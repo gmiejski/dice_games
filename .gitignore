@@ -141,7 +141,7 @@ ClientBin/
 *.dbproj.schemaview
 *.pfx
 *.publishsettings
-
+*.sln
 # RIA/Silverlight projects
 Generated_Code/
 
