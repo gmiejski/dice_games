@@ -4,8 +4,8 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>a9d74597-032f-45be-b385-e9c8c5e43d5a</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{1181133F-5015-490E-9D3A-11C9B24906BE}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CommonInterfacesModule</RootNamespace>
     <AssemblyName>CommonInterfacesModule</AssemblyName>
@@ -31,8 +31,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BotFactory.cs" />
+    <Compile Include="BotLevel.cs" />
+    <Compile Include="GameControllerFactory.cs" />
+    <Compile Include="GameType.cs" />
+    <Compile Include="IBot.cs" />
+    <Compile Include="ICreatedGame.cs" />
+    <Compile Include="IGameController.cs" />
+    <Compile Include="IGameState.cs" />
+    <Compile Include="IMove.cs" />
+    <Compile Include="IPlayerState.cs" />
+    <Compile Include="IServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
