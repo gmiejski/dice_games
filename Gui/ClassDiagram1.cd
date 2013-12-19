@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Gui.Files.CreatedGame">
+    <Position X="4.25" Y="6" Width="1.5" />
+    <AssociationLine Name="BotLevel" Type="Gui.Files.BotLevel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.001" Y="0.217" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAEAAgAIAAAAAZggAAAAAAA=</HashCode>
+      <FileName>Files\CreatedGame.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="BotLevel" />
+      <Property Name="GameType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Gui.Files.GameData">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAQAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Files\GameData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.Files.GameState">
+    <Position X="4.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAABAAQAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Files\GameState.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="PlayerStates" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Gui.Files.Move">
+    <Position X="9" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Files\Move.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.Files.PlayerState">
+    <Position X="7" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAIABAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Files\PlayerState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.Files.Server" BaseTypeListCollapsed="true">
+    <Position X="11" Y="4.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAABAAAAAAABAAAACEAIAAAAAEgAAAAgQAEAAAAA=</HashCode>
+      <FileName>Files\Server.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Gui.Files.Login">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AEAAYAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Pages\Login.aspx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.GameHub">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Files\GameHub.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.Startup" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Files\Startup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.Global">
+    <Position X="9" Y="3.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="server" Type="Gui.Files.IServer" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.5" Y="4.218" />
+        <Point X="11" Y="4.218" />
+        <Point X="11" Y="3.062" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAEAAAAAAAAAAECIBQAAAAAAAAI=</HashCode>
+      <FileName>Global.asax.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="server" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Gui.Game">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gAEBAAAAEAABAAAAQAAQAAEEAAEAABABAAAhAEMAAAA=</HashCode>
+      <FileName>Pages\Game.aspx.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="GameData" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Gui.Pages.Main">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAABAAAAAAAAAAAAAAQAAAAAAAAICAAI=</HashCode>
+      <FileName>Pages\Main.aspx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui.Pages.NewGame">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAIgAAAQAAAAQEAAAAAAIAAQAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Pages\NewGame.aspx.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Gui.Files.IServer" Collapsed="true">
+    <Position X="10.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAABAAAACEAIAAAAAEgAAAAgQAAAAAAA=</HashCode>
+      <FileName>Files\IServer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Gui.Files.BotLevel" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Files\BotLevel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Gui.Files.GameType" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAABAAAAAAAAABA=</HashCode>
+      <FileName>Files\GameType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,38 @@
+﻿body {
+}
+
+.gameStat {
+    display: inline-block;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #0094ff;
+    border-radius: 10px 0px 0px 0px;
+}
+
+#playersList td, #playersList th, #gamesList td, #gamesList th {
+    border: solid;
+    border-color: #0094ff;
+}
+
+.standardWindow {
+    border: solid;
+    border-width:5px;
+    border-radius: 5px 5px;
+    border-color: #4800ff;
+    
+}
+ 
+#playersList {
+}
+
+.bottomRightCorner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.centered {
+    position: fixed;
+    top: 40%;
+    left: 40%;
+}

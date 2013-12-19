@@ -1,0 +1,121 @@
+﻿body {
+    font-size: 18pt;
+    background-image: url(../Images/table.jpg);
+    background-color: rgba(200, 200, 200, 0.8);
+}
+
+#refreshTable {
+    display: none;
+}
+
+.playerHasTurn {
+    border: solid 4px #ccb700 !important;
+}
+
+.gameStat {
+    display: inline-block;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #2054bb;
+    background-color: #999;
+}
+
+#playersList td, #playersList th, #gamesList td, #gamesList th {
+    border: solid;
+    border-color: #2054bb;
+    background-color: #999;
+}
+
+.standardWindow {
+    border: solid;
+    border-width:3px;
+    border-radius: 5px 5px;
+    border-color: #2054bb;
+    background-color: #999;
+}
+
+input[type=submit] {
+    background-color: #88aadd;
+    font-size: 18pt;
+}
+
+.horCentered {
+    text-align:center;
+    margin: auto;
+}
+
+#playersList {
+}
+
+.bottomRightCorner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.bottom {
+    position: fixed;
+    bottom: 100px;
+}
+
+.centered {
+    position: fixed;
+    top: 40%;
+    left: 40%;
+}
+
+#userDice {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.userDiceSet {
+    margin: 5px;
+    cursor: pointer;
+    width: 68px;
+    height: 68px;
+}
+
+.dice_0 {
+    background-image:url(../Images/0.png);
+}
+.dice_1 {
+    background-image:url(../Images/1.png);
+}
+.dice_2 {
+    background-image:url(../Images/2.png);
+}
+.dice_3 {
+    background-image:url(../Images/3.png);
+}
+.dice_4 {
+    background-image:url(../Images/4.png);
+}
+.dice_5 {
+    background-image:url(../Images/5.png);
+}
+.dice_6 {
+    background-image:url(../Images/6.png);
+}
+
+.dice_0.userDiceSetToRoll {
+    background-image:url(../Images/0_akt.png);
+}
+.dice_1.userDiceSetToRoll {
+    background-image:url(../Images/1_akt.png);
+}
+.dice_2.userDiceSetToRoll {
+    background-image:url(../Images/2_akt.png);
+}
+.dice_3.userDiceSetToRoll {
+    background-image:url(../Images/3_akt.png);
+}
+.dice_4.userDiceSetToRoll {
+    background-image:url(../Images/4_akt.png);
+}
+.dice_5.userDiceSetToRoll {
+    background-image:url(../Images/5_akt.png);
+}
+.dice_6.userDiceSetToRoll {
+    background-image:url(../Images/6_akt.png);
+}
