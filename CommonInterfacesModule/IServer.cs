@@ -10,14 +10,14 @@ namespace CommonInterfacesModule
 
         bool JoinGame(string playerName, string gameName);
 
-        void MakeMove(string playerName, string gameName, IMove move);
+        void MakeMove(string playerName, string gameName, Move move);
 
         bool RegisterPlayer(string playerName, string contextId);
 
         void UnregisterPlayer(string playerName);
 
-        List<ICreatedGame> GetAvailableGames();
+        List<CreatedGame> GetAvailableGames();
 
-        IGameState GetGameState(string gameName);
+        GameState GetGameState(string gameName);
     }
 }

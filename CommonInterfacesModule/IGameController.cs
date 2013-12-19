@@ -10,7 +10,9 @@ namespace CommonInterfacesModule
         event BroadcastGameStateHandler BroadcastGameState;
         event DeleteGameControllerHandler DeleteGameController;
 
-        IGameState GameState { get; set; }
+        GameState GameState { get; set; }
+
+        void MakeMove(string playerName, Move move);
 
     }
 }

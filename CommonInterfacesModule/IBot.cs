@@ -1,15 +1,16 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
+﻿
 namespace CommonInterfacesModule
 {
-    public delegate void BotMovedHandler(string botName, IMove move);
+    public delegate void BotMovedHandler(string botName, Move move);
 
     public interface IBot
     {
         event BotMovedHandler BotMoved;
 
-        IMove GetNextMove(IGameState gameState);
-        void SendGameState(IGameState gameState);
+        string Name { get; set; }
+
+        Move GetNextMove(GameState gameState);
+        void SendGameState(GameState gameState);
 
     }
 }
