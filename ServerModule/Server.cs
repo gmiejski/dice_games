@@ -22,9 +22,17 @@ namespace ServerModule
             _loggedPlayers = new Dictionary<string, string>();
         }
 
-        public bool CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
+        public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
         {
-            throw new NotImplementedException();
+            CreatedGame createdGame = null;
+            if (!_availableGames.ContainsKey(gameName))
+            {
+                createdGame = new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBots, botLevel);
+
+                _availableGames.Add(gameName, createdGame);
+            }
+
+            return createdGame;
         }
 
         public void DeleteGame(string gameName)
@@ -67,7 +75,7 @@ namespace ServerModule
 
         public List<CreatedGame> GetAvailableGames()
         {
-            throw new NotImplementedException();
+            return _availableGames.Values.ToList();
         }
 
         public GameState GetGameState(string gameName)

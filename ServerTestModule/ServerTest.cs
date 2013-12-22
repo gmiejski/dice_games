@@ -1,6 +1,8 @@
-﻿using CommonInterfacesModule;
+﻿using System.Linq;
+using CommonInterfacesModule;
 using NUnit.Framework;
 using ServerModule;
+using System.Collections.Generic;
 
 namespace ServerTestModule
 {
@@ -9,6 +11,13 @@ namespace ServerTestModule
     {
 
         private IServer _instance;
+
+        private const string OwnerName = "ownerName";
+        private const string GameName = "gameName";
+        private GameType GameType = GameType.NPlus;
+        private const int NumberOfPlayers = 3;
+        private const int NumberOfBots = 1;
+        private BotLevel BotLevel = BotLevel.Easy;
 
         [SetUp]
         public void SetUp()
@@ -50,5 +59,41 @@ namespace ServerTestModule
             Assert.True(_instance.RegisterPlayer(playerName, contextId));
             Assert.False(_instance.RegisterPlayer(playerName, contextId));
         }
+
+        [Test]
+        public void ShouldCreateNewGame()
+        {
+            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            Assert.NotNull(createdGame);
+            Assert.AreEqual(createdGame.GameName, GameName);
+            Assert.AreEqual(createdGame.BotLevel, BotLevel);
+            Assert.AreEqual(createdGame.GameType, GameType);
+            Assert.AreEqual(createdGame.NumberOfBots, NumberOfBots);
+            Assert.AreEqual(createdGame.NumberOfPlayers, NumberOfPlayers);
+            Assert.AreEqual(createdGame.OwnerName, OwnerName);
+            Assert.True(createdGame.PlayerNames.Contains(OwnerName));
+        }
+
+        [Test]
+        public void ShouldCreateNewGameWhenGameNameAlreadyInUse()
+        {
+            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            CreatedGame secondGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+
+            Assert.NotNull(createdGame);
+            Assert.Null(secondGame);
+
+        }
+
+        [Test]
+        public void ShouldReturnAvailableGames()
+        {
+            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            List<CreatedGame> createdGames = _instance.GetAvailableGames();
+            Assert.True(createdGames.Contains(createdGame));
+        }
+
+        
+
     }
 }
