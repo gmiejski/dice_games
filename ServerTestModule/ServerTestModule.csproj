@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreatedGameTest.cs" />
     <Compile Include="ServerTest.cs" />
   </ItemGroup>
   <ItemGroup>

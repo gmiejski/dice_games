@@ -21,12 +21,21 @@ namespace CommonInterfacesModule
 
         public bool AddPlayer(string playerName)
         {
-            throw new NotImplementedException();
+            if (PlayerNames.Contains(playerName) || IsReadyToStart())
+            {
+                return false;
+            }
+            PlayerNames.Add(playerName);
+            return true;
         }
 
         public bool IsReadyToStart()
         {
-            throw new NotImplementedException();
+            if (NumberOfPlayers == PlayerNames.Count)
+            {
+                return true;
+            }
+            return false;
         }
 
         public CreatedGame(string ownerName,string gameName, GameType gameType,int numberOfPlayers,int numberOfBots,BotLevel botLevel)
@@ -37,7 +46,7 @@ namespace CommonInterfacesModule
             GameName = gameName;
             BotLevel = botLevel;
             OwnerName = ownerName;
-            // TODO create Player names list
+            PlayerNames = new List<string> {ownerName};
         }
     }
 }
