@@ -10,16 +10,26 @@ namespace ServerModule
     public class Server : IServer
     {
 
+        private GameControllerFactory _gameControllerFactory;
+
         private readonly Dictionary<string, IGameController> _activeGames;
         private readonly Dictionary<string, CreatedGame> _availableGames;
         private readonly Dictionary<string, string> _loggedPlayers;
 
+        public Server(GameControllerFactory gameControllerFactory, Dictionary<string, IGameController> activeGames, Dictionary<string, CreatedGame> availableGames, Dictionary<string, string> loggedPlayers)
+        {
+            _gameControllerFactory = gameControllerFactory;
+            _activeGames = activeGames;
+            _availableGames = availableGames;
+            _loggedPlayers = loggedPlayers;
+        }
 
         public Server()
         {
             _activeGames = new Dictionary<string, IGameController>();
             _availableGames = new Dictionary<string, CreatedGame>();
             _loggedPlayers = new Dictionary<string, string>();
+            _gameControllerFactory = new GameControllerFactory();
         }
 
         public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
