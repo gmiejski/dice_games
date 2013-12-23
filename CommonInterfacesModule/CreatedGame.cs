@@ -19,17 +19,17 @@ namespace CommonInterfacesModule
 
         public List<string> PlayerNames { get; private set; }
 
-        public bool AddPlayer(string playerName)
+        public virtual bool AddPlayer(string playerName)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsReadyToStart()
+        public virtual bool IsReadyToStart()
         {
             throw new NotImplementedException();
         }
 
-        public CreatedGame(string ownerName,string gameName, GameType gameType,int numberOfPlayers,int numberOfBots,BotLevel botLevel)
+        public CreatedGame(string ownerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
         {
             NumberOfPlayers = numberOfPlayers;
             NumberOfBots = numberOfBots;
