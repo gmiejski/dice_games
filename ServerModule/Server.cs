@@ -52,7 +52,21 @@ namespace ServerModule
 
         public bool JoinGame(string playerName, string gameName)
         {
-            throw new NotImplementedException();
+            bool result = false;
+
+            if (_availableGames.ContainsKey(gameName))
+            {
+                var createdGame = _availableGames[gameName];
+                result = createdGame.AddPlayer(playerName);
+                if (createdGame.IsReadyToStart())
+                {
+                    _availableGames.Remove(gameName);
+                    var gameController = _gameControllerFactory.CreateGameController(createdGame);
+                    _activeGames.Add(gameName,gameController);
+                }
+            }
+
+            return result;
         }
 
         public void MakeMove(string playerName, string gameName, Move move)
@@ -62,12 +76,7 @@ namespace ServerModule
 
         public bool RegisterPlayer(String playerName, string contextId)
         {
-            if (String.IsNullOrEmpty(contextId) || String.IsNullOrEmpty(playerName))
-            {
-                return false;
-            }
-
-            if (_loggedPlayers.ContainsKey(playerName))
+            if (String.IsNullOrEmpty(contextId) || String.IsNullOrEmpty(playerName) || _loggedPlayers.ContainsKey(playerName))
             {
                 return false;
             }

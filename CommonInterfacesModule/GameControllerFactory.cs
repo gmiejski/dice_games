@@ -2,7 +2,7 @@
 {
     public class GameControllerFactory
     {
-        public IGameController CreateGameController(CreatedGame createdGame)
+        public virtual IGameController CreateGameController(CreatedGame createdGame)
         {
             throw new System.NotImplementedException();
         }

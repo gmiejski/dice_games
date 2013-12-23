@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using CommonInterfacesModule;
+using Moq;
 using NUnit.Framework;
 using ServerModule;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace ServerTestModule
         private Dictionary<string, IGameController> _activeGames;
         private Dictionary<string, CreatedGame> _availableGames;
         private Dictionary<string, string> _loggedPlayers;
-        private GameControllerFactory _gameControllerFactory;
+        private Mock<GameControllerFactory> _gameControllerFactoryMock;
 
         private const string OwnerName = "ownerName";
         private const string GameName = "gameName";
@@ -29,9 +30,9 @@ namespace ServerTestModule
             _activeGames = new Dictionary<string, IGameController>();
             _availableGames = new Dictionary<string, CreatedGame>();
             _loggedPlayers = new Dictionary<string, string>();
-            _gameControllerFactory = new GameControllerFactory();
+            _gameControllerFactoryMock = new Mock<GameControllerFactory>();
 
-            _instance = new Server(_gameControllerFactory, _activeGames, _availableGames, _loggedPlayers);
+            _instance = new Server(_gameControllerFactoryMock.Object, _activeGames, _availableGames, _loggedPlayers);
         }
 
         [Test]
@@ -119,7 +120,83 @@ namespace ServerTestModule
             Assert.True(createdGames.Contains(createdGame));
         }
 
+        [Test]
+        public void ShouldAddPlayerToExistingCreatedGame()
+        {
+            string playerName = "playerName";
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(true);
+            _availableGames.Add(GameName,createdGameMock.Object);
+
+            bool result = _instance.JoinGame(playerName, GameName);
+
+            Assert.True(result);
+            createdGameMock.Verify(cr => cr.AddPlayer(It.IsAny<string>()),Times.Once);
+        }
+
+        [Test]
+        public void ShouldNotAddPlayerWhenNoCreatedGameFound()
+        {
+            string playerName = "playerName";
+
+            bool result = _instance.JoinGame(playerName, GameName);
+
+            Assert.False(result);
+        }
+        [Test]
+        public void ShouldReturnFalseWhenUnnableToJoinPlayerToGame()
+        {
+            string playerName = "playerName";
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(false);
+            _availableGames.Add(GameName, createdGameMock.Object);
+
+            bool result = _instance.JoinGame(playerName, GameName);
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void ShouldRemoveCreatedGameFromAvailableGamesWhenIsReadyToStart()
+        {
+            string playerName = "playerName";
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(true);
+            createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
+            _availableGames.Add(GameName, createdGameMock.Object);
+
+            bool result = _instance.JoinGame(playerName, GameName);
+
+            Assert.True(result);
+            createdGameMock.Verify(cr => cr.AddPlayer(It.IsAny<string>()), Times.Once);
+            createdGameMock.Verify(cr => cr.IsReadyToStart(), Times.Once);
+            Assert.False(_availableGames.ContainsKey(GameName));
+        }
+
+        [Test]
+        public void ShouldAddGameControllerToActiveGamesWhenLastPlayerSuccesfullyJoinedCreatedGame()
+        {
+            const string playerName = "playerName";
+
+            var gameControllerMock = new Mock<IGameController>();
+
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+
+            createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(true);
+            createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
+            _gameControllerFactoryMock.Setup(mock => mock.CreateGameController(createdGameMock.Object)).Returns(gameControllerMock.Object);
+
+            _availableGames.Add(GameName, createdGameMock.Object);
 
 
+            bool result = _instance.JoinGame(playerName, GameName);
+
+            Assert.True(result);
+            createdGameMock.Verify(cr => cr.AddPlayer(playerName), Times.Once);
+            createdGameMock.Verify(cr => cr.IsReadyToStart(), Times.Once);
+            _gameControllerFactoryMock.Verify(factory => factory.CreateGameController(It.IsAny<CreatedGame>()), Times.Once());
+            Assert.True(_activeGames.ContainsKey(GameName));
+            Assert.AreEqual(gameControllerMock.Object,_activeGames[GameName]);
+        }
     }
 }

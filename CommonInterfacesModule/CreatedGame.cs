@@ -19,7 +19,7 @@ namespace CommonInterfacesModule
 
         public List<string> PlayerNames { get; private set; }
 
-        public bool AddPlayer(string playerName)
+        public virtual bool AddPlayer(string playerName)
         {
             if (PlayerNames.Contains(playerName) || IsReadyToStart())
             {
@@ -29,7 +29,7 @@ namespace CommonInterfacesModule
             return true;
         }
 
-        public bool IsReadyToStart()
+        public virtual bool IsReadyToStart()
         {
             if (NumberOfPlayers == PlayerNames.Count)
             {
@@ -38,7 +38,7 @@ namespace CommonInterfacesModule
             return false;
         }
 
-        public CreatedGame(string ownerName,string gameName, GameType gameType,int numberOfPlayers,int numberOfBots,BotLevel botLevel)
+        public CreatedGame(string ownerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
         {
             NumberOfPlayers = numberOfPlayers;
             NumberOfBots = numberOfBots;
@@ -46,7 +46,7 @@ namespace CommonInterfacesModule
             GameName = gameName;
             BotLevel = botLevel;
             OwnerName = ownerName;
-            PlayerNames = new List<string> {ownerName};
+            PlayerNames = new List<string> { ownerName };
         }
     }
 }
