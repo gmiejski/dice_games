@@ -4,7 +4,7 @@ namespace CommonInterfacesModule
 {
     public interface IServer
     {
-        bool CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel);
+        CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel);
 
         void DeleteGame(string gameName);
 
