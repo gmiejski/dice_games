@@ -99,7 +99,7 @@ namespace ServerModule
 
         public GameState GetGameState(string gameName)
         {
-            throw new NotImplementedException();
+            return _activeGames.ContainsKey(gameName) ? _activeGames[gameName].GameState : null;
         }
     }
 }

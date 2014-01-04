@@ -198,5 +198,35 @@ namespace ServerTestModule
             Assert.True(_activeGames.ContainsKey(GameName));
             Assert.AreEqual(gameControllerMock.Object,_activeGames[GameName]);
         }
+
+        [Test]
+        public void ShouldReturnNullWhenAskingForGameStateOfNotExistingGameController()
+        {
+
+            string gameName = "gameName";
+
+            GameState gameState = _instance.GetGameState(gameName);
+
+            Assert.Null(gameState);
+
+        }
+
+        [Test]
+        public void ShouldReturnGameStateOfExistingGameController()
+        {
+            var gameController = new Mock<IGameController>();
+            var gameState = new Mock<GameState>();
+            gameController.Setup(gc => gc.GameState).Returns(gameState.Object);
+
+            string gameName = "gameName";
+            _activeGames.Add(gameName, gameController.Object);
+
+            var result = _instance.GetGameState(gameName);
+
+            Assert.NotNull(result);
+            Assert.AreEqual(result, gameState.Object);
+
+        }
+
     }
 }
