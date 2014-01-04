@@ -69,9 +69,14 @@ namespace ServerModule
             return result;
         }
 
-        public void MakeMove(string playerName, string gameName, Move move)
+        public bool MakeMove(string playerName, string gameName, Move move)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName) || move == null)
+            {
+                return false;    
+            }
+
+            return _activeGames.ContainsKey(gameName) && _activeGames[gameName].MakeMove(playerName, move);
         }
 
         public bool RegisterPlayer(String playerName, string contextId)

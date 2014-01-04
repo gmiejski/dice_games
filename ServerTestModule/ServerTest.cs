@@ -228,5 +228,59 @@ namespace ServerTestModule
 
         }
 
+        [Test]
+        public void ShouldReturnFalseWhenMakingMoveWithNullParameters()
+        {
+            string playerName = "playerName";
+            string gameName = "gameName";
+            var move = new Mock<Move>(null);
+
+            Assert.False(_instance.MakeMove(null,gameName,move.Object));
+            Assert.False(_instance.MakeMove(playerName,null,move.Object));
+            Assert.False(_instance.MakeMove(playerName,gameName,null));
+        }
+
+        [Test]
+        public void ShouldReturnFalseWhenMakingMoveWithEmptyStringParameters()
+        {
+            string playerName = "playerName";
+            string gameName = "gameName";
+            var move = new Mock<Move>(null);
+
+            Assert.False(_instance.MakeMove("", gameName, move.Object));
+            Assert.False(_instance.MakeMove(playerName, "", move.Object));
+        }
+
+        [Test]
+        public void ShouldReturnFalseWhenMakingMoveAndNoGameControllerFound()
+        {
+            string playerName = "playerName";
+            string gameName = "gameName";
+            var move = new Mock<Move>(null);
+
+            bool result = _instance.MakeMove(playerName, gameName, move.Object);
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void ShouldSendMoveToMathingGameController()
+        {
+            var gameController = new Mock<IGameController>();
+            
+            var move = new Mock<Move>(null);
+            var gameName = "gameName";
+            var playerName = "playerName";
+
+            gameController.Setup(gc => gc.MakeMove(playerName, move.Object)).Returns(true);
+            _activeGames.Add(gameName, gameController.Object);
+
+            bool result = _instance.MakeMove(playerName,gameName,move.Object);
+
+            Assert.True(result);
+            gameController.Verify(gc => gc.MakeMove(playerName,move.Object),Times.Once);
+
+        }
+
     }
 }
