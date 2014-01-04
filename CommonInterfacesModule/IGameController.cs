@@ -12,7 +12,7 @@ namespace CommonInterfacesModule
 
         GameState GameState { get; set; }
 
-        void MakeMove(string playerName, Move move);
+        bool MakeMove(string playerName, Move move);
 
     }
 }

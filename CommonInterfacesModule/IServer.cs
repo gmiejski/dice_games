@@ -10,7 +10,7 @@ namespace CommonInterfacesModule
 
         bool JoinGame(string playerName, string gameName);
 
-        void MakeMove(string playerName, string gameName, Move move);
+        bool MakeMove(string playerName, string gameName, Move move);
 
         bool RegisterPlayer(string playerName, string contextId);
 
