@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <link href="../Styles/dice.css" rel="stylesheet" />
+    <link href="../App_Themes/dice.css" rel="stylesheet" />
     <script src="../Scripts/jquery-2.0.3.min.js"></script>
     <script src="../Scripts/jquery.signalR-2.0.0.min.js"></script>
     <script src="/signalr/hubs"></script>

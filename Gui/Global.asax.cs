@@ -1,4 +1,5 @@
-﻿using Gui.Files;
+﻿using CommonInterfacesModule;
+using Gui.Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;

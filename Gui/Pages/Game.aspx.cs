@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using CommonInterfacesModule;
 
 namespace Gui
 {
@@ -18,8 +19,6 @@ namespace Gui
         protected void Page_Load(object sender, EventArgs e)
         {
             _server = Global.server;
-            //Session["playerName"] = "Edek";
-            //Session["gameName"] = "Gra";
             if ((Session["playerName"] == null) || (Session["gameName"] == null))
             {
                 throw new InvalidOperationException("Blad " + Session["playerName"] + " | " + Session["gameName"]);

@@ -1,4 +1,5 @@
-﻿using Gui.Files;
+﻿using CommonInterfacesModule;
+using Gui.Files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace Gui.Pages
 
         protected void CreateGame_Click(object sender, EventArgs e)
         {
-            Global.server.CreateGame(PlayerName, newGameName.Text, GameType.NStar, 2);
+            Global.server.CreateGame(PlayerName, newGameName.Text, GameType.NStar, 2, 3, BotLevel.Easy);
             Session["gameName"] = newGameName.Text;
             Response.Redirect("Game.aspx", false);
         }

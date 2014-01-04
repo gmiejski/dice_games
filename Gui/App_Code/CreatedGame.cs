@@ -1,11 +1,12 @@
-﻿using System;
+﻿using CommonInterfacesModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Gui.Files
 {
-    public class CreatedGame
+    public class CreatedGame : ICreatedGame
     {
         public string GameName { get; set; }
         public string OwnerName { get; set; }
@@ -22,7 +23,7 @@ namespace Gui.Files
             PlayerNames = new List<string> { ownerName };
             NumberOfPlayers = numberOfPlayers;
             NumberOfBots = numberOfBots;
-            BotLevel = BotLevel.EASY;
+            BotLevel = BotLevel.Easy;
         }
         public bool IsReadyToStart() { return false; }
         public Boolean AddPlayer(string playerName) { return false; }

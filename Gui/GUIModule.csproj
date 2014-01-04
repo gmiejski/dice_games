@@ -107,29 +107,27 @@
     <Content Include="Images\6.png" />
     <Content Include="Images\6_akt.png" />
     <Content Include="Images\table.jpg" />
-    <Content Include="Styles\dice.css" />
+    <Content Include="App_Themes\dice.css" />
     <Content Include="Pages\Login.aspx" />
     <Content Include="Pages\Game.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Pages\Main.aspx" />
     <Content Include="packages.config" />
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Pages\NewGame.aspx" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Files\BotLevel.cs" />
-    <Compile Include="Files\CreatedGame.cs" />
-    <Compile Include="Files\GameData.cs" />
-    <Compile Include="Files\GameType.cs" />
-    <Compile Include="Files\Move.cs" />
-    <Compile Include="Files\GameHub.cs" />
-    <Compile Include="Files\Startup.cs" />
+    <Compile Include="App_Code\CreatedGame.cs" />
+    <Compile Include="GameHub.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="App_Code\GameData.cs" />
     <Compile Include="Pages\Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -137,8 +135,8 @@
     <Compile Include="Pages\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Files\PlayerState.cs" />
-    <Compile Include="Files\GameState.cs" />
+    <Compile Include="App_Code\PlayerState.cs" />
+    <Compile Include="App_Code\GameState.cs" />
     <Compile Include="Pages\Game.aspx.cs">
       <DependentUpon>Game.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -149,7 +147,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Files\IServer.cs" />
     <Compile Include="Pages\Main.aspx.cs">
       <DependentUpon>Main.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -165,7 +162,7 @@
       <DependentUpon>NewGame.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Files\Server.cs" />
+    <Compile Include="App_Code\Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-2.0.3.min.map" />
@@ -176,7 +173,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\CommonInterfacesModule\CommonInterfacesModule.csproj">
+      <Project>{1181133f-5015-490e-9d3a-11c9b24906be}</Project>
+      <Name>CommonInterfacesModule</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
