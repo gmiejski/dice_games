@@ -43,11 +43,11 @@
     <Compile Include="GameControllerFactory.cs" />
     <Compile Include="GameType.cs" />
     <Compile Include="IBot.cs" />
-    <Compile Include="ICreatedGame.cs" />
+    <Compile Include="CreatedGame.cs" />
     <Compile Include="IGameController.cs" />
-    <Compile Include="IGameState.cs" />
-    <Compile Include="IMove.cs" />
-    <Compile Include="IPlayerState.cs" />
+    <Compile Include="GameState.cs" />
+    <Compile Include="Move.cs" />
+    <Compile Include="PlayerState.cs" />
     <Compile Include="IServer.cs" />
   </ItemGroup>
   <ItemGroup>

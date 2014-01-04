@@ -4,20 +4,20 @@ namespace CommonInterfacesModule
 {
     public interface IServer
     {
-        bool CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel);
+        CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel);
 
         void DeleteGame(string gameName);
 
         bool JoinGame(string playerName, string gameName);
 
-        void MakeMove(string playerName, string gameName, IMove move);
+        bool MakeMove(string playerName, string gameName, Move move);
 
         bool RegisterPlayer(string playerName, string contextId);
 
         void UnregisterPlayer(string playerName);
 
-        List<ICreatedGame> GetAvailableGames();
+        List<CreatedGame> GetAvailableGames();
 
-        IGameState GetGameState(string gameName);
+        GameState GetGameState(string gameName);
     }
 }
