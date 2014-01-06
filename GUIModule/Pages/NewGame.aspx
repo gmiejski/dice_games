@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="NewGame.aspx.cs" Inherits="Gui.Pages.NewGame" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="NewGame.aspx.cs" Inherits="GUIModule.Pages.NewGame" %>
 
 <!DOCTYPE html>
 

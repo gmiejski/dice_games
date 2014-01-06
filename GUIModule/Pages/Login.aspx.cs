@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Gui.Files
+namespace GUIModule.App_Code
 {
     public partial class Login : System.Web.UI.Page
     {

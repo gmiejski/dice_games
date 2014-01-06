@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gui.Files {
+namespace GUIModule.App_Code {
     
     
     public partial class Login {

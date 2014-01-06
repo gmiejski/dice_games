@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gui.Pages {
+namespace GUIModule.Pages {
     
     
     public partial class NewGame {

@@ -1,5 +1,5 @@
 ﻿using CommonInterfacesModule;
-using Gui.Files;
+using GUIModule.App_Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
 
-namespace Gui
+namespace GUIModule
 {
     public class Global : System.Web.HttpApplication
     {

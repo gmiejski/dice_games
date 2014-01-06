@@ -1,7 +1,7 @@
 ﻿using Microsoft.Owin;
 using Owin;
-[assembly: OwinStartup(typeof(Gui.Startup))]
-namespace Gui
+[assembly: OwinStartup(typeof(GUIModule.Startup))]
+namespace GUIModule
 {
     public class Startup
     {

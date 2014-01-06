@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Game.aspx.cs" Inherits="Gui.Game" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Game.aspx.cs" Inherits="GUIModule.Game" EnableEventValidation="false" %>
 
 <!DOCTYPE html>
 
@@ -25,9 +25,9 @@
                     <asp:Label runat="server" CssClass="gameStat">Stan: <%= GameData.State %></asp:Label><br />
                     <asp:Label runat="server" CssClass="gameStat" ID="winnerLabel">Zwycięzca: <%= GameData.Winner %></asp:Label>
                 </asp:Panel>
-                <asp:GridView runat="server" ID="awaitingPlayersList" class="standardWindow horCentered" AutoGenerateColumns="false">
+                <asp:GridView runat="server" ID="awaitingPlayersList" CssClass="standardWindow horCentered" AutoGenerateColumns="false">
                     <Columns>
-                        <asp:BoundField DataField="!" HeaderText="Gracz" />
+                        <asp:BoundField DataField="Key" HeaderText="Gracz" />
                         <asp:TemplateField HeaderText="Ogólny wynik">
                             <ItemTemplate>0</ItemTemplate>
                         </asp:TemplateField>
@@ -56,12 +56,9 @@
                                 <asp:Image runat="server" ImageUrl="~/Images/0.png" />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField HeaderText="Kombinacja">
-                            <ItemTemplate> --- </ItemTemplate>
-                        </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
-                <asp:GridView runat="server" ID="playersList" class="standardWindow horCentered"
+                <asp:GridView runat="server" ID="playersList" cssClass="standardWindow horCentered"
                     AutoGenerateColumns="false" OnDataBound="PlayersDataBound">
                     <Columns>
                         <asp:BoundField DataField="Key" HeaderText="Gracz" />
@@ -85,9 +82,9 @@
                     </Columns>
                 </asp:GridView>
                 <asp:Panel runat="server" CssClass="horCentered">
-                <asp:DataList runat="server" ID="userDice" AutoGenerateColumns="true" RepeatDirection="Horizontal" CssClass="horCentered">
+                <asp:DataList runat="server" ID="userDice" RepeatDirection="Horizontal" CssClass="horCentered">
                     <ItemTemplate>
-                        <asp:Panel runat="server" ID="toRoll" Text="a" CssClass='<%# "userDiceSet dice_" + Container.DataItem %>' />
+                        <asp:Panel runat="server" ID="toRoll" CssClass='<%# "userDiceSet dice_" + Container.DataItem %>' />
                     </ItemTemplate>
                 </asp:DataList>
                 <asp:Button runat="server" Text="Rzuć" ID="throwDice" />
@@ -116,8 +113,9 @@
                     event.preventDefault();
                     var toSend = [];
                     for (var i = 0; i < 5; i++) {
-                        var isSelected = $("#userDice_toRoll_" + i).hasClass("userDiceSetToRoll") ? 1 : 0;
-                        toSend.push(isSelected);
+                        if ($("#userDice_toRoll_" + i).hasClass("userDiceSetToRoll")) {
+                            toSend.push(i);
+                        }
                     }
                     gameState.server.throwDice(playerName, gameName, toSend);
                 });

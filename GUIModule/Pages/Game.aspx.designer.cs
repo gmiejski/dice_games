@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gui {
+namespace GUIModule {
     
     
     public partial class Game {

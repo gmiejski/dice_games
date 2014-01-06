@@ -1,5 +1,5 @@
 ﻿using CommonInterfacesModule;
-using Gui.Files;
+using GUIModule.App_Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Gui.Pages
+namespace GUIModule.Pages
 {
     public partial class NewGame : System.Web.UI.Page
     {
@@ -15,6 +15,11 @@ namespace Gui.Pages
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["playerName"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
+
             PlayerName = Session["playerName"].ToString();
         }
 

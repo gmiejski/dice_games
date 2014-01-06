@@ -1,4 +1,4 @@
-﻿using Gui.Files;
+﻿using GUIModule.App_Code;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +7,13 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using CommonInterfacesModule;
 
-namespace Gui.Pages
+namespace GUIModule.Pages
 {
     public partial class Main : System.Web.UI.Page
     {
         private IServer server;
         protected void Page_Load(object sender, EventArgs e)
         {
-            //Session["playerName"] = "Jutrko"; // tymczasowo zeby chodzilo
 
             if (Session["playerName"] == null) {
                 Response.Redirect("Login.aspx", false);
@@ -58,8 +57,5 @@ namespace Gui.Pages
             Session["playerName"] = null;
             Response.Redirect("Login.aspx", false);
         }
-        
     }
-
-
 }
