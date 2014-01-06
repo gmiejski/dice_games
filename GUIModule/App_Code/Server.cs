@@ -9,7 +9,7 @@ using GUIModule.App_Code;
 
 namespace GUIModule.App_Code
 {
-    class Server : IServer
+    public class Server : IServer
     {
         private Dictionary<string, GameState> games;
         
@@ -24,7 +24,7 @@ namespace GUIModule.App_Code
 
         public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBot, BotLevel botLevel)
         {
-            AvailableGames.Add(new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBot, botLevel) { PlayerNames = new List<string>()});
+            AvailableGames.Add(new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBot, botLevel));
             AvailableGames.Last().PlayerNames.Add(playerName);
             return AvailableGames.Last();
         }

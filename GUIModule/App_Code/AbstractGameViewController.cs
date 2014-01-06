@@ -17,7 +17,7 @@ namespace GUIModule.App_Code
             GameName = gameName;
         }
 
-        public static AbstractGameViewController newInstance(string playerName, string gameName, IServer server)
+        public static AbstractGameViewController NewInstance(string playerName, string gameName, IServer server)
         {
             var ongoingGame = server.GetGameState(gameName);
             if (ongoingGame != null)

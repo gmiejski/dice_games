@@ -57,9 +57,6 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NMock3">
-      <HintPath>..\packages\NMock3.3.5.44\lib\net40\NMock3.dll</HintPath>
-    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
@@ -127,7 +124,7 @@
     <Compile Include="App_Code\OngoingGameViewController.cs" />
     <Compile Include="App_Code\PendingGameViewController.cs" />
     <Compile Include="GameHub.cs" />
-    <Compile Include="App_Code\GameViewController.cs" />
+    <Compile Include="App_Code\AbstractGameViewController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Code\GameData.cs" />
     <Compile Include="Pages\Login.aspx.cs">

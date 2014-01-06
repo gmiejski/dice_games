@@ -33,7 +33,7 @@ namespace GUIModule
             AbstractGameViewController controller = null;
             try
             {
-                controller = AbstractGameViewController.newInstance(PlayerName, GameName, _server);
+                controller = AbstractGameViewController.NewInstance(PlayerName, GameName, _server);
             }
             catch (InvalidOperationException)
             {
