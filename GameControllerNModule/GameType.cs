@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameControllerNModule
 {
-    enum GameType
+    public enum GameType
     {
         NPlus,
         NStar,

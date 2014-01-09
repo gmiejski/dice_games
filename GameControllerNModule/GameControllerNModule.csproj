@@ -46,6 +46,8 @@
   <ItemGroup>
     <Compile Include="AbstractGameController.cs" />
     <Compile Include="GameType.cs" />
+    <Compile Include="NPlusGameController.cs" />
+    <Compile Include="NStarGameController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

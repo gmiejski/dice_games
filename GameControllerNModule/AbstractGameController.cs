@@ -7,7 +7,7 @@ using CommonInterfacesModule;
 
 namespace GameControllerNModule
 {
-    abstract class AbstractGameController
+    public abstract class AbstractGameController : IGameController 
     {
         protected List<IBot> _bots;
         protected String _gameName;
@@ -23,5 +23,10 @@ namespace GameControllerNModule
             _gameType = gameType;
             _playerNames = playerNames;
         }
+
+        public event BroadcastGameStateHandler BroadcastGameState;
+        public event DeleteGameControllerHandler DeleteGameController;
+        public GameState GameState { get; set; }
+        public abstract bool MakeMove(string playerName, Move move);
     }
 }
