@@ -40,40 +40,49 @@ namespace GUIModule {
         protected global::System.Web.UI.UpdatePanel updatePanel;
         
         /// <summary>
-        /// gameStatsPanel control.
+        /// GameStatsPanel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel gameStatsPanel;
+        protected global::System.Web.UI.WebControls.Panel GameStatsPanel;
         
         /// <summary>
-        /// winnerLabel control.
+        /// GameState control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label winnerLabel;
+        protected global::System.Web.UI.WebControls.Label GameState;
         
         /// <summary>
-        /// awaitingPlayersList control.
+        /// WinnerLabel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView awaitingPlayersList;
+        protected global::System.Web.UI.WebControls.Label WinnerLabel;
         
         /// <summary>
-        /// playersList control.
+        /// AwaitingPlayersList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView playersList;
+        protected global::System.Web.UI.WebControls.GridView AwaitingPlayersList;
+        
+        /// <summary>
+        /// PlayersList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView PlayersList;
         
         /// <summary>
         /// userDice control.
@@ -85,30 +94,30 @@ namespace GUIModule {
         protected global::System.Web.UI.WebControls.DataList userDice;
         
         /// <summary>
-        /// throwDice control.
+        /// ThrowDice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button throwDice;
+        protected global::System.Web.UI.WebControls.Button ThrowDice;
         
         /// <summary>
-        /// refreshTable control.
+        /// RefreshTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button refreshTable;
+        protected global::System.Web.UI.WebControls.Button RefreshTable;
         
         /// <summary>
-        /// leaveGame control.
+        /// LeaveGame control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button leaveGame;
+        protected global::System.Web.UI.WebControls.Button LeaveGame;
     }
 }

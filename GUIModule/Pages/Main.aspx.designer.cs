@@ -13,21 +13,30 @@ namespace GUIModule.Pages {
     public partial class Main {
         
         /// <summary>
-        /// gamesList control.
+        /// GamesList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm gamesList;
+        protected global::System.Web.UI.HtmlControls.HtmlForm GamesList;
         
         /// <summary>
-        /// availableGamesTable control.
+        /// AvailableGamesTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView availableGamesTable;
+        protected global::System.Web.UI.WebControls.GridView AvailableGamesTable;
+        
+        /// <summary>
+        /// LogoutButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button LogoutButton;
     }
 }

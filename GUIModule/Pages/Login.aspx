@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link href="../App_Themes/dice.css" rel="stylesheet" />
-    <title></title>
+    <title>Logowanie</title>
 </head>
 <body>
     <form id="loginForm" runat="server">

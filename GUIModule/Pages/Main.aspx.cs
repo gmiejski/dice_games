@@ -22,26 +22,25 @@ namespace GUIModule.Pages
 
             server = Global.server;
             var games = server.GetAvailableGames();
-            availableGamesTable.DataSource = games;
-            availableGamesTable.DataBind();
+            AvailableGamesTable.DataSource = games;
+            AvailableGamesTable.DataBind();
         }
 
         public void JoinGame_Click(object sender, EventArgs e)
         {
-            int id = Convert.ToInt32(((Button)sender).CommandArgument);
-            string joinedGameName = server.GetAvailableGames()[id].GameName;
+            string joinedGameName = ((Button)sender).CommandArgument;
 
             if (Global.server.JoinGame(PlayerName, joinedGameName))
             {
                 Session["gameName"] = joinedGameName;
                 if (Session["playerName"] == null) {
-                    throw new InvalidOperationException(Session["playerName"].ToString() + " | " + Session["gameName"].ToString());
+                    Response.Redirect("Login.aspx");
                 }
                 Response.Redirect("Game.aspx", false);
             }
             else
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('Nie da sie dolaczyc do gry!')", true);
+                ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert('Nie udało się dołączyć do gry!')", true);
             }
         }
 

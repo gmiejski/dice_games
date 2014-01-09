@@ -4,7 +4,7 @@
     background-color: rgba(200, 200, 200, 0.8);
 }
 
-#refreshTable {
+#RefreshTable {
     display: none;
 }
 
@@ -12,7 +12,11 @@
     border: solid 4px #ccb700 !important;
 }
 
-.gameStat {
+.ourPlayer {
+    font-weight: bolder;
+}
+
+.gameStat, .helloText {
     display: inline-block;
     border-style: solid;
     border-width: 3px;
@@ -20,7 +24,7 @@
     background-color: #999;
 }
 
-#playersList td, #playersList th, #gamesList td, #gamesList th {
+#PlayersList td, #PlayersList th, #GamesList td, #GamesList th {
     border: solid;
     border-color: #2054bb;
     background-color: #999;
@@ -42,9 +46,6 @@ input[type=submit] {
 .horCentered {
     text-align:center;
     margin: auto;
-}
-
-#playersList {
 }
 
 .bottomRightCorner {

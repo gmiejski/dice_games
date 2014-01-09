@@ -17,7 +17,7 @@ namespace GUIModule.App_Code
         {
             games = new Dictionary<string, GameState>();
             
-            AvailableGames = new List<CreatedGame>();// { new CreatedGame("Gracz", "Nowa gra", GameType.NPlus, 2, 3, BotLevel.Easy) { PlayerNames = new List<string> {"jaijw"} } };
+            AvailableGames = new List<CreatedGame>();
         }
 
         public bool AddPlayer(string gameName, string playerName) { return false; }
@@ -29,10 +29,19 @@ namespace GUIModule.App_Code
             return AvailableGames.Last();
         }
         public void DeleteGame(string gameName) {
-            games.Remove(gameName);
-            AvailableGames.RemoveAll(game => game.GameName == gameName);
+            var ongoing = games.Remove(gameName);
+            AvailableGames.RemoveAll(game => (game.GameName == gameName) &&
+                (game.PlayerNames.Count == 1));
+
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.All.requestRefresh();
+            if (ongoing)
+            {
+                hub.Clients.All.endGame();
+            }
+            else
+            {
+                hub.Clients.All.requestRefresh();
+            }
         }
 
         public List<CreatedGame> GetAvailableGames() { return AvailableGames; }
@@ -64,7 +73,7 @@ namespace GUIModule.App_Code
                 playerState.Dices[die] = random.Next(6) + 1;
             }
 
-            var ord = game.PlayerStates.Last().Key == game.WhoseTurn ? 1 : 2;
+            var ord = game.PlayerStates.Last().Key == game.WhoseTurn ? 0 : 1;
             game.WhoseTurn = game.PlayerStates.ElementAt(ord).Key;
 
             // Call the broadcastMessage method to update clients.

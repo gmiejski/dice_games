@@ -5,18 +5,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <link href="../App_Themes/dice.css" rel="stylesheet" />
-    <title></title>
+    <title>Tworzenie gry</title>
 </head>
 <body>
     <form id="form1" runat="server">
         <asp:Panel runat="server">
-            <asp:Table ID="newGameTable" runat="server" CssClass="horCentered standardWindow">
+            <asp:Table ID="NewGameTable" runat="server" CssClass="horCentered standardWindow">
                 <asp:TableRow>
                     <asp:TableCell>
                         Nazwa gry:
                     </asp:TableCell>
                     <asp:TableCell>
-                        <asp:TextBox ID="newGameName" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="NewGameName" runat="server"></asp:TextBox>
                     </asp:TableCell>
                 </asp:TableRow>
                 <asp:TableRow>
@@ -24,10 +24,10 @@
                         Typ gry:
                     </asp:TableCell>
                     <asp:TableCell>
-                        <asp:DropDownList ID="newGameType" runat="server">
-                            <asp:ListItem>Poker</asp:ListItem>
-                            <asp:ListItem>N+</asp:ListItem>
-                            <asp:ListItem>N*</asp:ListItem>
+                        <asp:DropDownList ID="NewGameType" runat="server">
+                            <asp:ListItem Value="Poker">Poker</asp:ListItem>
+                            <asp:ListItem Value="NPlus">N+</asp:ListItem>
+                            <asp:ListItem Value="NStar">N*</asp:ListItem>
                         </asp:DropDownList>
                     </asp:TableCell>
                 </asp:TableRow>
@@ -36,7 +36,7 @@
                         Liczba graczy:
                     </asp:TableCell>
                     <asp:TableCell>
-                        <asp:TextBox ID="newGamePlayers" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="NewGamePlayers" runat="server"></asp:TextBox>
                     </asp:TableCell>
                 </asp:TableRow>
                 <asp:TableRow>
@@ -44,7 +44,7 @@
                         Liczba botów:
                     </asp:TableCell>
                     <asp:TableCell>
-                        <asp:TextBox ID="newGameBots" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="NewGameBots" runat="server"></asp:TextBox>
                     </asp:TableCell>
                 </asp:TableRow>
                 <asp:TableRow>
@@ -58,10 +58,10 @@
                 </asp:TableRow>
             </asp:Table>
             <asp:Panel runat="server" CssClass="horCentered">
-                <asp:Button runat="server" Text="Start" OnClick="CreateGame_Click"/>
+                <asp:Button runat="server" Text="Start" ID="StartGame" OnClick="CreateGame_Click"/>
             </asp:Panel>
         </asp:Panel>
-        <asp:Button runat="server" CssClass="bottomRightCorner" OnClick="LeaveNewGame_Click" Text="Powrót"/>
+        <asp:Button runat="server" CssClass="bottomRightCorner" ID="LeaveNewGame" OnClick="LeaveNewGame_Click" Text="Powrót"/>
     </form>
 </body>
 </html>

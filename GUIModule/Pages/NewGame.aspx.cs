@@ -25,9 +25,29 @@ namespace GUIModule.Pages
 
         protected void CreateGame_Click(object sender, EventArgs e)
         {
-            Global.server.CreateGame(PlayerName, newGameName.Text, GameType.NStar, 2, 3, BotLevel.Easy);
-            Session["gameName"] = newGameName.Text;
+            GameType gameType = GetGameTypeFromString(NewGameType.SelectedValue);
+
+            BotLevel botLevel = BotLevelHard.Checked ? BotLevel.Hard : BotLevel.Easy;
+            
+            Global.server.CreateGame(PlayerName, NewGameName.Text, gameType, 
+                Int32.Parse(NewGamePlayers.Text), Int32.Parse(NewGameBots.Text), botLevel);
+            Session["gameName"] = NewGameName.Text;
             Response.Redirect("Game.aspx", false);
+        }
+
+        private GameType GetGameTypeFromString(string type)
+        {
+            switch (type)
+            {
+                case "Poker":
+                    return GameType.Poker;
+                case "NPlus":
+                    return GameType.NPlus;
+                case "NStar":
+                    return GameType.NStar;
+                default:
+                    throw new InvalidProgramException("no game type " + NewGameType.SelectedValue);
+            }
         }
 
         protected void LeaveNewGame_Click(object sender, EventArgs e)

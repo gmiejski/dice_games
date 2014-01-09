@@ -22,49 +22,49 @@ namespace GUIModule.Pages {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// newGameTable control.
+        /// NewGameTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table newGameTable;
+        protected global::System.Web.UI.WebControls.Table NewGameTable;
         
         /// <summary>
-        /// newGameName control.
+        /// NewGameName control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox newGameName;
+        protected global::System.Web.UI.WebControls.TextBox NewGameName;
         
         /// <summary>
-        /// newGameType control.
+        /// NewGameType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList newGameType;
+        protected global::System.Web.UI.WebControls.DropDownList NewGameType;
         
         /// <summary>
-        /// newGamePlayers control.
+        /// NewGamePlayers control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox newGamePlayers;
+        protected global::System.Web.UI.WebControls.TextBox NewGamePlayers;
         
         /// <summary>
-        /// newGameBots control.
+        /// NewGameBots control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox newGameBots;
+        protected global::System.Web.UI.WebControls.TextBox NewGameBots;
         
         /// <summary>
         /// BotLevelEasy control.
@@ -83,5 +83,23 @@ namespace GUIModule.Pages {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton BotLevelHard;
+        
+        /// <summary>
+        /// StartGame control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button StartGame;
+        
+        /// <summary>
+        /// LeaveNewGame control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button LeaveNewGame;
     }
 }

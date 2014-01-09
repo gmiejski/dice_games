@@ -4,16 +4,20 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Lista gier</title>
     <link href="../App_Themes/dice.css" rel="stylesheet" />
     
 </head>
 <body>
     
-    <form id="gamesList" runat="server">
+    <form id="GamesList" runat="server">
     <div>
-        Witaj, <%= PlayerName %>!
-        <asp:GridView runat="server" ID="availableGamesTable" AutoGenerateColumns="false">
+        <asp:Panel runat="server" CssClass="horCentered">
+            <asp:Label runat="server" ID="HelloText" CssClass="helloText">
+                Witaj, <%= PlayerName %>!
+            </asp:Label>
+        </asp:Panel>
+        <asp:GridView runat="server" ID="AvailableGamesTable" CssClass="standardWindow horCentered" AutoGenerateColumns="false">
             <Columns>
                 <asp:BoundField DataField="GameName" HeaderText="Nazwa" />
                 <asp:BoundField DataField="OwnerName" HeaderText="Twórca" />
@@ -30,7 +34,7 @@
                 <asp:TemplateField>
                     <ItemTemplate>
                         <asp:Button runat="server" ID="joinGame" CssClass="joinGameButton" Text='Dołącz!'
-                            OnClick="JoinGame_Click" CommandArgument="<%# Container.DisplayIndex %>" />
+                            OnClick="JoinGame_Click" CommandArgument='<%# Eval("GameName") %>' />
                     </ItemTemplate>
                 </asp:TemplateField>
             </Columns>
@@ -39,7 +43,7 @@
             <asp:Button runat="server" Text="Załóż grę" OnClick="NewGame_Click" CssClass="bottom"/>
         </asp:Panel>
         <asp:Panel runat="server" CssClass="bottomRightCorner" >
-            <asp:Button runat="server" Text="Wyloguj" OnClick="Logout_Click" />
+            <asp:Button runat="server" ID="LogoutButton" Text="Wyloguj" OnClick="Logout_Click" />
         </asp:Panel>
     </div>
     </form>

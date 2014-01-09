@@ -16,16 +16,16 @@
         </asp:ScriptManager>
         <asp:UpdatePanel runat="server" ID="updatePanel" UpdateMode="Always">
             <Triggers>
-                <asp:AsyncPostBackTrigger ControlID="refreshTable" EventName="click" />
+                <asp:AsyncPostBackTrigger ControlID="RefreshTable" EventName="click" />
             </Triggers>
             <ContentTemplate>
-                <asp:Panel ID="gameStatsPanel" runat="server" CssClass="horCentered">
+                <asp:Panel ID="GameStatsPanel" runat="server" CssClass="horCentered">
                     <asp:Label runat="server" CssClass="gameStat">Jesteś <%= PlayerName %></asp:Label><br />
                     <asp:Label runat="server" CssClass="gameStat">Nazwa gry: <%= GameName %></asp:Label><br />
-                    <asp:Label runat="server" CssClass="gameStat">Stan: <%= GameData.State %></asp:Label><br />
-                    <asp:Label runat="server" CssClass="gameStat" ID="winnerLabel">Zwycięzca: <%= GameData.Winner %></asp:Label>
+                    <asp:Label runat="server" CssClass="gameStat">Stan: <asp:label runat="server" ID="GameState"><%= GameData.State %></asp:label></asp:Label><br />
+                    <asp:Label runat="server" CssClass="gameStat" ID="WinnerLabel">Zwycięzca: <%= GameData.Winner %></asp:Label>
                 </asp:Panel>
-                <asp:GridView runat="server" ID="awaitingPlayersList" CssClass="standardWindow horCentered" AutoGenerateColumns="false">
+                <asp:GridView runat="server" ID="AwaitingPlayersList" CssClass="standardWindow horCentered" AutoGenerateColumns="false">
                     <Columns>
                         <asp:BoundField DataField="Key" HeaderText="Gracz" />
                         <asp:TemplateField HeaderText="Ogólny wynik">
@@ -58,7 +58,7 @@
                         </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
-                <asp:GridView runat="server" ID="playersList" cssClass="standardWindow horCentered"
+                <asp:GridView runat="server" ID="PlayersList" cssClass="standardWindow horCentered"
                     AutoGenerateColumns="false" OnDataBound="PlayersDataBound">
                     <Columns>
                         <asp:BoundField DataField="Key" HeaderText="Gracz" />
@@ -87,29 +87,34 @@
                         <asp:Panel runat="server" ID="toRoll" CssClass='<%# "userDiceSet dice_" + Container.DataItem %>' />
                     </ItemTemplate>
                 </asp:DataList>
-                <asp:Button runat="server" Text="Rzuć" ID="throwDice" />
+                <asp:Button runat="server" Text="Rzuć" ID="ThrowDice" />
                 </asp:Panel>
             </ContentTemplate>
         </asp:UpdatePanel>
-        <asp:Button runat="server" ID="refreshTable"/>
+        <asp:Button runat="server" ID="RefreshTable"/>
         <div class="bottomRightCorner">
-            <asp:Button runat="server" Text="Opuść grę" ID="leaveGame" OnClick="LeaveGame_Click" />
+            <asp:Button runat="server" Text="Opuść grę" ID="LeaveGame" OnClick="LeaveGame_Click" />
         </div>
     </form>
 
     <script type="text/javascript">
         $(function () {
             var gameState = $.connection.gameHub;
-            var playerName = "<%= PlayerName %>";
-            var gameName = "<%= GameName %>";
+            var playerName = "<%= EncodedPlayerName %>";
+            var gameName = "<%= EncodedGameName %>";
 
             gameState.client.requestRefresh = function () {
-                $("#refreshTable").click();
+                $("#RefreshTable").click();
+            };
+
+            gameState.client.endGame = function () {
+                $.connection.hub.stop();
+                $("#GameState").text("zakończona").css("color", "#f00");
             };
 
             $.connection.hub.start().done(function () {
 
-                $(document).on('click', '#throwDice', function (event) {
+                $(document).on('click', '#ThrowDice', function (event) {
                     event.preventDefault();
                     var toSend = [];
                     for (var i = 0; i < 5; i++) {
@@ -125,7 +130,10 @@
             $(event.target).toggleClass("userDiceSetToRoll");
         });
 
-        $("#leaveGame").click(function () {
+        $("#LeaveGame").click(function () {
+            if ($("#GameState").text() == "zakończona") {
+                return true;
+            }
             return confirm("Czy na pewno?");
         });
     });
