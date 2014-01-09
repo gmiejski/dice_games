@@ -23,7 +23,7 @@ namespace Dice.GameControllerPokerModule
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
             }
             GameState.IsOver = false;
-            GameState.WinnerName = ownerName;
+            GameState.WinnerName = new List<String>() { ownerName };
             GameState.WhoseTurn = ownerName;
         }
 
@@ -113,14 +113,15 @@ namespace Dice.GameControllerPokerModule
 
         private Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
-            PlayerState winnerPlayerState = GameState.PlayerStates[GameState.WinnerName];
+            PlayerState winnerPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
 
             String winningConfiguration = winnerPlayerState.CurrentResult;
             Hands winningHand = (Hands)System.Enum.Parse(typeof(Hands), winningConfiguration);
 
             if (winningHand < playerConfiguration.Hands)
             {
-                GameState.WinnerName = playerName;
+                //GameState.WinnerName = playerName;
+                //wyczyscic i dodac
                 return true;
             }
             else
@@ -128,7 +129,8 @@ namespace Dice.GameControllerPokerModule
                 {
                     if (winnerPlayerState.CurrentResultValue < playerConfiguration.HigherValue)
                     {
-                        GameState.WinnerName = playerName;
+                        //GameState.WinnerName = playerName;
+                        //jw.
                         return true;
                     }
                     else return false;
