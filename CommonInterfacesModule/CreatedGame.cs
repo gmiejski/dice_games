@@ -21,12 +21,13 @@ namespace CommonInterfacesModule
 
         public virtual bool AddPlayer(string playerName)
         {
-            throw new NotImplementedException();
+            PlayerNames.Add(playerName);
+            return true;
         }
 
         public virtual bool IsReadyToStart()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public CreatedGame(string ownerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
@@ -37,7 +38,8 @@ namespace CommonInterfacesModule
             GameName = gameName;
             BotLevel = botLevel;
             OwnerName = ownerName;
-            // TODO create Player names list
+
+            PlayerNames = new List<string>();
         }
     }
 }
