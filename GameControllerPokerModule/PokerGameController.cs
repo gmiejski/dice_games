@@ -10,21 +10,22 @@ namespace Dice.GameControllerPokerModule
     class PokerGameController : AbstractGameController
     {
         private Dictionary<String, Configuration> _playersDice = new Dictionary<String, Configuration>();
+        private String _firstPlayer;
+        private int _roundIterator = 0;
+        private int _turnsIterator = 0;
+        private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
             List<String> players, List<IBot> bots)
             : base(ownerName, gameName, gameType, players, bots)
         {
-            GameState = new GameState();
+            _firstPlayer = players[0];
             foreach (String player in players)
             {
                 List<int> dice = new List<int>() { 0, 0, 0, 0, 0 };
                 GameState.PlayerStates.Add(player, new PlayerState(dice) { CurrentResultValue = 0, CurrentResult = Hands.HighCard.ToString(), NumberOfWonRounds = 0 });
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
             }
-            GameState.IsOver = false;
-            GameState.WinnerName = new List<String>() { ownerName };
-            GameState.WhoseTurn = ownerName;
         }
 
         public override bool MakeMove(String PlayerName, Move move)
@@ -33,6 +34,26 @@ namespace Dice.GameControllerPokerModule
 
             if (!PlayerName.Equals(gameState.WhoseTurn))
                 return false;
+
+            if (_roundIterator == 4)
+            {
+                gameState.IsOver = true;
+            }
+            else
+                if (PlayerName.Equals(_firstPlayer) && _turnsIterator == 4)
+                {
+                    _roundIterator += 1;
+                    _turnsIterator = 1;
+                    gameState.WinnerName = new List<string>();
+                    gameState.WinnerName.Add(_firstPlayer);
+                    _playersByScoreList = new Dictionary<String, int>();
+                    _playersByScoreList.Add(_firstPlayer, 0);
+                    return false;
+                }
+                else
+                    if (PlayerName.Equals(_firstPlayer))
+                        _turnsIterator += 1;
+
             Configuration playerConfiguration = _playersDice[PlayerName];
             Random rnd = new Random();
             foreach (int element in move.DicesToRoll)
@@ -45,6 +66,7 @@ namespace Dice.GameControllerPokerModule
             gameState.PlayerStates[PlayerName].Dices = playerConfiguration.Dices;
 
             CheckWinnerChange(playerConfiguration, PlayerName);
+
             //metoda update w GameState?
             GameState = gameState;
             return true;
@@ -53,7 +75,7 @@ namespace Dice.GameControllerPokerModule
 
         private Configuration CheckConfiguration(Configuration configuration)
         {
-            List<int> counterList = new List<int> { 0, 0, 0, 0, 0, 0 };
+            List<int> counterList = new List<int> { 0, 0, 0, 0, 0, 0, 0 };
             foreach (int element in configuration.Dices)
             {
                 counterList[element] += 1;
@@ -113,31 +135,43 @@ namespace Dice.GameControllerPokerModule
 
         private Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
-            PlayerState winnerPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
+            PlayerState winningPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
 
-            String winningConfiguration = winnerPlayerState.CurrentResult;
-            Hands winningHand = (Hands)System.Enum.Parse(typeof(Hands), winningConfiguration);
+            PlayerState playerState = GameState.PlayerStates[playerName];
+            playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
+            _playersByScoreList[playerName] = playerState.CurrentResultValue;
 
-            if (winningHand < playerConfiguration.Hands)
+            Dictionary<String, int> tmpList = new Dictionary<String, int>();
+
+            foreach (KeyValuePair<String, int> player in _playersByScoreList.OrderBy(key => key.Value))
             {
-                //GameState.WinnerName = playerName;
-                //wyczyscic i dodac
-                return true;
+                tmpList.Add(player.Key, player.Value);
             }
-            else
-                if (winningHand.Equals(playerConfiguration.Hands))
+
+            _playersByScoreList = tmpList;
+
+            if (playerName.Equals(GameState.WinnerName))
+            {
+                if (!playerName.Equals(_playersByScoreList.Keys.First()))
                 {
-                    if (winnerPlayerState.CurrentResultValue < playerConfiguration.HigherValue)
-                    {
-                        //GameState.WinnerName = playerName;
-                        //jw.
-                        return true;
-                    }
-                    else return false;
-                    // TODO lowerValue jak bedzie w gamestate
+                    GameState.WinnerName = new List<string>();
+                    GameState.WinnerName.Add(_playersByScoreList.Keys.First());
+                    return true;
                 }
                 else
                     return false;
+            }
+            else
+                if (winningPlayerState.CurrentResultValue < playerState.CurrentResultValue)
+                {
+                    GameState.WinnerName = new List<string>();
+                    GameState.WinnerName.Add(playerName);
+                    return true;
+                }
+                else if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue)
+                    GameState.WinnerName.Add(playerName);
+
+            return false;
         }
     }
 }
