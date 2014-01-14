@@ -241,6 +241,41 @@ namespace ServerTestModule
         }
 
         [Test]
+        public void ShouldRemoveAvailableGameWhenLastPlayerRemoved()
+        {
+            string playerName = "playerName";
+            List<string> playerNames = new List<string> { playerName };
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+
+            createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(playerNames);
+
+            _availableGames.Add(GameName, createdGameMock.Object);
+
+            Assert.True(_instance.RemovePlayer(playerName));
+            createdGameMock.VerifyGet(cr => cr.PlayerNames, Times.Exactly(2));
+            Assert.True(_availableGames.Count == 0);
+        }
+
+        [Test]
+        public void ShouldRemovePlayerAndGameWhenPlayerInActiveGame()
+        {
+            string playerName = "playerName";
+            Dictionary<string, PlayerState> playerStates = new Dictionary<string, PlayerState> { {playerName, new Mock<PlayerState>(null).Object} };
+            var gameStateMock = new Mock<GameState>();
+            var gameControllerMock = new Mock<IGameController>();
+
+            gameStateMock.SetupGet(g => g.PlayerStates).Returns(playerStates);
+            gameControllerMock.SetupGet(g => g.GameState).Returns(gameStateMock.Object);
+
+            _activeGames.Add(GameName, gameControllerMock.Object);
+
+            Assert.True(_instance.RemovePlayer(playerName));
+            gameStateMock.VerifyGet(g => g.PlayerStates, Times.Once);
+            gameControllerMock.VerifyGet(g => g.GameState, Times.Once);
+            Assert.True(_activeGames.Count == 0);
+        }
+
+        [Test]
         public void ShouldReturnAvailableGames()
         {
             CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);

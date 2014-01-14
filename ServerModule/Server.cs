@@ -20,6 +20,13 @@ namespace ServerModule
         private readonly object _lockAvailableGames = new object();
         private readonly object _lockLoggedPlayers = new object();
 
+        /// <summary> 
+        /// Class constructor used for tests.
+        /// </summary>
+        /// <param name="activeGames">Dictionary containing pairs of {GameName : GameController}</param>
+        /// <param name="availableGames">Dictionary containing pairs of {GameName : GreatedGame}</param>
+        /// <param name="gameControllerFactory">Factory of GameControllers</param>
+        /// <param name="loggedPlayers">Dictionary containing pairs of {PlayerName : ContextId}</param>
         public Server(GameControllerFactory gameControllerFactory, Dictionary<string, IGameController> activeGames, Dictionary<string, CreatedGame> availableGames, Dictionary<string, string> loggedPlayers)
         {
             _gameControllerFactory = gameControllerFactory;
@@ -28,6 +35,9 @@ namespace ServerModule
             _loggedPlayers = loggedPlayers;
         }
 
+        /// <summary> 
+        /// Class parameterless constructor. 
+        /// </summary>
         public Server()
         {
             _activeGames = new Dictionary<string, IGameController>();
@@ -36,6 +46,16 @@ namespace ServerModule
             _gameControllerFactory = new GameControllerFactory();
         }
 
+        /// <summary>
+        /// This method is called when a player wants to create new game.
+        /// </summary>
+        /// <param name="playerName">Name of player who wants to create a new game</param>
+        /// <param name="gameName">Name of new game to be created</param>
+        /// <param name="gameType">Type of game, can be: NPlus, NStar, Poker</param>
+        /// <param name="numberOfPlayers">Number of human players including game creator</param>
+        /// <param name="numberOfBots">Number of bots</param>
+        /// <param name="botLevel">Bot level, can be: Easy, Hard</param>
+        /// <returns>Returns CreatedGame object or null.</returns>
         public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
         {
             if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName) || numberOfPlayers < 0 || numberOfBots < 0)
@@ -54,6 +74,11 @@ namespace ServerModule
             return createdGame;
         }
 
+        /// <summary>
+        /// This method is called when game is finished or when one of players left active game or when last player left available game
+        /// </summary>
+        /// <param name="gameName">Name of game to be deleted</param>
+        /// <returns>Returns true indicating successful game deletion or false otherwise</returns>
         public bool DeleteGame(string gameName)
         {
             if (string.IsNullOrEmpty(gameName))
@@ -83,6 +108,12 @@ namespace ServerModule
             return false;
         }
 
+        /// <summary>
+        /// This method is called when a player wants to join available game.
+        /// </summary>
+        /// <param name="playerName">Name of player who wants to join game</param>
+        /// <param name="gameName">Name of game player wants to join</param>
+        /// <returns>Returns true indicating successful addition to game or false otherwise</returns>
         public bool JoinGame(string playerName, string gameName)
         {
             bool result = false;
@@ -113,6 +144,13 @@ namespace ServerModule
             return result;
         }
 
+        /// <summary>
+        /// This method is called when human player wants to make a move.
+        /// </summary>
+        /// <param name="playerName">Name of player who wants to make a move</param>
+        /// <param name="gameName">Name of game player belongs to</param>
+        /// <param name="move">Players move consisting of dices player wants to roll</param>
+        /// <returns>Returns true indicating successful move or false otherwise.</returns>
         public bool MakeMove(string playerName, string gameName, Move move)
         {
             if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName) || move == null)
@@ -125,6 +163,12 @@ namespace ServerModule
             }
         }
 
+        /// <summary>
+        /// This method is called when player wants to log in the system
+        /// </summary>
+        /// <param name="playerName">Name of player who want to log in</param>
+        /// <param name="contextId">Context Id of connecting player</param>
+        /// <returns>Returns true indicating successful login or false otherwise.</returns>
         public bool RegisterPlayer(String playerName, string contextId)
         {
             if (String.IsNullOrEmpty(contextId) || String.IsNullOrEmpty(playerName) || _loggedPlayers.ContainsKey(playerName))
@@ -138,6 +182,11 @@ namespace ServerModule
             return true;
         }
 
+        /// <summary>
+        /// This method is called when player wants to log out from the system.
+        /// </summary>
+        /// <param name="playerName">Name of player who wants to log out</param>
+        /// <returns>Returns true indicating successful logout or false otherwise.</returns>
         public bool UnregisterPlayer(string playerName)
         {
             if (String.IsNullOrEmpty(playerName) || !_loggedPlayers.ContainsKey(playerName))
@@ -152,6 +201,13 @@ namespace ServerModule
             return true;
         }
 
+        /// <summary>
+        /// This method is called when player wants to leave either available or active game.
+        /// If player is the only one belonging to available game this game is deleted.
+        /// if player belongs to active game this game is deleted.
+        /// </summary>
+        /// <param name="playerName">Name of player who wants to leave a game.</param>
+        /// <returns>Returns true indicating successful player removal or false otherwise.</returns>
         public bool RemovePlayer(string playerName)
         {
             if (String.IsNullOrEmpty(playerName))
@@ -192,6 +248,10 @@ namespace ServerModule
             return false;
         }
 
+        /// <summary>
+        /// This method is called when player wants to see available games.
+        /// </summary>
+        /// <returns>Returns list of available games.</returns>
         public List<CreatedGame> GetAvailableGames()
         {
             lock (_lockAvailableGames)
@@ -200,6 +260,11 @@ namespace ServerModule
             }
         }
 
+        /// <summary>
+        /// This method is called when player wants to see current game state.
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <returns>Returns current GameState.</returns>
         public GameState GetGameState(string gameName)
         {
             lock (_lockActiveGames)
