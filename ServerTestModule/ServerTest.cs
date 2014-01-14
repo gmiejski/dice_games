@@ -17,11 +17,11 @@ namespace ServerTestModule
         private Dictionary<string, string> _loggedPlayers;
         private Mock<GameControllerFactory> _gameControllerFactoryMock;
 
-        private const string OwnerName = "ownerName";
-        private const string GameName = "gameName";
+        private string OwnerName = "ownerName";
+        private string GameName = "gameName";
         private GameType GameType = GameType.NPlus;
-        private const int NumberOfPlayers = 3;
-        private const int NumberOfBots = 1;
+        private int NumberOfPlayers = 3;
+        private int NumberOfBots = 1;
         private BotLevel BotLevel = BotLevel.Easy;
 
         [SetUp]
@@ -85,6 +85,39 @@ namespace ServerTestModule
         }
 
         [Test]
+        public void ShouldUnregisterPlayer()
+        {
+            string playerName = "playerName";
+            string contextId = "context";
+            _loggedPlayers.Add(playerName, contextId);
+            Assert.True(_instance.UnregisterPlayer(playerName));
+            Assert.True(_loggedPlayers.Count == 0);
+        }
+
+        [Test]
+        public void ShouldNotUnregisterPlayerWhenArgumentIsNullOrEmpty()
+        {
+            string playerName = "playerName";
+            string contextId = "context";
+            _loggedPlayers.Add(playerName, contextId);
+            Assert.False(_instance.UnregisterPlayer(null));
+            Assert.True(_loggedPlayers.Keys.Contains(playerName));
+            Assert.False(_instance.UnregisterPlayer(""));
+            Assert.True(_loggedPlayers.Keys.Contains(playerName));
+        }
+
+        [Test]
+        public void ShouldNotUnregisterPlayerWhenDesiredNameIsNotInUse()
+        {
+            string playerName = "playerName";
+            string anotherPlayerName = "playerName2";
+            string contextId = "context";
+            _loggedPlayers.Add(playerName, contextId);
+            Assert.False(_instance.UnregisterPlayer(anotherPlayerName));
+            Assert.True(_loggedPlayers.Keys.Contains(playerName));
+        }
+
+        [Test]
         public void ShouldCreateNewGame()
         {
             CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
@@ -101,7 +134,7 @@ namespace ServerTestModule
         }
 
         [Test]
-        public void ShouldCreateNewGameWhenGameNameAlreadyInUse()
+        public void ShouldNotCreateNewGameWhenGameNameAlreadyInUse()
         {
             CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
             CreatedGame secondGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
@@ -110,6 +143,101 @@ namespace ServerTestModule
             Assert.Null(secondGame);
             Assert.AreEqual(createdGame,_availableGames[GameName]);
 
+        }
+
+        [Test]
+        public void ShouldNotCreateNewGameWhenArgumentsAreMalformed()
+        {
+            Assert.Null(_instance.CreateGame(null, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame("", GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame(OwnerName, null, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame(OwnerName, "", GameType, NumberOfPlayers, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, -1, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, -1, BotLevel));
+        }
+
+        [Test]
+        public void ShouldNotDeleteGameWhenArgumentIsNullOrEmpty()
+        {
+            Assert.False(_instance.DeleteGame(null));
+            Assert.False(_instance.DeleteGame(""));
+        }
+
+        [Test]
+        public void ShouldNotDeleteGameWhenGameNameIsNotInUse()
+        {
+            string firstGame = "firstGame";
+            string secondGame = "secondGame";
+            string thirdGame = "thirdGame";
+            _availableGames.Add(firstGame, new Mock<CreatedGame>(null,null,null,null,null,null).Object);
+            _activeGames.Add(secondGame, new Mock<IGameController>().Object);
+            Assert.False(_instance.DeleteGame(thirdGame));
+            Assert.True(_availableGames.Keys.Contains(firstGame));
+            Assert.True(_activeGames.Keys.Contains(secondGame));
+        }
+
+        [Test]
+        public void ShouldDeleteGameWhenGameIsAvailable()
+        {
+            _availableGames.Add(GameName, new Mock<CreatedGame>(null, null, null, null, null, null).Object);
+            Assert.True(_instance.DeleteGame(GameName));
+            Assert.False(_availableGames.Keys.Contains(GameName));
+        }
+
+        [Test]
+        public void ShouldDeleteGameWhenGameIsActive()
+        {
+            _activeGames.Add(GameName, new Mock<IGameController>().Object);
+            Assert.True(_instance.DeleteGame(GameName));
+            Assert.False(_activeGames.Keys.Contains(GameName));
+        }
+
+        [Test]
+        public void ShouldNotRemovePlayerWhenPlayerNameIsNullOrEmpty()
+        {
+            Assert.False(_instance.RemovePlayer(null));
+            Assert.False(_instance.RemovePlayer(""));
+        }
+
+        [Test]
+        public void ShouldNotRemovePlayerWhenPlayerNotInAvailableAndActiveGame()
+        {
+            string playerName = "playerName";
+            string firstGame = "firstGame";
+            string secondGame = "secondGame";
+            var gameStateMock = new Mock<GameState>();
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var gameControllerMock = new Mock<IGameController>();
+            
+            createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(new List<string>());
+            gameStateMock.SetupGet(g => g.PlayerStates).Returns(new Dictionary<string, PlayerState>());
+            gameControllerMock.SetupGet(g => g.GameState).Returns(gameStateMock.Object);
+            
+            _availableGames.Add(firstGame, createdGameMock.Object);
+            _activeGames.Add(secondGame, gameControllerMock.Object);
+            
+            Assert.False(_instance.RemovePlayer(playerName));
+            createdGameMock.VerifyGet(cr => cr.PlayerNames, Times.Once);
+            gameControllerMock.VerifyGet(g => g.GameState, Times.Once);
+            gameStateMock.VerifyGet(g => g.PlayerStates, Times.Once);
+        }
+
+        [Test]
+        public void ShouldRemovePlayerWhenPlayerInAvailableGame()
+        {
+            string playerName = "playerName";
+            string anotherPlayerName = "anotherPlayer";
+            List<string> playerNames = new List<string> { playerName, anotherPlayerName };
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+
+            createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(playerNames);
+
+            _availableGames.Add(GameName, createdGameMock.Object);
+
+            Assert.True(_instance.RemovePlayer(playerName));
+            createdGameMock.VerifyGet(cr => cr.PlayerNames, Times.Exactly(3));
+            Assert.False(_availableGames.First().Value.PlayerNames.Contains(playerName));
+            Assert.True(_availableGames.First().Value.PlayerNames.Contains(anotherPlayerName));
         }
 
         [Test]
@@ -124,6 +252,9 @@ namespace ServerTestModule
         public void ShouldAddPlayerToExistingCreatedGame()
         {
             string playerName = "playerName";
+            string contextId = "contextId";
+
+            _loggedPlayers.Add(playerName, contextId);
             var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
             createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(true);
             _availableGames.Add(GameName,createdGameMock.Object);
@@ -160,9 +291,14 @@ namespace ServerTestModule
         public void ShouldRemoveCreatedGameFromAvailableGamesWhenIsReadyToStart()
         {
             string playerName = "playerName";
+            string contextId = "contextId";
+
+            _loggedPlayers.Add(playerName, contextId);
             var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var gameControllerMock = new Mock<IGameController>();
             createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
+            _gameControllerFactoryMock.Setup(gc => gc.CreateGameController(createdGameMock.Object)).Returns(gameControllerMock.Object);
             _availableGames.Add(GameName, createdGameMock.Object);
 
             bool result = _instance.JoinGame(playerName, GameName);
@@ -176,10 +312,11 @@ namespace ServerTestModule
         [Test]
         public void ShouldAddGameControllerToActiveGamesWhenLastPlayerSuccesfullyJoinedCreatedGame()
         {
-            const string playerName = "playerName";
+            string playerName = "playerName";
+            string contextId = "contextId";
 
+            _loggedPlayers.Add(playerName, contextId);
             var gameControllerMock = new Mock<IGameController>();
-
             var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
 
             createdGameMock.Setup(cr => cr.AddPlayer(playerName)).Returns(true);

@@ -17,7 +17,7 @@ namespace CommonInterfacesModule
 
         public string OwnerName { get; private set; }
 
-        public List<string> PlayerNames { get; private set; }
+        public virtual List<string> PlayerNames { get; private set; }
 
         public virtual bool AddPlayer(string playerName)
         {
