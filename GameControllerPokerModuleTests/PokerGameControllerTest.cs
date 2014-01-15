@@ -76,7 +76,11 @@ namespace GameControllerPokerModuleTests
             gameController.GameState.WhoseTurn = nextPlayer;
             Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
             List<int> playerDice = gameController.GameState.PlayerStates[nextPlayer].Dices;
-            Configuration bestConfiguration = new Configuration(Hands.Five, 6, new List<int>() { 6, 6, 6, 6, 6 });
+            List<int> bestDice = new List<int>() { 6, 6, 6, 6, 6 };
+            Configuration bestConfiguration = new Configuration(Hands.Five, 6, bestDice);
+            bestConfiguration.Dices = bestDice;
+            Assert.AreEqual(bestConfiguration.Hands, Hands.Five);
+            Assert.AreEqual(bestConfiguration.Dices, bestDice);
             Assert.IsTrue(((PokerGameController)gameController).CheckWinnerChange(bestConfiguration, players[1]));
             Assert.IsTrue(gameController.GameState.WinnerName.Contains("player2"));
         }
@@ -137,6 +141,102 @@ namespace GameControllerPokerModuleTests
             List<String> players = new List<String>();
             List<IBot> botList = new List<IBot>();
             gameController = new PokerGameController("player", gameName, gameType, players, botList);
+        }
+
+        [TestMethod]
+        public void TestGameOver()
+        {
+            String gameName = "gra1";
+            GameType gameType = GameType.Poker;
+            List<String> players = new List<String>() { "player1", "player2" };
+            List<IBot> botList = new List<IBot>();
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            String nextPlayer = players[0];
+            gameController.GameState.WhoseTurn = nextPlayer;
+            Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
+            for (int i = 0; i < 12; i++)
+            {
+                gameController.MakeMove(players[0], firstMove);
+                gameController.GameState.WhoseTurn = players[0];
+            }
+            Assert.IsFalse(gameController.MakeMove(players[0], firstMove));
+            Assert.IsTrue(gameController.GameState.IsOver);
+        }
+
+        [TestMethod]
+        public void TestRoundOver()
+        {
+            String gameName = "gra1";
+            GameType gameType = GameType.Poker;
+            List<String> players = new List<String>() { "player1", "player2" };
+            List<IBot> botList = new List<IBot>();
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            String nextPlayer = players[0];
+            Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
+            for (int i = 0; i < 4; i++)
+            {
+                gameController.GameState.WhoseTurn = players[0];
+                gameController.MakeMove(players[0], firstMove);
+            }
+            Assert.IsTrue(gameController.GameState.WinnerName.Contains(players[0]) && gameController.GameState.WinnerName.Count == 1);
+        }
+
+        [TestMethod]
+        public void TestConfiguration()
+        {
+            String gameName = "gra1";
+            GameType gameType = GameType.Poker;
+            List<String> players = new List<String>() { "player1", "player2" };
+            List<IBot> botList = new List<IBot>();
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            String nextPlayer = players[0];
+            Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
+            Configuration fiveConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 6, 6, 6 });
+            Configuration fourConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 6, 6, 5 });
+            Configuration fullConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 6, 5, 5 });
+            Configuration highStraightConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 5, 4, 3, 2 });
+            Configuration lowStraightConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 5, 4, 3, 2, 1 });
+            Configuration threeConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 6, 5, 4 });
+            Configuration twoPairConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 5, 5, 4 });
+            Configuration pairConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 5, 4, 3 });
+            Configuration highCardConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 1, 2, 3, 4, 6 });
+            ((PokerGameController)gameController).CheckConfiguration(fiveConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(fourConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(fullConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(highStraightConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(lowStraightConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(threeConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(twoPairConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(pairConfiguration);
+            ((PokerGameController)gameController).CheckConfiguration(highCardConfiguration);
+            Assert.AreEqual(fiveConfiguration.Hands, Hands.Five);
+            Assert.AreEqual(fiveConfiguration.HigherValue, 6);
+            Assert.AreEqual(fiveConfiguration.LowerValue, 0);
+            Assert.AreEqual(fourConfiguration.Hands, Hands.Four);
+            Assert.AreEqual(fourConfiguration.HigherValue, 6);
+            Assert.AreEqual(fourConfiguration.LowerValue, 0);
+            Assert.AreEqual(fullConfiguration.Hands, Hands.Full);
+            Assert.AreEqual(fullConfiguration.HigherValue, 6);
+            Assert.AreEqual(fullConfiguration.LowerValue, 5);
+            Assert.AreEqual(highStraightConfiguration.Hands, Hands.HighStraight);
+            Assert.AreEqual(highStraightConfiguration.HigherValue, 0);
+            Assert.AreEqual(highStraightConfiguration.LowerValue, 0);
+            Assert.AreEqual(lowStraightConfiguration.Hands, Hands.LowStraight);
+            Assert.AreEqual(lowStraightConfiguration.HigherValue, 0);
+            Assert.AreEqual(lowStraightConfiguration.LowerValue, 0);
+            Assert.AreEqual(threeConfiguration.Hands, Hands.Three);
+            Assert.AreEqual(threeConfiguration.HigherValue, 6);
+            Assert.AreEqual(threeConfiguration.LowerValue, 0);
+            Assert.AreEqual(twoPairConfiguration.Hands, Hands.TwoPair);
+            Assert.AreEqual(twoPairConfiguration.HigherValue, 6);
+            Assert.AreEqual(twoPairConfiguration.LowerValue, 5);
+            Assert.AreEqual(pairConfiguration.Hands, Hands.Pair);
+            Assert.AreEqual(pairConfiguration.HigherValue, 6);
+            Assert.AreEqual(pairConfiguration.LowerValue, 0);
+            Assert.AreEqual(highCardConfiguration.Hands, Hands.HighCard);
+            Assert.AreEqual(highCardConfiguration.LowerValue, 0);
+            Assert.AreEqual(highCardConfiguration.HigherValue, 6);
+
         }
 
     }

@@ -11,6 +11,8 @@ namespace GameControllerPokerModule
         Pair,
         TwoPair,
         Three,
+        LowStraight,
+        HighStraight,
         Full,
         Four,
         Five

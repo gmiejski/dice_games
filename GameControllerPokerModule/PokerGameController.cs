@@ -11,8 +11,8 @@ namespace GameControllerPokerModule
     {
         private Dictionary<String, Configuration> _playersDice = new Dictionary<String, Configuration>();
         private String _firstPlayer;
-        private int _roundIterator = 0;
-        private int _turnsIterator = 0;
+        private int _roundIterator = 1;
+        private int _turnsIterator = 1;
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
@@ -45,6 +45,7 @@ namespace GameControllerPokerModule
             {
                 gameState.IsOver = true;
                 OnDelete(GameName);
+                return false;
             }
             else
                 if (PlayerName.Equals(_firstPlayer) && _turnsIterator == 4)
@@ -55,7 +56,6 @@ namespace GameControllerPokerModule
                     gameState.WinnerName.Add(_firstPlayer);
                     _playersByScoreList = new Dictionary<String, int>();
                     _playersByScoreList.Add(_firstPlayer, 0);
-                    return false;
                 }
                 else
                     if (PlayerName.Equals(_firstPlayer))
@@ -130,8 +130,21 @@ namespace GameControllerPokerModule
                     configuration.LowerValue = 0;
                     break;
                 case 5:
-                    configuration.Hands = Hands.HighCard;
-                    configuration.HigherValue = counterList.IndexOf(5);
+                    if (counterList[6] == 0)
+                    {
+                        configuration.Hands = Hands.LowStraight;
+                        configuration.HigherValue = 0;
+                    }
+                    else if (counterList[1] == 0)
+                    {
+                        configuration.Hands = Hands.HighStraight;
+                        configuration.HigherValue = 0;
+                    }
+                    else
+                    {
+                        configuration.Hands = Hands.HighCard;
+                        configuration.HigherValue = 6;
+                    }
                     configuration.LowerValue = 0;
                     break;
             }
@@ -175,7 +188,7 @@ namespace GameControllerPokerModule
                     GameState.WinnerName.Add(playerName);
                     return true;
                 }
-                else if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue)
+                else if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue && !GameState.WinnerName.Contains(playerName))
                 {
                     GameState.WinnerName.Add(playerName);
                     return true;
