@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using CommonInterfacesModule;
 using Moq;
 using NUnit.Framework;
@@ -17,11 +18,12 @@ namespace ServerTestModule
         private Dictionary<string, string> _loggedPlayers;
         private Mock<GameControllerFactory> _gameControllerFactoryMock;
 
-        private string OwnerName = "ownerName";
-        private string GameName = "gameName";
+        private const string OwnerName = "ownerName";
+        private const string GameName = "gameName";
+        private const string PlayerName = "playerName";
         private GameType GameType = GameType.NPlus;
-        private int NumberOfPlayers = 3;
-        private int NumberOfBots = 1;
+        private const int NumberOfPlayers = 3;
+        private const int NumberOfBots = 1;
         private BotLevel BotLevel = BotLevel.Easy;
 
         [SetUp]
@@ -284,6 +286,15 @@ namespace ServerTestModule
         }
 
         [Test]
+        public void ShouldReturnFalseWhenJoiningGameWithEmptyOrNullArguments()
+        {
+            Assert.False(_instance.JoinGame(string.Empty, GameName));
+            Assert.False(_instance.JoinGame(PlayerName, string.Empty));
+            Assert.False(_instance.JoinGame(PlayerName, string.Empty));
+            Assert.False(_instance.JoinGame(null, GameName));
+        }
+
+        [Test]
         public void ShouldAddPlayerToExistingCreatedGame()
         {
             string playerName = "playerName";
@@ -453,6 +464,8 @@ namespace ServerTestModule
             gameController.Verify(gc => gc.MakeMove(playerName,move.Object),Times.Once);
 
         }
+
+        
 
     }
 }

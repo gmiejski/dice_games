@@ -119,7 +119,10 @@ namespace ServerModule
         public bool JoinGame(string playerName, string gameName) // TODO sprawdzić testy
         {
 
-            // TODO null and empty strings checks
+            if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName))
+            {
+                return false;
+            }
 
             bool result = false;
             lock (_lockAvailableGames)
@@ -144,7 +147,7 @@ namespace ServerModule
             if (result)
             {
                 var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh();
+                hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh(); // TODO co w sytuacji gdy nie mamy gracza w dict? teoretycznie nigdy sie nei zdarzy, ale kto go tam wie :P To też powinno być atomiczne, bo nam w czasie dołączania do gry może się rozłączyć, pójdzie event że trzeba go wywalić i tutaj dostaniemy null'a bo go już w dict nie będzie
             }
             return result;
         }
