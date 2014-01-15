@@ -6,11 +6,11 @@ using Microsoft.AspNet.SignalR;
 
 namespace ServerModule
 {
-    //TODO xml comment
+    // TODO xml comment
     public class Server : IServer
     {
 
-        private GameControllerFactory _gameControllerFactory;
+        private readonly GameControllerFactory _gameControllerFactory;
 
         private readonly Dictionary<string, IGameController> _activeGames;
         private readonly Dictionary<string, CreatedGame> _availableGames;
@@ -54,7 +54,7 @@ namespace ServerModule
         /// <param name="numberOfPlayers">Number of human players including game creator</param>
         /// <param name="numberOfBots">Number of bots</param>
         /// <param name="botLevel">Bot level, can be: Easy, Hard</param>
-        /// <returns>Returns CreatedGame object or null.</returns>
+        /// <returns>Returns CreatedGame object or null when operation was unsuccesful .</returns>
         public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
         {
             if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName) || numberOfPlayers < 0 || numberOfBots < 0)
@@ -217,7 +217,6 @@ namespace ServerModule
             {
                 return _loggedPlayers.Remove(playerName);
             }
-             // TODO changed returning true to returning value of dict.Remove(...)
         }
 
         /// <summary>
@@ -289,7 +288,7 @@ namespace ServerModule
         private void OnGameStateChanged(string gameName)
         {
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.Group(gameName).endGame();
+            hub.Clients.Group(gameName).endGame(); // TODO ???
         }
     }
 }
