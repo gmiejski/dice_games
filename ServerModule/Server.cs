@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommonInterfacesModule;
 using Microsoft.AspNet.SignalR;
 
 namespace ServerModule
 {
+    //TODO xml comment
     public class Server : IServer
     {
 
@@ -23,8 +22,8 @@ namespace ServerModule
         /// <summary> 
         /// Class constructor used for tests.
         /// </summary>
-        /// <param name="activeGames">Dictionary containing pairs of {GameName : GameController}</param>
-        /// <param name="availableGames">Dictionary containing pairs of {GameName : GreatedGame}</param>
+        /// <param name="activeGames">Dictionary containing pairs of {GameName : IGameController}</param>
+        /// <param name="availableGames">Dictionary containing pairs of {GameName : CreatedGame}</param>
         /// <param name="gameControllerFactory">Factory of GameControllers</param>
         /// <param name="loggedPlayers">Dictionary containing pairs of {PlayerName : ContextId}</param>
         public Server(GameControllerFactory gameControllerFactory, Dictionary<string, IGameController> activeGames, Dictionary<string, CreatedGame> availableGames, Dictionary<string, string> loggedPlayers)
@@ -63,12 +62,15 @@ namespace ServerModule
                 return null;
             }
             CreatedGame createdGame = null;
-            if (!_availableGames.ContainsKey(gameName))
+            lock (_lockAvailableGames)
             {
-                createdGame = new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBots, botLevel);
-                lock (_lockAvailableGames)
+                if (!_availableGames.ContainsKey(gameName)) //  TODO  musi być też sprawdzenie czy nie istnieje gra działająca pod tym name
                 {
+                    createdGame = new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBots,
+                        botLevel);
+
                     _availableGames.Add(gameName, createdGame);
+
                 }
             }
             return createdGame;
@@ -90,7 +92,7 @@ namespace ServerModule
                 if (_availableGames.ContainsKey(gameName))
                 {
                     _availableGames.Remove(gameName);
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
+                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>(); // TODO czyli jka już nie ma gry, to będzie chciał zaciągnąć sobie GameState, dostanie null i to jest obsłużone w js?
                     hub.Clients.Group(gameName).requestRefresh();
                     return true;
                 }
@@ -114,8 +116,11 @@ namespace ServerModule
         /// <param name="playerName">Name of player who wants to join game</param>
         /// <param name="gameName">Name of game player wants to join</param>
         /// <returns>Returns true indicating successful addition to game or false otherwise</returns>
-        public bool JoinGame(string playerName, string gameName)
+        public bool JoinGame(string playerName, string gameName) // TODO sprawdzić testy
         {
+
+            // TODO null and empty strings checks
+
             bool result = false;
             lock (_lockAvailableGames)
             {
@@ -127,8 +132,8 @@ namespace ServerModule
                     {
                         _availableGames.Remove(gameName);
                         var gameController = _gameControllerFactory.CreateGameController(createdGame);
-                        gameController.BroadcastGameState += new BroadcastGameStateHandler(OnGameStateChanged);
-                        gameController.DeleteGameController += new DeleteGameControllerHandler(DeleteGame);
+                        gameController.BroadcastGameState += OnGameStateChanged;
+                        gameController.DeleteGameController += DeleteGame;
                         lock (_lockActiveGames)
                         {
                             _activeGames.Add(gameName, gameController);
@@ -149,7 +154,7 @@ namespace ServerModule
         /// </summary>
         /// <param name="playerName">Name of player who wants to make a move</param>
         /// <param name="gameName">Name of game player belongs to</param>
-        /// <param name="move">Players move consisting of dices player wants to roll</param>
+        /// <param name="move">Player's move consisting of dices player wants to roll</param>
         /// <returns>Returns true indicating successful move or false otherwise.</returns>
         public bool MakeMove(string playerName, string gameName, Move move)
         {
@@ -189,6 +194,9 @@ namespace ServerModule
         /// <returns>Returns true indicating successful logout or false otherwise.</returns>
         public bool UnregisterPlayer(string playerName)
         {
+
+            // TODO trzeba sprawdzenie tez dodać do locka? Teoretycznie nie, ale można :P
+
             if (String.IsNullOrEmpty(playerName) || !_loggedPlayers.ContainsKey(playerName))
             {
                 return false;
@@ -196,9 +204,9 @@ namespace ServerModule
             RemovePlayer(playerName);
             lock (_lockLoggedPlayers)
             {
-                _loggedPlayers.Remove(playerName);
+                return _loggedPlayers.Remove(playerName);
             }
-            return true;
+             // TODO changed returning true to returning value of dict.Remove(...)
         }
 
         /// <summary>
@@ -216,33 +224,27 @@ namespace ServerModule
             }
             lock (_lockAvailableGames)
             {
-                foreach(KeyValuePair<string, CreatedGame> game in _availableGames) 
+                foreach (var game in _availableGames.Where(game => game.Value.PlayerNames.Contains(playerName)))
                 {
-                    if (game.Value.PlayerNames.Contains(playerName))
+                    if (game.Value.PlayerNames.Count == 1)
                     {
-                        if (game.Value.PlayerNames.Count == 1)
-                        {
-                            DeleteGame(game.Key);
-                        }
-                        else
-                        {
-                            game.Value.PlayerNames.Remove(playerName);
-                            var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                            hub.Clients.Group(game.Key).requestRefresh();
-                        }
-                        return true;
+                        DeleteGame(game.Key);
                     }
+                    else
+                    {
+                        game.Value.PlayerNames.Remove(playerName);
+                        var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
+                        hub.Clients.Group(game.Key).requestRefresh();
+                    }
+                    return true;
                 }
             }
             lock (_lockActiveGames)
             {
-                foreach (KeyValuePair<string, IGameController> game in _activeGames)
+                foreach (var game in _activeGames.Where(game => game.Value.GameState.PlayerStates.Keys.Contains(playerName)))
                 {
-                    if (game.Value.GameState.PlayerStates.Keys.Contains(playerName))
-                    {
-                        DeleteGame(game.Key);
-                        return true;
-                    }
+                    DeleteGame(game.Key);
+                    return true;
                 }
             }
             return false;
