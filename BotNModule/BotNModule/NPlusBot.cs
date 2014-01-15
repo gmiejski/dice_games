@@ -18,10 +18,28 @@ namespace BotNModule
         {
             Move myMove = null;
             PlayerState player;
-            if (gameState.PlayerStates.TryGetValue(this.name, out player))
-                myMove = new Move(ultimateProbability(player.Dices, 20));
-            else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
-            
+            if (getBotLevel() == BotLevel.Hard)
+            {
+                if (gameState.PlayerStates.TryGetValue(this.name, out player))
+                {
+                    List<int> l = UltimateProbability(player.Dices, 20, new List<int>());
+                    List<int> ll = new List<int>(l);
+                    foreach (int x in l)
+                    {
+                        ll[l.IndexOf(x)] = player.Dices.IndexOf(x);
+                    }
+                    myMove = new Move(ll);
+                }
+                else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
+            }
+            else
+            {
+                if (gameState.PlayerStates.TryGetValue(this.name, out player))
+                    myMove = new Move(new List<int>() { 0, 1, 2, 3, 4, 5 });
+                else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
+
+            }
+
             return myMove;
         }
 
@@ -35,13 +53,13 @@ namespace BotNModule
         /// <param name="numOfDices"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        private double collectSetSize(int numOfDices, int val)
+        public double CollectSetSize(int numOfDices, int val)
         {
             double s = 0;
             for (int i = 1; i <= 6; i++)
             {
                 if (i <= val && numOfDices > 1)
-                    s += collectSetSize(numOfDices - 1, val - i);
+                    s += CollectSetSize(numOfDices - 1, val - i);
 
                 else if (i == val && numOfDices == 1)
                     s = 1;
@@ -49,36 +67,32 @@ namespace BotNModule
             return s;
         }
 
+        private List<double> best = new List<double>();
+        private List<List<int>> removing = new List<List<int>>();
         /// <summary>
-        /// return indexes of dices to roll
+        /// return values of dices to roll
         /// It's based on highest Probability
         /// </summary>
         /// <param name="dices"></param>
-        /// <param name="sum"></param>
+        /// <param name="product"></param>
+        /// <param name="removed">new List<int>()</param>
         /// <returns></returns>
-        public List<int> ultimateProbability(List<int> dices, int sum)
+        public List<int> UltimateProbability(List<int> dices, int product, List<int> removed)
         {
-            List<int> l = new List<int>(dices);
-            List<double> best = new List<double>();
-            while (l.Count > 0)
+            foreach (int x in dices)
             {
-                best.Add(collectSetSize(5 - l.Count, sum - l.Sum()) / Math.Pow(6, 5 - l.Count));
-
-                l.Remove(l.Min());
-            }
-            for (int i = 0; i < 5 - best.IndexOf(best.Max()); i++)
-            {
-                dices[dices.IndexOf(dices.Max())] = -1;
-            }
-            l = new List<int>();
-            for (int i = 0; i < 5; i++)
-            {
-                if (dices[i] > 0)
-                    l.Add(i);
+                List<int> l = new List<int>(dices);
+                l.Remove(x);
+                removed.Add(x);
+                UltimateProbability(l, product, removed);
+                best.Add(CollectSetSize(5 - l.Count, product - l.Sum()) / Math.Pow(6, 5 - l.Count));
+                removing.Add(new List<int>(removed));
+                removed.Remove(x);
             }
 
-            return l;
-
+            if (best.Count > 0 && removing.Count > 0)
+                return removing.ElementAt(best.IndexOf(best.Max()));
+            return null;
         }
     }
 }
