@@ -9,7 +9,7 @@ namespace GameControllerNModule
 {
     class NPlusGameController : AbstractGameController
     {
-        public NPlusGameController(List<IBot> bots, string gameName, string ownerName, GameType gameType, List<string> playerNames) : base(bots, gameName, ownerName, gameType, playerNames)
+        public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots) : base(ownerName, gameName, gameType, players, bots)
         {
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CommonInterfacesModule
 {
-    abstract class AbstractGameController : IGameController
+    public abstract class AbstractGameController : IGameController
     {
 
         private GameState _gameState;
