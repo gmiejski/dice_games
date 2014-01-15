@@ -10,8 +10,9 @@ namespace BotNModule
     class NStarBot : AbstractBot
     {
         public NStarBot(BotLevel botLevel)
+            : base(botLevel)
         {
-            throw new NotImplementedException();
+
         }
         public override Move GetNextMove(GameState gameState)
         {

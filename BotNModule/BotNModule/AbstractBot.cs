@@ -11,33 +11,35 @@ namespace BotNModule
     {
         private BotLevel botLevel;
         public abstract event BotMovedHandler BotMoved;
+        protected String name;
         protected AbstractBot()
         {
-            throw new NotImplementedException();
+            this.botLevel = BotLevel.Easy;
         }
         protected AbstractBot(BotLevel botLevel)
         {
-            throw new NotImplementedException();
+            this.botLevel = botLevel;
         }
         public abstract Move GetNextMove(GameState gameState);
         public void SendGameState(GameState gameState)
         {
             throw new NotImplementedException();
         }
-        BotLevel getBotLevel()
+        public BotLevel getBotLevel()
         {
-            throw new NotImplementedException();
+            return botLevel;
         }
         public string Name
         {
             get
             {
-                throw new NotImplementedException();
+                return name;
             }
             set
             {
-                throw new NotImplementedException();
+                name = value;
             }
         }
+
     }
 }
