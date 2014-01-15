@@ -202,7 +202,7 @@ namespace ServerTestModule
         public void ShouldNotRemovePlayerWhenPlayerNameIsNullOrEmpty()
         {
             Assert.False(_instance.RemovePlayer(null));
-            Assert.False(_instance.RemovePlayer(""));
+            Assert.False(_instance.RemovePlayer(string.Empty));
         }
 
         [Test]
@@ -247,10 +247,10 @@ namespace ServerTestModule
         [Test]
         public void ShouldRemoveAvailableGameWhenLastPlayerRemoved()
         {
-            var PlayerNames = new List<string> { PlayerName };
+            var playerNames = new List<string> { PlayerName };
             var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
 
-            createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(PlayerNames);
+            createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(playerNames);
 
             _availableGames.Add(GameName, createdGameMock.Object);
 
