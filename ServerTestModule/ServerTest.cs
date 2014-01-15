@@ -151,11 +151,21 @@ namespace ServerTestModule
         public void ShouldNotCreateNewGameWhenArgumentsAreMalformed()
         {
             Assert.Null(_instance.CreateGame(null, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame("", GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame(string.Empty, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
             Assert.Null(_instance.CreateGame(OwnerName, null, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame(OwnerName, "", GameType, NumberOfPlayers, NumberOfBots, BotLevel));
+            Assert.Null(_instance.CreateGame(OwnerName, string.Empty, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
             Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, -1, NumberOfBots, BotLevel));
             Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, -1, BotLevel));
+        }
+
+        [Test]
+        public void ShouldNotCreateGameWhenActiveGameWithSameNameExists()
+        {
+            var gameControllerMock = new Mock<IGameController>();
+
+            _activeGames.Add(GameName,gameControllerMock.Object);
+            Assert.Null(_instance.CreateGame(PlayerName,GameName, GameType,0,0,BotLevel));
+
         }
 
         [Test]

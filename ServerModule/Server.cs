@@ -64,7 +64,14 @@ namespace ServerModule
             CreatedGame createdGame = null;
             lock (_lockAvailableGames)
             {
-                if (!_availableGames.ContainsKey(gameName)) //  TODO  musi być też sprawdzenie czy nie istnieje gra działająca pod tym name
+                lock( _lockActiveGames)
+                {
+                    if (_activeGames.ContainsKey(gameName))
+                    {
+                        return null;
+                    }
+                }
+                if (!_availableGames.ContainsKey(gameName)) 
                 {
                     createdGame = new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBots,
                         botLevel);
@@ -72,6 +79,7 @@ namespace ServerModule
                     _availableGames.Add(gameName, createdGame);
 
                 }
+                
             }
             return createdGame;
         }
