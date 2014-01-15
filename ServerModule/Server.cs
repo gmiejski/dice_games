@@ -6,7 +6,6 @@ using Microsoft.AspNet.SignalR;
 
 namespace ServerModule
 {
-    // TODO xml comment
     public class Server : IServer
     {
 
@@ -100,7 +99,7 @@ namespace ServerModule
                 if (_availableGames.ContainsKey(gameName))
                 {
                     _availableGames.Remove(gameName);
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>(); //  TODO czyli jka już nie ma gry, to będzie chciał zaciągnąć sobie GameState, dostanie null i to jest obsłużone w js?
+                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
                     hub.Clients.Group(gameName).requestRefresh();
                     return true;
                 }
@@ -135,27 +134,35 @@ namespace ServerModule
             bool result = false;
             lock (_lockAvailableGames)
             {
-                if (_availableGames.ContainsKey(gameName))
+                lock (_lockLoggedPlayers)
                 {
-                    var createdGame = _availableGames[gameName];
-                    result = createdGame.AddPlayer(playerName);
-                    if (createdGame.IsReadyToStart())
+                    if (!_loggedPlayers.ContainsKey(playerName))
                     {
-                        _availableGames.Remove(gameName);
-                        var gameController = _gameControllerFactory.CreateGameController(createdGame);
-                        gameController.BroadcastGameState += OnGameStateChanged;
-                        gameController.DeleteGameController += DeleteGame;
-                        lock (_lockActiveGames)
+                        return false;
+                    }
+
+                    if (_availableGames.ContainsKey(gameName))
+                    {
+                        var createdGame = _availableGames[gameName];
+                        result = createdGame.AddPlayer(playerName);
+                        if (createdGame.IsReadyToStart())
                         {
-                            _activeGames.Add(gameName, gameController);
+                            _availableGames.Remove(gameName);
+                            var gameController = _gameControllerFactory.CreateGameController(createdGame);
+                            gameController.BroadcastGameState += OnGameStateChanged;
+                            gameController.DeleteGameController += DeleteGame;
+                            lock (_lockActiveGames)
+                            {
+                                _activeGames.Add(gameName, gameController);
+                            }
                         }
                     }
                 }
-            }
-            if (result)
-            {
-                var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh(); //  TODO co w sytuacji gdy nie mamy gracza w dict? teoretycznie nigdy sie nei zdarzy, ale kto go tam wie :P To też powinno być atomiczne, bo nam w czasie dołączania do gry może się rozłączyć, pójdzie event że trzeba go wywalić i tutaj dostaniemy null'a bo go już w dict nie będzie
+                if (result)
+                {
+                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
+                    hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh();
+                }
             }
             return result;
         }
@@ -293,7 +300,7 @@ namespace ServerModule
         private void OnGameStateChanged(string gameName)
         {
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.Group(gameName).endGame(); //  TODO ???
+            hub.Clients.Group(gameName).requestRefresh();
         }
     }
 }

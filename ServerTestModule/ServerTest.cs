@@ -109,7 +109,8 @@ namespace ServerTestModule
         [Test]
         public void ShouldCreateNewGame()
         {
-            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
+                BotLevel);
 
             Assert.NotNull(createdGame);
             Assert.AreEqual(createdGame.GameName, GameName);
@@ -125,8 +126,10 @@ namespace ServerTestModule
         [Test]
         public void ShouldNotCreateNewGameWhenGameNameAlreadyInUse()
         {
-            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
-            CreatedGame secondGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
+                BotLevel);
+            CreatedGame secondGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
+                BotLevel);
 
             Assert.NotNull(createdGame);
             Assert.Null(secondGame);
@@ -277,7 +280,8 @@ namespace ServerTestModule
         [Test]
         public void ShouldReturnAvailableGames()
         {
-            var createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            var createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
+                BotLevel);
             var createdGames = _instance.GetAvailableGames();
             Assert.True(createdGames.Contains(createdGame));
         }
@@ -313,6 +317,7 @@ namespace ServerTestModule
 
             Assert.False(result);
         }
+
         [Test]
         public void ShouldReturnFalseWhenUnnableToJoinPlayerToGame()
         {
@@ -334,7 +339,8 @@ namespace ServerTestModule
             var gameControllerMock = new Mock<IGameController>();
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
-            _gameControllerFactoryMock.Setup(gc => gc.CreateGameController(createdGameMock.Object)).Returns(gameControllerMock.Object);
+            _gameControllerFactoryMock.Setup(gc => gc.CreateGameController(createdGameMock.Object))
+                .Returns(gameControllerMock.Object);
             _availableGames.Add(GameName, createdGameMock.Object);
 
             bool result = _instance.JoinGame(PlayerName, GameName);
@@ -355,7 +361,8 @@ namespace ServerTestModule
 
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
-            _gameControllerFactoryMock.Setup(mock => mock.CreateGameController(createdGameMock.Object)).Returns(gameControllerMock.Object);
+            _gameControllerFactoryMock.Setup(mock => mock.CreateGameController(createdGameMock.Object))
+                .Returns(gameControllerMock.Object);
 
             _availableGames.Add(GameName, createdGameMock.Object);
 
@@ -365,7 +372,8 @@ namespace ServerTestModule
             Assert.True(result);
             createdGameMock.Verify(cr => cr.AddPlayer(PlayerName), Times.Once);
             createdGameMock.Verify(cr => cr.IsReadyToStart(), Times.Once);
-            _gameControllerFactoryMock.Verify(factory => factory.CreateGameController(It.IsAny<CreatedGame>()), Times.Once());
+            _gameControllerFactoryMock.Verify(factory => factory.CreateGameController(It.IsAny<CreatedGame>()),
+                Times.Once());
             Assert.True(_activeGames.ContainsKey(GameName));
             Assert.AreEqual(gameControllerMock.Object, _activeGames[GameName]);
         }
@@ -452,7 +460,8 @@ namespace ServerTestModule
 
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
-            _gameControllerFactoryMock.Setup(mock => mock.CreateGameController(createdGameMock.Object)).Returns(gameControllerMock.Object);
+            _gameControllerFactoryMock.Setup(mock => mock.CreateGameController(createdGameMock.Object))
+                .Returns(gameControllerMock.Object);
 
             _availableGames.Add(GameName, createdGameMock.Object);
 
@@ -463,5 +472,21 @@ namespace ServerTestModule
 
             Assert.False(_activeGames.ContainsKey(GameName));
         }
+
+        [Test]
+        public void ShouldReturnFalseWhenJoiningGameWIthUnpersistedPlayerName()
+        {
+
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            _availableGames.Add(GameName, createdGameMock.Object);
+
+            Assert.False(_instance.JoinGame(PlayerName, GameName));
+
+            createdGameMock.Verify(cg => cg.AddPlayer(It.IsAny<string>()), Times.Never);
+        }
+
+
     }
 }
+
+
