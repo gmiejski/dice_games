@@ -41,11 +41,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractBot.cs" />
+    <Compile Include="CommonInterfacesModule\BotFactory.cs" />
+    <Compile Include="CommonInterfacesModule\BotLevel.cs" />
+    <Compile Include="CommonInterfacesModule\CreatedGame.cs" />
+    <Compile Include="CommonInterfacesModule\GameControllerFactory.cs" />
+    <Compile Include="CommonInterfacesModule\GameState.cs" />
+    <Compile Include="CommonInterfacesModule\GameType.cs" />
+    <Compile Include="CommonInterfacesModule\IBot.cs" />
+    <Compile Include="CommonInterfacesModule\IGameController.cs" />
+    <Compile Include="CommonInterfacesModule\IServer.cs" />
+    <Compile Include="CommonInterfacesModule\Move.cs" />
+    <Compile Include="CommonInterfacesModule\PlayerState.cs" />
+    <Compile Include="NPlusBot.cs" />
+    <Compile Include="NStarBot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="CommonInterfacesModule\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CommonInterfacesModule\CommonInterfacesModule.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
