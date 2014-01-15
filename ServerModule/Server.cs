@@ -64,14 +64,14 @@ namespace ServerModule
             CreatedGame createdGame = null;
             lock (_lockAvailableGames)
             {
-                lock( _lockActiveGames)
+                lock (_lockActiveGames)
                 {
                     if (_activeGames.ContainsKey(gameName))
                     {
                         return null;
                     }
                 }
-                if (!_availableGames.ContainsKey(gameName)) 
+                if (!_availableGames.ContainsKey(gameName))
                 {
                     createdGame = new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBots,
                         botLevel);
@@ -79,7 +79,7 @@ namespace ServerModule
                     _availableGames.Add(gameName, createdGame);
 
                 }
-                
+
             }
             return createdGame;
         }
@@ -100,7 +100,7 @@ namespace ServerModule
                 if (_availableGames.ContainsKey(gameName))
                 {
                     _availableGames.Remove(gameName);
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>(); // TODO czyli jka już nie ma gry, to będzie chciał zaciągnąć sobie GameState, dostanie null i to jest obsłużone w js?
+                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>(); //  TODO czyli jka już nie ma gry, to będzie chciał zaciągnąć sobie GameState, dostanie null i to jest obsłużone w js?
                     hub.Clients.Group(gameName).requestRefresh();
                     return true;
                 }
@@ -124,7 +124,7 @@ namespace ServerModule
         /// <param name="playerName">Name of player who wants to join game</param>
         /// <param name="gameName">Name of game player wants to join</param>
         /// <returns>Returns true indicating successful addition to game or false otherwise</returns>
-        public bool JoinGame(string playerName, string gameName) // TODO sprawdzić testy
+        public bool JoinGame(string playerName, string gameName)
         {
 
             if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName))
@@ -155,7 +155,7 @@ namespace ServerModule
             if (result)
             {
                 var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh(); // TODO co w sytuacji gdy nie mamy gracza w dict? teoretycznie nigdy sie nei zdarzy, ale kto go tam wie :P To też powinno być atomiczne, bo nam w czasie dołączania do gry może się rozłączyć, pójdzie event że trzeba go wywalić i tutaj dostaniemy null'a bo go już w dict nie będzie
+                hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh(); //  TODO co w sytuacji gdy nie mamy gracza w dict? teoretycznie nigdy sie nei zdarzy, ale kto go tam wie :P To też powinno być atomiczne, bo nam w czasie dołączania do gry może się rozłączyć, pójdzie event że trzeba go wywalić i tutaj dostaniemy null'a bo go już w dict nie będzie
             }
             return result;
         }
@@ -187,12 +187,14 @@ namespace ServerModule
         /// <returns>Returns true indicating successful login or false otherwise.</returns>
         public bool RegisterPlayer(String playerName, string contextId)
         {
-            if (String.IsNullOrEmpty(contextId) || String.IsNullOrEmpty(playerName) || _loggedPlayers.ContainsKey(playerName))
+            if (String.IsNullOrEmpty(contextId) || String.IsNullOrEmpty(playerName))
             {
                 return false;
             }
             lock (_lockLoggedPlayers)
             {
+                if (_loggedPlayers.ContainsKey(playerName)) return false;
+
                 _loggedPlayers.Add(playerName, contextId);
             }
             return true;
@@ -205,16 +207,19 @@ namespace ServerModule
         /// <returns>Returns true indicating successful logout or false otherwise.</returns>
         public bool UnregisterPlayer(string playerName)
         {
-
-            // TODO trzeba sprawdzenie tez dodać do locka? Teoretycznie nie, ale można :P
-
-            if (String.IsNullOrEmpty(playerName) || !_loggedPlayers.ContainsKey(playerName))
+            if (String.IsNullOrEmpty(playerName))
             {
                 return false;
             }
-            RemovePlayer(playerName);
+
             lock (_lockLoggedPlayers)
             {
+                if (!_loggedPlayers.ContainsKey(playerName))
+                {
+                    return false;
+                }
+                RemovePlayer(playerName);
+
                 return _loggedPlayers.Remove(playerName);
             }
         }
@@ -288,7 +293,7 @@ namespace ServerModule
         private void OnGameStateChanged(string gameName)
         {
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.Group(gameName).endGame(); // TODO ???
+            hub.Clients.Group(gameName).endGame(); //  TODO ???
         }
     }
 }
