@@ -13,7 +13,7 @@ namespace CommonInterfacesModule
 
         public string WinnerName { get; set; }
 
-        public void Update(string playerName, Dictionary<int, int> dicesToRoll)
+        public void Update(string playerName, Dictionary<int, int> newDice)
         {
             throw new NotImplementedException();
         }

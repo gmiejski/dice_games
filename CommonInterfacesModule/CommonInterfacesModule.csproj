@@ -38,6 +38,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractGameController.cs" />
     <Compile Include="BotFactory.cs" />
     <Compile Include="BotLevel.cs" />
     <Compile Include="GameControllerFactory.cs" />

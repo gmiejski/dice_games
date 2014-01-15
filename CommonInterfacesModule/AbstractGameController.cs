@@ -8,12 +8,13 @@ namespace CommonInterfacesModule
     public abstract class AbstractGameController : IGameController
     {
 
-        private GameState _gameState;
-        private List<IBot> _bots;
-        private String _gameName;
-        private GameType _gameType;
-        private String _ownerName;
-        private List<String> _playerNames;
+        protected GameState _gameState;
+        protected List<IBot> _bots;
+        protected String _gameName;
+        protected GameType _gameType;
+        protected String _ownerName;
+        protected List<String> _playerNames;
+        protected int _numberOfRounds;
 
         event BroadcastGameStateHandler IGameController.BroadcastGameState
         {
@@ -39,13 +40,15 @@ namespace CommonInterfacesModule
             }
         }
 
-        protected AbstractGameController(String ownerName, String gameName, GameType gameType, List<String> players, List<IBot> bots)
+        protected AbstractGameController(String ownerName, String gameName, GameType gameType, List<String> players, List<IBot> bots, int numberOfRounds)
         {
             _ownerName = ownerName;
             _gameName = gameName;
             _gameType = gameType;
             _playerNames = players;
             _bots = bots;
+            _numberOfRounds = numberOfRounds;
+
         }
 
         public abstract bool MakeMove(string playerName, Move move);
