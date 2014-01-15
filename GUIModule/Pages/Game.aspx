@@ -113,7 +113,7 @@
             };
 
             $.connection.hub.start().done(function () {
-
+                gameState.server.loginToGroup(playerName, gameName);
                 $(document).on('click', '#ThrowDice', function (event) {
                     event.preventDefault();
                     var toSend = [];

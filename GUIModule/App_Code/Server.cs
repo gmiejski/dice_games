@@ -36,11 +36,11 @@ namespace GUIModule.App_Code
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
             if (ongoing)
             {
-                hub.Clients.All.endGame();
+                hub.Clients.Group(gameName).endGame();
             }
             else
             {
-                hub.Clients.All.requestRefresh();
+                hub.Clients.Group(gameName).requestRefresh();
             }
         }
 
@@ -59,7 +59,7 @@ namespace GUIModule.App_Code
             }
 
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.All.requestRefresh();
+            hub.Clients.Group(gameName).requestRefresh();
             return true;
         }
 
@@ -78,7 +78,7 @@ namespace GUIModule.App_Code
 
             // Call the broadcastMessage method to update clients.
             var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.All.requestRefresh();
+            hub.Clients.Group(gameName).requestRefresh();
 
             return true;
         }
