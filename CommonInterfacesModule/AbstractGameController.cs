@@ -14,20 +14,26 @@ namespace CommonInterfacesModule
         protected GameType _gameType;
         protected String _ownerName;
         protected List<String> _playerNames;
-        protected int _numberOfRounds;
 
-        event BroadcastGameStateHandler IGameController.BroadcastGameState
-        {
-            add { throw new NotImplementedException(); }
-            remove { throw new NotImplementedException(); }
-        }//rozeslac GameState eventem
+        public event BroadcastGameStateHandler BroadcastGameState;
+        public event DeleteGameControllerHandler DeleteGameController;
 
-        event DeleteGameControllerHandler IGameController.DeleteGameController
+        protected virtual void OnBroadcastGameState(string gameName, GameState gameState)
         {
-            add { throw new NotImplementedException(); }
-            remove { throw new NotImplementedException(); }
-        }//usunac gre
-        //czekac na event od bota
+            if (BroadcastGameState != null)
+            {
+//                BroadcastGameState(gameName, gameState);
+            }
+        }
+
+        protected virtual void OnDelete(string gameName)
+        {
+            if (DeleteGameController != null)
+            {
+                DeleteGameController(gameName);
+            }
+        }
+
         public GameState GameState
         {
             get
@@ -40,16 +46,39 @@ namespace CommonInterfacesModule
             }
         }
 
-        protected AbstractGameController(String ownerName, String gameName, GameType gameType, List<String> players, List<IBot> bots, int numberOfRounds)
+        public string GameName
         {
+            get { return _gameName; }
+        }
+
+        protected AbstractGameController(String ownerName, String gameName, GameType gameType, List<String> players, List<IBot> bots)
+        {
+            if (players.Count + bots.Count == 0)
+            {
+                throw new ArgumentException();
+            }
             _ownerName = ownerName;
             _gameName = gameName;
             _gameType = gameType;
             _playerNames = players;
             _bots = bots;
-            _numberOfRounds = numberOfRounds;
-
+            GameState = new GameState();
+            GameState.PlayerStates = new Dictionary<string, PlayerState>();
+            foreach (IBot bot in bots)
+            {
+                bot.BotMoved += new BotMovedHandler(BotMoved);
+            }
+            GameState.IsOver = false;
+            GameState.WinnerName = new List<string>() { players[0] };
+            GameState.WhoseTurn = players[0];
         }
+
+
+        public void BotMoved(string botName, Move move)
+        {
+            MakeMove(botName, move);
+        }
+
 
         public abstract bool MakeMove(string playerName, Move move);
     }

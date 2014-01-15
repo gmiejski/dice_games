@@ -12,23 +12,29 @@ namespace GameControllerNModule
         private int _gameGoal;
 
 
-        public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots, int numberOfRounds) : base(ownerName, gameName, gameType, players, bots, numberOfRounds)
+        public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots) : base(ownerName, gameName, gameType, players, bots)
         {
             _gameGoal = GenerateNewGoal();
         }
 
         public override bool MakeMove(string playerName, Move move)
         {
-            if (!_gameState.WhoseTurn.Equals(playerName))
+            if (!GameState.WhoseTurn.Equals(playerName))
                 return false;
 
             var newDice = move.DicesToRoll.ToDictionary(die => die, die => DieRoll());
-            _gameState.Update(playerName,newDice);
+            GameState.Update(playerName,newDice);
+            PlayerState player;
+            GameState.PlayerStates.TryGetValue(playerName,out player);
+            player.CurrentResultValue = player.Dices.Sum();
 
             if (CheckWinConditions(playerName))
             {
-                resetDice();
+                ResetDice();
+                _gameGoal = GenerateNewGoal();
             }
+            OnBroadcastGameState(GameName, GameState);
+            return true;
         }
 
         private int GenerateNewGoal()
@@ -46,7 +52,7 @@ namespace GameControllerNModule
         private bool CheckWinConditions(string playerName)
         {
             PlayerState playerState;
-            _gameState.PlayerStates.TryGetValue(playerName, out playerState);
+            GameState.PlayerStates.TryGetValue(playerName, out playerState);
 
             if (playerState.CurrentResultValue.Equals(_gameGoal))
             {
@@ -56,27 +62,28 @@ namespace GameControllerNModule
             {
                 return false;
             }
-
-            if (playerState.NumberOfWonRounds.Equals(_gameGoal))
-            {
-                _gameState.WinnerName = playerName;
-                _gameState.IsOver = true;
-            }
-
+            GameState.WhoseTurn = NextPlayer();
+            if (!playerState.NumberOfWonRounds.Equals(_gameGoal)) return true;
+            GameState.WinnerName.Add(playerName);
+            GameState.IsOver = true;
             return true;
 
         }
 
-        private void resetDice()
+        private void ResetDice()
         {
-            foreach (var player in _gameState.PlayerStates)
+            foreach (var player in GameState.PlayerStates)
             {
                 player.Value.Dices.Clear();
             }
         }
 
-
-
-
+        private string NextPlayer()
+        {
+            var currentPlayer = GameState.WhoseTurn;
+            var currentIndex = _playerNames.IndexOf(currentPlayer);
+            var nextIndex = (currentIndex + 1)%_playerNames.Capacity;
+            return _playerNames[nextIndex];
+        }
     }
 }

@@ -9,13 +9,85 @@ namespace GameControllerNModule
 {
     class NStarGameController : AbstractGameController
     {
-        public NStarGameController(List<IBot> bots, string gameName, string ownerName, GameType gameType, List<string> playerNames) : base(bots, gameName, ownerName, gameType, playerNames)
+        private int _gameGoal;
+
+
+        public NStarGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots) : base(ownerName, gameName, gameType, players, bots)
         {
+            _gameGoal = GenerateNewGoal();
+        }
+
+        private int GenerateNewGoal()
+        {
+            var newGoal = 1;
+            var random = new Random();
+            for (var i = 0; i < 6; i++)
+            {
+                newGoal *= random.Next(1, 7);
+            }
+            return newGoal;
         }
 
         public override bool MakeMove(string playerName, Move move)
         {
-            throw new NotImplementedException();
+            if (!GameState.WhoseTurn.Equals(playerName))
+                return false;
+
+            var newDice = move.DicesToRoll.ToDictionary(die => die, die => DieRoll());
+            GameState.Update(playerName, newDice);
+            PlayerState player;
+            GameState.PlayerStates.TryGetValue(playerName, out player);
+            player.CurrentResultValue = player.Dices.Aggregate(1, (current, die) => current * die);
+
+            if (CheckWinConditions(playerName))
+            {
+                ResetDice();
+                _gameGoal = GenerateNewGoal();
+            }
+            GameState.WhoseTurn = NextPlayer();
+            OnBroadcastGameState(GameName, GameState);
+            return true;
+        }
+
+        private string NextPlayer()
+        {
+            var currentPlayer = GameState.WhoseTurn;
+            var currentIndex = _playerNames.IndexOf(currentPlayer);
+            var nextIndex = (currentIndex + 1) % _playerNames.Capacity;
+            return _playerNames[nextIndex];
+        }
+
+        private void ResetDice()
+        {
+            foreach (var player in GameState.PlayerStates)
+            {
+                player.Value.Dices.Clear();
+            }
+        }
+
+        private bool CheckWinConditions(string playerName)
+        {
+            PlayerState playerState;
+            GameState.PlayerStates.TryGetValue(playerName, out playerState);
+
+            if (playerState.CurrentResultValue.Equals(_gameGoal))
+            {
+                playerState.NumberOfWonRounds += 1;
+            }
+            else
+            {
+                return false;
+            }
+            if (!playerState.NumberOfWonRounds.Equals(_gameGoal)) return true;
+            GameState.WinnerName.Add(playerName);
+            GameState.IsOver = true;
+            return true;
+        }
+
+        private int DieRoll()
+        {
+            var random = new Random();
+            return random.Next(1, 7);
         }
     }
 }

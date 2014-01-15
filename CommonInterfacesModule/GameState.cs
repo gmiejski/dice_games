@@ -11,11 +11,19 @@ namespace CommonInterfacesModule
 
         public string WhoseTurn { get; set; }
 
-        public string WinnerName { get; set; }
+        public List<string> WinnerName { get; set; }
 
         public void Update(string playerName, Dictionary<int, int> newDice)
         {
-            throw new NotImplementedException();
+            PlayerState player;
+            if (!PlayerStates.TryGetValue(playerName, out player))
+            {
+                throw new ArgumentException("No such player!");
+            }
+            foreach (var newDie in newDice)
+            {
+                player.Dices[newDie.Key] = newDie.Value;
+            }
         }
     }
 }
