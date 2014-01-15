@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Dice.GameControllerPokerModule
+namespace GameControllerPokerModule
 {
-    enum Hands
+    public enum Hands
     {
         HighCard,
         Pair,

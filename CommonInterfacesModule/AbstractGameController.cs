@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CommonInterfacesModule
 {
-    abstract class AbstractGameController : IGameController
+    public abstract class AbstractGameController : IGameController
     {
 
         private GameState _gameState;
@@ -53,12 +53,16 @@ namespace CommonInterfacesModule
 
         protected AbstractGameController(String ownerName, String gameName, GameType gameType, List<String> players, List<IBot> bots)
         {
+            if (players.Count + bots.Count == 0) {
+                throw new ArgumentException();
+            }
             _ownerName = ownerName;
             _gameName = gameName;
             _gameType = gameType;
             _playerNames = players;
             _bots = bots;
             GameState = new GameState();
+            GameState.PlayerStates = new Dictionary<string, PlayerState>();
             foreach (IBot bot in bots)
             {
                 bot.BotMoved += new BotMovedHandler(BotMoved);

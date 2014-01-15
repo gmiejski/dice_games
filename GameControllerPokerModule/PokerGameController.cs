@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using CommonInterfacesModule;
 
-namespace Dice.GameControllerPokerModule
+namespace GameControllerPokerModule
 {
-    class PokerGameController : AbstractGameController
+    public class PokerGameController : AbstractGameController
     {
         private Dictionary<String, Configuration> _playersDice = new Dictionary<String, Configuration>();
         private String _firstPlayer;
@@ -26,18 +26,25 @@ namespace Dice.GameControllerPokerModule
                 GameState.PlayerStates.Add(player, new PlayerState(dice) { CurrentResultValue = 0, CurrentResult = Hands.HighCard.ToString(), NumberOfWonRounds = 0 });
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
             }
+            foreach (IBot bot in bots)
+            {
+                List<int> dice = new List<int>() { 0, 0, 0, 0, 0 };
+                GameState.PlayerStates.Add(bot.Name, new PlayerState(dice) { CurrentResultValue = 0, CurrentResult = Hands.HighCard.ToString(), NumberOfWonRounds = 0 });
+                _playersDice.Add(bot.Name, new Configuration(Hands.HighCard, 0, dice));
+            }
         }
 
         public override bool MakeMove(String PlayerName, Move move)
         {
             GameState gameState = GameState;
 
-            if (!PlayerName.Equals(gameState.WhoseTurn))
+            if (!PlayerName.Equals(gameState.WhoseTurn) || move.DicesToRoll == null)
                 return false;
 
             if (_roundIterator == 4)
             {
                 gameState.IsOver = true;
+                OnDelete(GameName);
             }
             else
                 if (PlayerName.Equals(_firstPlayer) && _turnsIterator == 4)
@@ -67,13 +74,13 @@ namespace Dice.GameControllerPokerModule
 
             CheckWinnerChange(playerConfiguration, PlayerName);
 
-            //metoda update w GameState?
-            GameState = gameState;
+            updateGameState(gameState);
+            OnBroadcastGameState(GameName, GameState);
             return true;
 
         }
 
-        private Configuration CheckConfiguration(Configuration configuration)
+        public Configuration CheckConfiguration(Configuration configuration)
         {
             List<int> counterList = new List<int> { 0, 0, 0, 0, 0, 0, 0 };
             foreach (int element in configuration.Dices)
@@ -133,7 +140,7 @@ namespace Dice.GameControllerPokerModule
         }
 
 
-        private Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
+        public Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
             PlayerState winningPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
 
@@ -169,9 +176,18 @@ namespace Dice.GameControllerPokerModule
                     return true;
                 }
                 else if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue)
+                {
                     GameState.WinnerName.Add(playerName);
+                    return true;
+                }
 
             return false;
         }
+
+        public void updateGameState(GameState newGameState)
+        {
+            GameState = newGameState;
+        }
+
     }
 }
