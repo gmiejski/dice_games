@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameControllerNModule;
+using Dice.GameControllerPokerModule;
+
+
 
 
 namespace CommonInterfacesModule
@@ -33,7 +36,7 @@ namespace CommonInterfacesModule
                     break;
 
                 case GameType.Poker:
-                    return null;
+                    return new 
                     break;
 
             }

@@ -41,7 +41,6 @@
     <Compile Include="AbstractGameController.cs" />
     <Compile Include="BotFactory.cs" />
     <Compile Include="BotLevel.cs" />
-    <Compile Include="GameControllerFactory.cs" />
     <Compile Include="GameType.cs" />
     <Compile Include="IBot.cs" />
     <Compile Include="CreatedGame.cs" />
