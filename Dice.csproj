@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{660489C5-809C-48A6-BF17-1794DF125E17}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ClassLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Dice</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="BotNModule\BotNModule.csproj" />
+    <Content Include="BotPokerModule\BotPokerModule.csproj" />
+    <Content Include="CommonInterfacesModule\CommonInterfacesModule.csproj" />
+    <Content Include="GameControllerNModule\GameControllerNModule.csproj" />
+    <Content Include="GameControllerPokerModule\GameControllerPokerModule.csproj" />
+    <Content Include="GUIModule\GUIModule.csproj" />
+    <Content Include="ServerModule\ServerModule.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".git\config" />
+    <None Include=".git\description" />
+    <None Include=".git\FETCH_HEAD" />
+    <None Include=".git\gitk.cache" />
+    <None Include=".git\HEAD" />
+    <None Include=".git\hooks\applypatch-msg.sample" />
+    <None Include=".git\hooks\commit-msg.sample" />
+    <None Include=".git\hooks\post-update.sample" />
+    <None Include=".git\hooks\pre-applypatch.sample" />
+    <None Include=".git\hooks\pre-commit.sample" />
+    <None Include=".git\hooks\pre-push.sample" />
+    <None Include=".git\hooks\pre-rebase.sample" />
+    <None Include=".git\hooks\prepare-commit-msg.sample" />
+    <None Include=".git\hooks\update.sample" />
+    <None Include=".git\index" />
+    <None Include=".git\info\exclude" />
+    <None Include=".git\logs\HEAD" />
+    <None Include=".git\logs\refs\heads\develop" />
+    <None Include=".git\logs\refs\heads\master" />
+    <None Include=".git\logs\refs\heads\module_poker" />
+    <None Include=".git\logs\refs\remotes\origin\HEAD" />
+    <None Include=".git\logs\refs\remotes\origin\module_poker" />
+    <None Include=".git\objects\pack\pack-fd48e2d314c158756cc4d70fed21386b557b31bf.idx" />
+    <None Include=".git\objects\pack\pack-fd48e2d314c158756cc4d70fed21386b557b31bf.pack" />
+    <None Include=".git\packed-refs" />
+    <None Include=".git\refs\heads\develop" />
+    <None Include=".git\refs\heads\master" />
+    <None Include=".git\refs\heads\module_poker" />
+    <None Include=".git\refs\remotes\origin\HEAD" />
+    <None Include=".git\refs\remotes\origin\module_poker" />
+    <None Include="BotNModule\App.config" />
+    <None Include="BotPokerModule\App.config" />
+    <None Include="CommonInterfacesModule\App.config" />
+    <None Include="GameControllerNModule\App.config" />
+    <None Include="GameControllerPokerModule\App.config" />
+    <None Include="GameControllerPokerModule\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="GUIModule\App.config" />
+    <None Include="README.md" />
+    <None Include="ServerModule\App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonInterfacesModule\BotFactory.cs" />
+    <Compile Include="CommonInterfacesModule\BotLevel.cs" />
+    <Compile Include="CommonInterfacesModule\CreatedGame.cs" />
+    <Compile Include="CommonInterfacesModule\GameControllerFactory.cs" />
+    <Compile Include="CommonInterfacesModule\GameState.cs" />
+    <Compile Include="CommonInterfacesModule\GameType.cs" />
+    <Compile Include="CommonInterfacesModule\IBot.cs" />
+    <Compile Include="CommonInterfacesModule\IGameController.cs" />
+    <Compile Include="CommonInterfacesModule\IServer.cs" />
+    <Compile Include="CommonInterfacesModule\Move.cs" />
+    <Compile Include="CommonInterfacesModule\PlayerState.cs" />
+    <Compile Include="GameControllerPokerModule\Configuration.cs" />
+    <Compile Include="GameControllerPokerModule\Hands.cs" />
+    <Compile Include="GameControllerPokerModule\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
+    <Compile Include="GameControllerPokerModule\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
+    <Compile Include="GameControllerPokerModule\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".git\objects\info\" />
+    <Folder Include=".git\refs\tags\" />
+    <Folder Include="GameControllerPokerModule\bin\Debug\" />
+    <Folder Include="GameControllerPokerModule\obj\Debug\TempPE\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+</Project>
