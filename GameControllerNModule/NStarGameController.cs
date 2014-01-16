@@ -7,7 +7,7 @@ using CommonInterfacesModule;
 
 namespace GameControllerNModule
 {
-    class NStarGameController : AbstractGameController
+    public class NStarGameController : AbstractGameController
     {
         private int _gameGoal;
 

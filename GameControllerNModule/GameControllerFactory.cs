@@ -1,5 +1,6 @@
 ﻿using System.Collections;
-
+using System.Collections.Generic;
+using GameControllerNModule;
 
 
 namespace CommonInterfacesModule
@@ -20,17 +21,19 @@ namespace CommonInterfacesModule
         public virtual IGameController CreateGameController(CreatedGame createdGame)
         {
             
-
+            List<IBot> bots = BotFactory.CreateBots(createdGame.BotLevel, createdGame.GameType, createdGame.NumberOfBots);
             switch (createdGame.GameType)
             {
                 case GameType.NPlus:
-                    return new 
+                    return new NPlusGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
                     break;
 
                 case GameType.NStar:
+                    return new NStarGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
                     break;
 
                 case GameType.Poker:
+                    return null;
                     break;
 
             }
