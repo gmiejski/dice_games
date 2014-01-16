@@ -9,15 +9,30 @@ using GUIModule.App_Code;
 
 namespace GUIModule.App_Code
 {
-    public class Server : IServer
+    public class Server1 : IServer
     {
         private Dictionary<string, GameState> games;
         
-        public Server()
+        public Server1()
         {
             games = new Dictionary<string, GameState>();
             
             AvailableGames = new List<CreatedGame>();
+        }
+
+        bool IServer.DeleteGame(string gameName)
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IServer.UnregisterPlayer(string playerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemovePlayer(string playerName)
+        {
+            throw new NotImplementedException();
         }
 
         public bool AddPlayer(string gameName, string playerName) { return false; }
@@ -28,7 +43,7 @@ namespace GUIModule.App_Code
             AvailableGames.Last().PlayerNames.Add(playerName);
             return AvailableGames.Last();
         }
-        public bool DeleteGame(string gameName) {
+        public void DeleteGame(string gameName) {
             var ongoing = games.Remove(gameName);
             AvailableGames.RemoveAll(game => (game.GameName == gameName) &&
                 (game.PlayerNames.Count == 1));
@@ -42,12 +57,6 @@ namespace GUIModule.App_Code
             {
                 hub.Clients.Group(gameName).requestRefresh();
             }
-            return true;
-        }
-
-        public bool RemovePlayer(string playerName)
-        {
-            return true;
         }
 
         public List<CreatedGame> GetAvailableGames() { return AvailableGames; }
@@ -90,7 +99,7 @@ namespace GUIModule.App_Code
         }
 
         public bool RegisterPlayer(string playerName, string contextId) { return true; }
-        public bool UnregisterPlayer(string playerName) { return false;  }
+        public void UnregisterPlayer(string playerName) { }
 
         public GameState GetGameState(string gameName)
         {
