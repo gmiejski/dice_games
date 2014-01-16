@@ -17,16 +17,24 @@ namespace CommonInterfacesModule
 
         public string OwnerName { get; private set; }
 
-        public List<string> PlayerNames { get; private set; }
+        public virtual List<string> PlayerNames { get; private set; }
 
         public virtual bool AddPlayer(string playerName)
         {
+            if (PlayerNames.Contains(playerName) || IsReadyToStart())
+            {
+                return false;
+            }
             PlayerNames.Add(playerName);
             return true;
         }
 
         public virtual bool IsReadyToStart()
         {
+            if (NumberOfPlayers == PlayerNames.Count)
+            {
+                return true;
+            }
             return false;
         }
 
@@ -38,8 +46,8 @@ namespace CommonInterfacesModule
             GameName = gameName;
             BotLevel = botLevel;
             OwnerName = ownerName;
-
-            PlayerNames = new List<string>();
+            PlayerNames = new List<string> { ownerName };
+     
         }
     }
 }
