@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GameControllerNModule;
-using Dice.GameControllerPokerModule;
-
-
+using GameControllerPokerModule;
 
 
 namespace CommonInterfacesModule
@@ -36,9 +34,10 @@ namespace CommonInterfacesModule
                     break;
 
                 case GameType.Poker:
-                    return new 
+                    return new PokerGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
                     break;
-
+                default:
+                    return null;
             }
         }
     }
