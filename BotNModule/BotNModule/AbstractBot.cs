@@ -40,6 +40,5 @@ namespace BotNModule
                 name = value;
             }
         }
-
     }
 }

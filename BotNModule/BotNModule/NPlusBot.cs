@@ -35,7 +35,7 @@ namespace BotNModule
             else
             {
                 if (gameState.PlayerStates.TryGetValue(this.name, out player))
-                    myMove = new Move(new List<int>() { 0, 1, 2, 3, 4, 5 });
+                    myMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
                 else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
 
             }
@@ -75,7 +75,7 @@ namespace BotNModule
         /// </summary>
         /// <param name="dices"></param>
         /// <param name="product"></param>
-        /// <param name="removed">new List<int>()</param>
+        /// <param name="removed">empty list</param>
         /// <returns></returns>
         public List<int> UltimateProbability(List<int> dices, int product, List<int> removed)
         {
