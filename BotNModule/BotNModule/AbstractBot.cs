@@ -25,7 +25,7 @@ namespace BotNModule
         {
             throw new NotImplementedException();
         }
-        public BotLevel getBotLevel()
+        public BotLevel GetBotLevel()
         {
             return botLevel;
         }

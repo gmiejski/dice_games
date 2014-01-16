@@ -37,24 +37,24 @@ namespace BotNTestModule
         public void TestUltimateProbality()
         {
             List<int> dices = new List<int>(new int[] { 6, 6, 6, 6, 6 });
-            List<int> dicesToRoll = _botHard.UltimateProbability(dices, 30);
+            List<int> dicesToRoll = _botHard.UltimateProbability(dices, 30, new List<int>());
             Assert.AreEqual(0, dicesToRoll.Count);
 
             dices = new List<int>(new int[] { 6, 2, 6, 6, 6 });
-            dicesToRoll = _botHard.UltimateProbability(dices, 30);
+            dicesToRoll = _botHard.UltimateProbability(dices, 30, new List<int>());
             Assert.AreEqual(1, dicesToRoll.Count);
             Assert.IsTrue(dicesToRoll.Contains(2));
 
             dices = new List<int>(new int[] { 1, 2, 3, 4, 5 });
-            dicesToRoll = _botHard.UltimateProbability(dices, 30);
+            dicesToRoll = _botHard.UltimateProbability(dices, 30, new List<int>());
             Assert.AreEqual(5, dicesToRoll.Count);
 
             dices = new List<int>(new int[] { 5, 1, 4, 2, 5 });
-            dicesToRoll = _botHard.UltimateProbability(dices, 5);
+            dicesToRoll = _botHard.UltimateProbability(dices, 5, new List<int>());
             Assert.AreEqual(4, dicesToRoll.Count);
 
             dices = new List<int>(new int[] { 5, 1, 4, 2, 5 });
-            dicesToRoll = _botHard.UltimateProbability(dices, 6);
+            dicesToRoll = _botHard.UltimateProbability(dices, 6, new List<int>());
             Assert.AreEqual(3, dicesToRoll.Count);
         }
 

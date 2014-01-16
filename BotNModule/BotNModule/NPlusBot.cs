@@ -18,7 +18,7 @@ namespace BotNModule
         {
             Move myMove = null;
             PlayerState player;
-            if (getBotLevel() == BotLevel.Hard)
+            if (GetBotLevel() == BotLevel.Hard)
             {
                 if (gameState.PlayerStates.TryGetValue(this.name, out player))
                 {
