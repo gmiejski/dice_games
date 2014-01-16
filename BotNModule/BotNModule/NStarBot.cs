@@ -18,7 +18,7 @@ namespace BotNModule
         {
             Move myMove = null;
             PlayerState player;
-            if (getBotLevel() == BotLevel.Hard)
+            if (GetBotLevel() == BotLevel.Hard)
             {
                 if (gameState.PlayerStates.TryGetValue(this.name, out player))
                 {
@@ -52,7 +52,7 @@ namespace BotNModule
         /// <param name="numOfDices"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public static double CollectSetSize(int numOfDices, int val)
+        public double CollectSetSize(int numOfDices, int val)
         {
             double s = 0;
             for (int i = 1; i <= 6; i++)
