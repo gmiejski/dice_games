@@ -22,8 +22,8 @@ namespace BotNTestModule
         [SetUp]
         public void SetUp()
         {
-            _botEasy = new NPlusBot(LevelEasy);
-            _botHard = new NPlusBot(LevelHard);
+            _botEasy = new NPlusBot(LevelEasy,"1");
+            _botHard = new NPlusBot(LevelHard,"2");
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace BotNTestModule
         {
             List<int> dices = new List<int>(new int[] { 6, 6, 6, 6, 6 });
             List<int> dicesToRoll = _botHard.UltimateProbability(dices, 30, new List<int>());
-            Assert.AreEqual(0, dicesToRoll.Count);
+            Assert.AreEqual(1, dicesToRoll.Count);
 
             dices = new List<int>(new int[] { 6, 2, 6, 6, 6 });
             dicesToRoll = _botHard.UltimateProbability(dices, 30, new List<int>());

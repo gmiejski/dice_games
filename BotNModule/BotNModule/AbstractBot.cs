@@ -16,9 +16,10 @@ namespace BotNModule
         {
             this.botLevel = BotLevel.Easy;
         }
-        protected AbstractBot(BotLevel botLevel)
+        protected AbstractBot(BotLevel botLevel, String name)
         {
             this.botLevel = botLevel;
+            this.name = name;
         }
         public abstract Move GetNextMove(GameState gameState);
         public void SendGameState(GameState gameState)

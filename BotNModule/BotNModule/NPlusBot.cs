@@ -9,8 +9,8 @@ namespace BotNModule
 {
     public class NPlusBot : AbstractBot
     {
-        public NPlusBot(BotLevel botLevel)
-            : base(botLevel)
+        public NPlusBot(BotLevel botLevel, String name)
+            : base(botLevel,name)
         {
         }
 

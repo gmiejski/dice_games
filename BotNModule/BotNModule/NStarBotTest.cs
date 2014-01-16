@@ -21,8 +21,8 @@ namespace BotNTestModule
         [SetUp]
         public void SetUp()
         {
-            _botEasy = new NStarBot(LevelEasy);
-            _botHard = new NStarBot(LevelHard);
+            _botEasy = new NStarBot(LevelEasy, "1");
+            _botHard = new NStarBot(LevelHard,"2");
         }
 
         [Test]
