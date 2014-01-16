@@ -99,10 +99,10 @@ namespace GUIUnitTest
             Assert.IsNull(gameData.WhoseTurn);
             Assert.IsNull(gameData.Winner);
             
-            var arr = new string[1];
+            var arr = new string[2];
             view.GetPlayers().Keys.CopyTo(arr, 0);
-            Assert.AreEqual(view.GetPlayers().Count, 1);
-            Assert.AreEqual(arr[0], "usr1");
+            Assert.AreEqual(view.GetPlayers().Count, 2);
+            Assert.AreEqual(arr[1], "usr1");
         }
     }
 }
