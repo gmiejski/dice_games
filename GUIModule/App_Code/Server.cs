@@ -28,7 +28,7 @@ namespace GUIModule.App_Code
             AvailableGames.Last().PlayerNames.Add(playerName);
             return AvailableGames.Last();
         }
-        public void DeleteGame(string gameName) {
+        public bool DeleteGame(string gameName) {
             var ongoing = games.Remove(gameName);
             AvailableGames.RemoveAll(game => (game.GameName == gameName) &&
                 (game.PlayerNames.Count == 1));
@@ -42,6 +42,12 @@ namespace GUIModule.App_Code
             {
                 hub.Clients.Group(gameName).requestRefresh();
             }
+            return true;
+        }
+
+        public bool RemovePlayer(string playerName)
+        {
+            return true;
         }
 
         public List<CreatedGame> GetAvailableGames() { return AvailableGames; }
@@ -84,7 +90,7 @@ namespace GUIModule.App_Code
         }
 
         public bool RegisterPlayer(string playerName, string contextId) { return true; }
-        public void UnregisterPlayer(string playerName) { }
+        public bool UnregisterPlayer(string playerName) { return false;  }
 
         public GameState GetGameState(string gameName)
         {
