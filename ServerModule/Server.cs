@@ -6,6 +6,15 @@ using Microsoft.AspNet.SignalR;
 
 namespace ServerModule
 {
+    /// <summary>
+    /// Server is the central point between Hub class and actions takne on different GameControllers.
+    /// Its is responsible of : <br></br>
+    /// <list type="bullet">
+    /// <item>delivering all actions from clients to specific game instances </item>
+    /// <item>managing state of not started game</item>
+    /// <item>calling Hub actions when certains events are raised from game controllers</item>
+    /// </list>
+    /// </summary>
     public class Server : IServer
     {
 
@@ -99,8 +108,7 @@ namespace ServerModule
                 if (_availableGames.ContainsKey(gameName))
                 {
                     _availableGames.Remove(gameName);
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                    hub.Clients.Group(gameName).requestRefresh();
+                    GetHubContext().Clients.Group(gameName).requestRefresh();
                     return true;
                 }
             }
@@ -109,8 +117,7 @@ namespace ServerModule
                 if (_activeGames.ContainsKey(gameName))
                 {
                     _activeGames.Remove(gameName);
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                    hub.Clients.Group(gameName).endGame();
+                    GetHubContext().Clients.Group(gameName).endGame();
                     return true;
                 }
             }
@@ -160,8 +167,7 @@ namespace ServerModule
                 }
                 if (result)
                 {
-                    var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                    hub.Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh();
+                    GetHubContext().Clients.Group(gameName, _loggedPlayers[playerName]).requestRefresh();
                 }
             }
             return result;
@@ -255,8 +261,7 @@ namespace ServerModule
                     else
                     {
                         game.Value.PlayerNames.Remove(playerName);
-                        var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-                        hub.Clients.Group(game.Key).requestRefresh();
+                        GetHubContext().Clients.Group(game.Key).requestRefresh();
                     }
                     return true;
                 }
@@ -299,8 +304,12 @@ namespace ServerModule
 
         private void OnGameStateChanged(string gameName)
         {
-            var hub = GlobalHost.ConnectionManager.GetHubContext<GameHub>();
-            hub.Clients.Group(gameName).requestRefresh();
+            GetHubContext().Clients.Group(gameName).requestRefresh();
+        }
+
+        private IHubContext GetHubContext()
+        {
+            return GlobalHost.ConnectionManager.GetHubContext<GameHub>();
         }
     }
 }
