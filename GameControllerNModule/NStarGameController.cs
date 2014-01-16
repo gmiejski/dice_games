@@ -30,6 +30,14 @@ namespace GameControllerNModule
 
         public override bool MakeMove(string playerName, Move move)
         {
+            if (playerName == null || move == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (move.DicesToRoll.Count > 5 || move.DicesToRoll.Max() > 4)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
             if (!GameState.WhoseTurn.Equals(playerName))
                 return false;
 
@@ -44,7 +52,6 @@ namespace GameControllerNModule
                 ResetDice();
                 _gameGoal = GenerateNewGoal();
             }
-            GameState.WhoseTurn = NextPlayer();
             OnBroadcastGameState(GameName, GameState);
             return true;
         }
@@ -53,7 +60,7 @@ namespace GameControllerNModule
         {
             var currentPlayer = GameState.WhoseTurn;
             var currentIndex = _playerNames.IndexOf(currentPlayer);
-            var nextIndex = (currentIndex + 1) % _playerNames.Capacity;
+            var nextIndex = (currentIndex + 1) % (_playerNames.Capacity-1);
             return _playerNames[nextIndex];
         }
 
@@ -69,6 +76,7 @@ namespace GameControllerNModule
         {
             PlayerState playerState;
             GameState.PlayerStates.TryGetValue(playerName, out playerState);
+            GameState.WhoseTurn = NextPlayer();
 
             if (playerState.CurrentResultValue.Equals(_gameGoal))
             {
@@ -78,7 +86,7 @@ namespace GameControllerNModule
             {
                 return false;
             }
-            if (!playerState.NumberOfWonRounds.Equals(_gameGoal)) return true;
+            if (!playerState.NumberOfWonRounds.Equals(_gameGoal)) return false;
             GameState.WinnerName.Add(playerName);
             GameState.IsOver = true;
             return true;

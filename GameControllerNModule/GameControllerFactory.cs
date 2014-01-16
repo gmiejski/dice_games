@@ -27,15 +27,12 @@ namespace CommonInterfacesModule
             {
                 case GameType.NPlus:
                     return new NPlusGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
-                    break;
 
                 case GameType.NStar:
                     return new NStarGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
-                    break;
 
                 case GameType.Poker:
                     return new PokerGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
-                    break;
                 default:
                     return null;
             }

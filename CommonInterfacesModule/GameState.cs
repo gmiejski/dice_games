@@ -8,7 +8,7 @@ namespace CommonInterfacesModule
         public bool IsOver { get; set; }
 
         public Dictionary<String, PlayerState> PlayerStates { get; set; }
-
+        
         public string WhoseTurn { get; set; }
 
         public List<string> WinnerName { get; set; }

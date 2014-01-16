@@ -53,6 +53,10 @@ namespace CommonInterfacesModule
 
         protected AbstractGameController(String ownerName, String gameName, GameType gameType, List<String> players, List<IBot> bots)
         {
+            if (ownerName == null || gameName == null)
+            {
+                throw new ArgumentNullException();
+            }
             if (players.Count + bots.Count == 0)
             {
                 throw new ArgumentException();
@@ -64,9 +68,14 @@ namespace CommonInterfacesModule
             _bots = bots;
             GameState = new GameState();
             GameState.PlayerStates = new Dictionary<string, PlayerState>();
+            foreach (String player in _playerNames)
+            {
+                GameState.PlayerStates.Add(player, new PlayerState(new List<int>() { 0, 0, 0, 0, 0 }));
+            }
             foreach (IBot bot in bots)
             {
                 bot.BotMoved += new BotMovedHandler(BotMoved);
+                GameState.PlayerStates.Add(bot.Name, new PlayerState(new List<int>() { 0, 0, 0, 0, 0 }));
             }
             GameState.IsOver = false;
             GameState.WinnerName = new List<string>() { players[0] };
