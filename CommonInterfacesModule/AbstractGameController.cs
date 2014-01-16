@@ -22,7 +22,7 @@ namespace CommonInterfacesModule
         {
             if (BroadcastGameState != null)
             {
-//                BroadcastGameState(gameName, gameState);
+                BroadcastGameState(gameName, gameState);
             }
         }
 
