@@ -110,6 +110,7 @@
             gameState.client.endGame = function () {
                 $.connection.hub.stop();
                 $("#GameState").text("zakończona").css("color", "#f00");
+                $("#ThrowDice").attr("disabled", "disabled");
             };
 
             $.connection.hub.start().done(function () {
