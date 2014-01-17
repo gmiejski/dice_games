@@ -85,7 +85,6 @@
     <None Include="CommonInterfacesModule\App.config" />
     <None Include="GameControllerNModule\App.config" />
     <None Include="GameControllerPokerModule\App.config" />
-    <None Include="GameControllerPokerModule\obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
     <None Include="GUIModule\App.config" />
     <None Include="README.md" />
     <None Include="ServerModule\App.config" />
@@ -95,7 +94,6 @@
     <Compile Include="CommonInterfacesModule\BotFactory.cs" />
     <Compile Include="CommonInterfacesModule\BotLevel.cs" />
     <Compile Include="CommonInterfacesModule\CreatedGame.cs" />
-    <Compile Include="CommonInterfacesModule\GameControllerFactory.cs" />
     <Compile Include="CommonInterfacesModule\GameState.cs" />
     <Compile Include="CommonInterfacesModule\GameType.cs" />
     <Compile Include="CommonInterfacesModule\IBot.cs" />
@@ -103,11 +101,11 @@
     <Compile Include="CommonInterfacesModule\IServer.cs" />
     <Compile Include="CommonInterfacesModule\Move.cs" />
     <Compile Include="CommonInterfacesModule\PlayerState.cs" />
+    <Compile Include="GameControllerNModule\GameControllerFactory.cs" />
+    <Compile Include="GameControllerNModule\NPlusGameController.cs" />
+    <Compile Include="GameControllerNModule\NStarGameController.cs" />
     <Compile Include="GameControllerPokerModule\Configuration.cs" />
     <Compile Include="GameControllerPokerModule\Hands.cs" />
-    <Compile Include="GameControllerPokerModule\obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="GameControllerPokerModule\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="GameControllerPokerModule\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="GameControllerPokerModule\PokerGameController.cs" />
   </ItemGroup>
   <ItemGroup>
