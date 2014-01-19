@@ -7,7 +7,7 @@ namespace CommonInterfacesModule
     {
         public bool IsOver { get; set; }
 
-        public Dictionary<String, PlayerState> PlayerStates { get; set; }
+        public virtual Dictionary<String, PlayerState> PlayerStates { get; set; }
 
         public string WhoseTurn { get; set; }
 

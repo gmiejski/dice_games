@@ -6,7 +6,7 @@ namespace CommonInterfacesModule
     {
         CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel);
 
-        void DeleteGame(string gameName);
+        bool DeleteGame(string gameName);
 
         bool JoinGame(string playerName, string gameName);
 
@@ -14,7 +14,9 @@ namespace CommonInterfacesModule
 
         bool RegisterPlayer(string playerName, string contextId);
 
-        void UnregisterPlayer(string playerName);
+        bool UnregisterPlayer(string playerName);
+
+        bool RemovePlayer(string playerName);
 
         List<CreatedGame> GetAvailableGames();
 
