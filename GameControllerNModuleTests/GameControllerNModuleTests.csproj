@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7613A614-D342-46EF-A1E0-4C9E3BD317EE}</ProjectGuid>
+    <ProjectGuid>{136CFEC5-1B7A-407E-9411-5C6C15347E0B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GUIUnitTest</RootNamespace>
-    <AssemblyName>GUIUnitTest</AssemblyName>
+    <RootNamespace>GameControllerNModuleTests</RootNamespace>
+    <AssemblyName>GameControllerNModuleTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -16,7 +16,6 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.2.1312.1622\lib\net40\Moq.dll</HintPath>
+      <HintPath>Moq.4.0.10827.Final\Moq.4.0.10827\NET40\Moq.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -54,7 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="GameViewTest.cs" />
+    <Compile Include="NStarGameControllerTest.cs" />
+    <Compile Include="NPlusGameControllerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,16 +62,10 @@
       <Project>{1181133f-5015-490e-9d3a-11c9b24906be}</Project>
       <Name>CommonInterfacesModule</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GUIModule\GUIModule.csproj">
-      <Project>{c1bbbc49-0a1d-4fb4-8b82-fe05a4adcbe7}</Project>
-      <Name>GUIModule</Name>
+    <ProjectReference Include="..\GameControllerNModule\GameControllerNModule.csproj">
+      <Project>{1712bacc-0692-4f9e-bfbd-4cf35ef8f4f0}</Project>
+      <Name>GameControllerNModule</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

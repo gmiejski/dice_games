@@ -7,11 +7,15 @@ namespace CommonInterfacesModule
     {
         public bool IsOver { get; set; }
 
-        public virtual Dictionary<String, PlayerState> PlayerStates { get; set; }
+        public Dictionary<String, PlayerState> PlayerStates { get; set; }
 
         public string WhoseTurn { get; set; }
 
+<<<<<<< HEAD
         public List<string> WinnerName { get; set; }
+=======
+        public List<String> WinnerName { get; set; }
+>>>>>>> module_poker
 
         public void Update(string playerName, Dictionary<int, int> newDice)
         {

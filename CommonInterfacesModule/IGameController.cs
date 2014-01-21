@@ -2,6 +2,7 @@
 namespace CommonInterfacesModule
 {
 
+
     public delegate void BroadcastGameStateHandler(string gameName);
     public delegate bool DeleteGameControllerHandler (string gameName);
 

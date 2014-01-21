@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommonInterfacesModule;
 using Microsoft.AspNet.SignalR;
+using GUIModule;
 
 namespace ServerModule
 {
@@ -50,7 +51,7 @@ namespace ServerModule
             _activeGames = new Dictionary<string, IGameController>();
             _availableGames = new Dictionary<string, CreatedGame>();
             _loggedPlayers = new Dictionary<string, string>();
-            _gameControllerFactory = new GameControllerFactory();
+            _gameControllerFactory = GameControllerFactory.getInstance();
         }
 
         /// <summary>

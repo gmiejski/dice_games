@@ -42,6 +42,17 @@
       <Project>{1181133f-5015-490e-9d3a-11c9b24906be}</Project>
       <Name>CommonInterfacesModule</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GameControllerPokerModule\GameControllerPokerModule.csproj">
+      <Project>{97E046DC-FB1C-4E49-94DA-346D32CB071D}</Project>
+      <Name>GameControllerPokerModule</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="NPlusGameController.cs" />
+    <Compile Include="NStarGameController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,7 +9,7 @@ namespace GUIModule.App_Code
     {
         public string Name { get; set; }
         public string State { get; set; }
-        public string Winner { get; set; }
+        public List<string> Winner { get; set; }
         public string WhoseTurn { get; set; }
     }
 }

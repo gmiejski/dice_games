@@ -58,7 +58,7 @@ namespace GUIUnitTest
 
             var dict = new Dictionary<string, PlayerState>();
             serv.Setup(x => x.GetGameState("game")).Returns(
-                new GameState { WhoseTurn = "turn", WinnerName = "winner",
+                new GameState { WhoseTurn = "turn", WinnerName = new List<string> {"winner"},
                     IsOver = true, PlayerStates = dict }
             );
             

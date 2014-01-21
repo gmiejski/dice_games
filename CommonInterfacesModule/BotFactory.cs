@@ -6,7 +6,7 @@
     {
         public static List<IBot> CreateBots(BotLevel botLevel, GameType gameType, int numberOfBots)
         {
-            throw new System.NotImplementedException();
+            return new List<IBot>();
         }
 
         private BotFactory()

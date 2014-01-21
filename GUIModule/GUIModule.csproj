@@ -7,7 +7,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7AB8ED92-CCA8-4CF3-BF8C-E5C7E3169271}</ProjectGuid>
+    <ProjectGuid>{C1BBBC49-0A1D-4FB4-8B82-FE05A4ADCBE7}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -60,6 +60,10 @@
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="ServerModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ServerModule\bin\Debug\ServerModule.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
@@ -174,10 +178,6 @@
     <ProjectReference Include="..\CommonInterfacesModule\CommonInterfacesModule.csproj">
       <Project>{1181133f-5015-490e-9d3a-11c9b24906be}</Project>
       <Name>CommonInterfacesModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ServerModule\ServerModule.csproj">
-      <Project>{DE6544C9-2820-453D-B69E-FADBBD07C28A}</Project>
-      <Name>ServerModule</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
