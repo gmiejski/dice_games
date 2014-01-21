@@ -24,11 +24,18 @@ namespace BotNModule
                 {
                     List<int> l = UltimateProbability(player.Dices, 20, new List<int>());
                     List<int> ll = new List<int>(l);
+                    List<int> tmpl = new List<int>(l);
+                    List<int> tmpDice = new List<int>(player.Dices);
                     foreach (int x in l)
                     {
-                        ll[l.IndexOf(x)] = player.Dices.IndexOf(x);
+                        ll[tmpl.IndexOf(x)] = tmpDice.IndexOf(x);
+                        tmpl[tmpl.IndexOf(x)] = -1;
+                        tmpDice[tmpDice.IndexOf(x)] = -1;
                     }
                     myMove = new Move(ll);
+
+                    best = new List<double>();
+                    removing = new List<List<int>>();
                 }
                 else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
             }
@@ -84,7 +91,13 @@ namespace BotNModule
                 l.Remove(x);
                 removed.Add(x);
                 UltimateProbability(l, product, removed);
-                best.Add(CollectSetSize(5 - l.Count, product - getProduct(l)) / Math.Pow(6, 5 - l.Count));
+                int lProduct = getProduct(l);
+                if (lProduct > 0 && product % lProduct == 0 && lProduct <= product)
+                    best.Add(CollectSetSize(5 - l.Count, product / lProduct) / Math.Pow(6, 5 - l.Count));
+                else if (lProduct == 0)
+                    best.Add(CollectSetSize(5 - l.Count, product) / Math.Pow(6, 5 - l.Count));
+
+                else best.Add(-1);//that combination is impossible
                 removing.Add(new List<int>(removed));
                 removed.Remove(x);
             }

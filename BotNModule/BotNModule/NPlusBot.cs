@@ -24,11 +24,18 @@ namespace BotNModule
                 {
                     List<int> l = UltimateProbability(player.Dices, 20, new List<int>());
                     List<int> ll = new List<int>(l);
+                    List<int> tmpl = new List<int>(l);
+                    List<int> tmpDice = new List<int>(player.Dices);
                     foreach (int x in l)
                     {
-                        ll[l.IndexOf(x)] = player.Dices.IndexOf(x);
+                        ll[tmpl.IndexOf(x)] = tmpDice.IndexOf(x);
+                        tmpl[tmpl.IndexOf(x)] = -1;
+                        tmpDice[tmpDice.IndexOf(x)] = -1;
                     }
                     myMove = new Move(ll);
+
+                    best = new List<double>();
+                    removing = new List<List<int>>();
                 }
                 else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
             }
