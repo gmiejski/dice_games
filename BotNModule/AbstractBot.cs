@@ -24,7 +24,8 @@ namespace BotNModule
         public abstract Move GetNextMove(GameState gameState);
         public void SendGameState(GameState gameState)
         {
-            throw new NotImplementedException();
+	    if (BotMoved != null)
+                BotMoved(Name, GetNextMove(gameState));
         }
         public BotLevel GetBotLevel()
         {
