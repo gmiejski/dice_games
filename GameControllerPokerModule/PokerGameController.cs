@@ -71,6 +71,7 @@ namespace GameControllerPokerModule
             playerConfiguration = CheckConfiguration(playerConfiguration);
 
             gameState.PlayerStates[PlayerName].Dices = playerConfiguration.Dices;
+            gameState.PlayerStates[PlayerName].CurrentResult = playerConfiguration.Hands.ToString();
 
             CheckWinnerChange(playerConfiguration, PlayerName);
 
