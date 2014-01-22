@@ -37,15 +37,23 @@ namespace GUIModule.Pages
                 Int32.TryParse(NewGameBots.Text, out numberOfBots) &&
                 Int32.TryParse(NewGameRounds.Text, out numberOfRounds);
 
-            bool areValuesValid = (numberOfPlayers > 0) && (numberOfBots > 0) && (numberOfRounds > 0);
+            bool areValuesValid = (numberOfPlayers > 0) && (numberOfBots >= 0) && (numberOfRounds > 0);
 
             if (canParseValues && areValuesValid) // validate input data
             { // data ok, create a new game
-                Global.server.CreateGame(PlayerName, NewGameName.Text, gameType,
+                CreatedGame cg = Global.server.CreateGame(PlayerName, NewGameName.Text, gameType,
                     numberOfPlayers, numberOfBots, botLevel);
 
-                Session["gameName"] = NewGameName.Text;
-                Response.Redirect("Game.aspx", false); // redirect to a new games
+                if (cg != null)
+                {
+                    Session["gameName"] = NewGameName.Text;
+                    Response.Redirect("Game.aspx", false); // redirect to a new games
+                }
+                else // for example name is already taken
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(),
+                    "myalert", "alert('Tworzenie gry nie powiodlo sie! (na przyklad ')", true);
+                }
             }
             else // error
             {
