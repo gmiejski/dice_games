@@ -27,6 +27,11 @@ namespace GameControllerPokerModuleTests
             iBotMock2.SetupGet(x => x.Name).Returns("bot2");
             List<IBot> botList = new List<IBot>() { iBotMock1.Object, iBotMock2.Object };
             gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            
+            //CreatedGame createdGame = new CreatedGame(players[0], gameName, gameType, players.Count, botList.Count, BotLevel.Easy);
+            //createdGame.PlayerNames = players;
+            //gameController = GameControllerFactory.getInstance().CreateGameController(createdGame);
+            
             Assert.IsNotNull(gameController);
             Assert.IsNotNull(gameController.GameState);
             Assert.IsNotNull(gameController.GameState.PlayerStates);
