@@ -54,6 +54,7 @@ namespace GUIModule.Pages
         protected void Logout_Click(object sender, EventArgs e)
         {
             Session["playerName"] = null;
+            server.UnregisterPlayer(PlayerName);
             Response.Redirect("Login.aspx", false);
         }
     }

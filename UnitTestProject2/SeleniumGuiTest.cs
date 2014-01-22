@@ -62,7 +62,7 @@ namespace SeleniumTest
                 // dolaczamy do gry
                 chDriver.FindElement(By.Id("AvailableGamesTable_joinGame_0")).Click();
 
-                Thread.Sleep(300);
+                Thread.Sleep(2000);
 
                 // wykonujemy ruch
                 if (chDriver.FindElement(By.Id("ThrowDice")).Enabled)
@@ -132,17 +132,20 @@ namespace SeleniumTest
                 chDriver.Navigate().GoToUrl("http://localhost:55910/Pages/Login.aspx");
                 LoginToPage(chDriver, "user1");
 
+                Thread.Sleep(1000);
                 // dolaczamy do gry
                 chDriver.FindElement(By.Id("AvailableGamesTable_joinGame_0")).Click();
+
+                // gracz udaje ze mysli
+                Thread.Sleep(1000);
 
                 // gracz rozmysla sie
                 chDriver.FindElement(By.Id("LeaveGame")).Click();
                 chDriver.SwitchTo().Alert().Accept();
-
+                Thread.Sleep(500);
                 // sprawdzamy czy gra nie zakonczyla sie, a jedynie usunela jednego gracza
                 var rows = ffDriver.FindElements(By.CssSelector("#AwaitingPlayersList tr")).Count;
-                Assert.AreEqual(3, rows); // sa tylko dwa wiersze, naglowek i gracz ff
-                // do poprawki!!!
+                Assert.AreEqual(2, rows); // sa tylko dwa wiersze, naglowek i gracz ff
 
                 // gracz ff wychodzi
                 ffDriver.FindElement(By.Id("LeaveGame")).Click();

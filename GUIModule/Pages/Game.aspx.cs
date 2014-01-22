@@ -104,7 +104,7 @@ namespace GUIModule
 
         protected void LeaveGame_Click(object sender, EventArgs e)
         {
-            _server.DeleteGame(GameName);
+            _server.RemovePlayer(PlayerName);
             Session["gameName"] = null;
             Response.Redirect("Main.aspx", false);
         }

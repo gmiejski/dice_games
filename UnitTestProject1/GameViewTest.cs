@@ -69,7 +69,9 @@ namespace GUIUnitTest
             Assert.IsInstanceOfType(gameData, typeof(GameData));
             Assert.AreEqual(gameData.Name, "game");
             Assert.AreEqual(gameData.WhoseTurn, "turn");
-            Assert.AreEqual(gameData.Winner, "winner");
+            Assert.IsTrue(new HashSet<string>(gameData.Winner)
+                .SetEquals(new HashSet<string> {"winner" }));
+
             Assert.AreEqual(gameData.State, "zakończona");
 
             Assert.AreEqual(view.GetPlayers(), dict);
