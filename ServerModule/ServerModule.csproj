@@ -40,6 +40,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BotNModule\BotNModule.csproj">
+      <Project>{48085b38-5644-4d7d-a57f-919ada05e9f7}</Project>
+      <Name>BotNModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BotPokerModule\BotPokerModule.csproj">
+      <Project>{31ea8c2c-1e6a-48f5-83f4-d21ca34c85ec}</Project>
+      <Name>BotPokerModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonInterfacesModule\CommonInterfacesModule.csproj">
       <Project>{1181133f-5015-490e-9d3a-11c9b24906be}</Project>
       <Name>CommonInterfacesModule</Name>
@@ -58,6 +66,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BotFactory.cs" />
     <Compile Include="GameControllerFactory.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>

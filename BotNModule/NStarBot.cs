@@ -7,9 +7,9 @@ using CommonInterfacesModule;
 
 namespace BotNModule
 {
-    class NStarBot : AbstractBot
+    public class NStarBot : AbstractBot
     {
-        public NStarBot(BotLevel botLevel, String name)
+        public NStarBot(BotLevel botLevel, string name)
             : base(botLevel, name)
         {
 
@@ -75,6 +75,8 @@ namespace BotNModule
 
         private List<double> best = new List<double>();
         private List<List<int>> removing = new List<List<int>>();
+        private BotLevel botLevel;
+        private string p;
         /// <summary>
         /// return values of dices to roll
         /// It's based on highest Probability
