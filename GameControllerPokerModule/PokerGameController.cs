@@ -23,13 +23,11 @@ namespace GameControllerPokerModule
             foreach (String player in players)
             {
                 List<int> dice = new List<int>() { 0, 0, 0, 0, 0 };
-                GameState.PlayerStates.Add(player, new PlayerState(dice) { CurrentResultValue = 0, CurrentResult = Hands.HighCard.ToString(), NumberOfWonRounds = 0 });
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
             }
             foreach (IBot bot in bots)
             {
                 List<int> dice = new List<int>() { 0, 0, 0, 0, 0 };
-                GameState.PlayerStates.Add(bot.Name, new PlayerState(dice) { CurrentResultValue = 0, CurrentResult = Hands.HighCard.ToString(), NumberOfWonRounds = 0 });
                 _playersDice.Add(bot.Name, new Configuration(Hands.HighCard, 0, dice));
             }
         }
