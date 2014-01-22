@@ -56,6 +56,14 @@
                         <asp:RadioButton ID="BotLevelHard" runat="server" GroupName="botLevel" Text="Trudny" />
                     </asp:TableCell>
                 </asp:TableRow>
+                <asp:TableRow>
+                    <asp:TableCell>
+                        Liczba rund:
+                    </asp:TableCell>
+                    <asp:TableCell>
+                        <asp:TextBox ID="NewGameRounds" runat="server"></asp:TextBox>
+                    </asp:TableCell>
+                </asp:TableRow>
             </asp:Table>
             <asp:Panel runat="server" CssClass="horCentered">
                 <asp:Button runat="server" Text="Start" ID="StartGame" OnClick="CreateGame_Click"/>

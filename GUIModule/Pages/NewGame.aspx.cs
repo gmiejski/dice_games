@@ -28,11 +28,30 @@ namespace GUIModule.Pages
             GameType gameType = GetGameTypeFromString(NewGameType.SelectedValue);
 
             BotLevel botLevel = BotLevelHard.Checked ? BotLevel.Hard : BotLevel.Easy;
-            
-            Global.server.CreateGame(PlayerName, NewGameName.Text, gameType, 
-                Int32.Parse(NewGamePlayers.Text), Int32.Parse(NewGameBots.Text), botLevel);
-            Session["gameName"] = NewGameName.Text;
-            Response.Redirect("Game.aspx", false);
+
+            int numberOfPlayers = 0;
+            int numberOfBots = 0;
+            int numberOfRounds = 0;
+
+            bool canParseValues = Int32.TryParse(NewGamePlayers.Text, out numberOfPlayers) &&
+                Int32.TryParse(NewGameBots.Text, out numberOfBots) &&
+                Int32.TryParse(NewGameRounds.Text, out numberOfRounds);
+
+            bool areValuesValid = (numberOfPlayers > 0) && (numberOfBots > 0) && (numberOfRounds > 0);
+
+            if (canParseValues && areValuesValid) // validate input data
+            { // data ok, create a new game
+                Global.server.CreateGame(PlayerName, NewGameName.Text, gameType,
+                    numberOfPlayers, numberOfBots, botLevel);
+
+                Session["gameName"] = NewGameName.Text;
+                Response.Redirect("Game.aspx", false); // redirect to a new games
+            }
+            else // error
+            {
+                ClientScript.RegisterStartupScript(this.GetType(),
+                    "myalert", "alert('Liczba graczy, botow lub rund nie jest poprawna liczba!')", true);
+            }
         }
 
         private GameType GetGameTypeFromString(string type)
