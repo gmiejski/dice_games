@@ -13,10 +13,10 @@ namespace GameControllerNModule
         private int _roundsToWin;
         private readonly Random _random = new Random();
 
-        public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots) : base(ownerName, gameName, gameType, players, bots)
+        public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots, int numberOfRounds) : base(ownerName, gameName, gameType, players, bots)
         {
             _gameGoal = GenerateNewGoal();
-            _roundsToWin = 4;
+            _roundsToWin = numberOfRounds;
         }
 
         public override bool MakeMove(string playerName, Move move)

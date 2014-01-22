@@ -26,13 +26,13 @@ namespace ServerModule
             switch (createdGame.GameType)
             {
                 case GameType.NPlus:
-                    return new NPlusGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
+                    return new NPlusGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots,createdGame.NumberOfRounds);
 
                 case GameType.NStar:
-                    return new NStarGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
+                    return new NStarGameController(createdGame.OwnerName, createdGame.GameName, createdGame.GameType, createdGame.PlayerNames, bots, createdGame.NumberOfRounds);
 
                 case GameType.Poker:
-                    return new PokerGameController(createdGame.OwnerName,createdGame.GameName,createdGame.GameType,createdGame.PlayerNames,bots);
+                    return new PokerGameController(createdGame.OwnerName, createdGame.GameName, createdGame.GameType, createdGame.PlayerNames, bots, createdGame.NumberOfRounds);
                 default:
                     return null;
             }

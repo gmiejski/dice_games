@@ -13,15 +13,17 @@ namespace GameControllerPokerModule
         private String _firstPlayer;
         private List<string> _playersOrderedList;
         private const int _numberOfTurnsInRound = 3;
+        private int _roundsToWin;
 
         private int _roundIterator = 1;
         private int _turnsIterator = 1;
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
-            List<String> players, List<IBot> bots)
+            List<String> players, List<IBot> bots, int numberOfRounds)
             : base(ownerName, gameName, gameType, players, bots)
         {
+            _roundsToWin = numberOfRounds;
             _firstPlayer = players[0];
             foreach (var player in players)
             {
