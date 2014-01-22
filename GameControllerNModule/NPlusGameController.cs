@@ -10,11 +10,13 @@ namespace GameControllerNModule
     public class NPlusGameController : AbstractGameController
     {
         private int _gameGoal;
+        private int _roundsToWin;
         private readonly Random _random = new Random();
 
         public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots) : base(ownerName, gameName, gameType, players, bots)
         {
             _gameGoal = GenerateNewGoal();
+            _roundsToWin = 4;
         }
 
         public override bool MakeMove(string playerName, Move move)
@@ -34,7 +36,9 @@ namespace GameControllerNModule
             GameState.Update(playerName,newDice);
             PlayerState player;
             GameState.PlayerStates.TryGetValue(playerName,out player);
-            player.CurrentResultValue = player.Dices.Sum();
+            var sum = player.Dices.Sum();
+            player.CurrentResult = sum.ToString() + " [" + _gameGoal.ToString() + (sum - _gameGoal).ToString("+#;-#;#") + "]";
+            player.CurrentResultValue = sum;
 
             if (CheckWinConditions(playerName))
             {
@@ -70,7 +74,7 @@ namespace GameControllerNModule
             {
                 return false;
             }
-            if (!playerState.NumberOfWonRounds.Equals(_gameGoal)) return false;
+            if (playerState.NumberOfWonRounds < _roundsToWin) return false;
             GameState.WinnerName.Add(playerName);
             GameState.IsOver = true;
             return true;

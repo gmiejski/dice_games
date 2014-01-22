@@ -10,11 +10,13 @@ namespace GameControllerNModule
     public class NStarGameController : AbstractGameController
     {
         private int _gameGoal;
+        private int _roundsToWin;
         private readonly Random _random = new Random();
 
         public NStarGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots) : base(ownerName, gameName, gameType, players, bots)
         {
             _gameGoal = GenerateNewGoal();
+            _roundsToWin = 4;
         }
 
         private int GenerateNewGoal()
@@ -45,7 +47,9 @@ namespace GameControllerNModule
             GameState.Update(playerName, newDice);
             PlayerState player;
             GameState.PlayerStates.TryGetValue(playerName, out player);
-            player.CurrentResultValue = player.Dices.Aggregate(1, (current, die) => current * die);
+            var product = player.Dices.Aggregate(1, (current, die) => current * die);
+            player.CurrentResult = product.ToString() + " [" + _gameGoal.ToString() + (product - _gameGoal).ToString("+#;-#;#") + "]";
+            player.CurrentResultValue = product;
 
             if (CheckWinConditions(playerName))
             {
@@ -86,7 +90,7 @@ namespace GameControllerNModule
             {
                 return false;
             }
-            if (!playerState.NumberOfWonRounds.Equals(_gameGoal)) return false;
+            if (playerState.NumberOfWonRounds < _roundsToWin) return false;
             GameState.WinnerName.Add(playerName);
             GameState.IsOver = true;
             return true;
