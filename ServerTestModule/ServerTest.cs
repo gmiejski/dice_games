@@ -16,7 +16,7 @@ namespace ServerTestModule
         private Dictionary<string, IGameController> _activeGames;
         private Dictionary<string, CreatedGame> _availableGames;
         private Dictionary<string, string> _loggedPlayers;
-        private Mock<GameControllerFactory> _gameControllerFactoryMock;
+        private Mock<IGameControllerFactory> _gameControllerFactoryMock;
 
         private const string OwnerName = "ownerName";
         private const string GameName = "gameName";
@@ -34,7 +34,7 @@ namespace ServerTestModule
             _activeGames = new Dictionary<string, IGameController>();
             _availableGames = new Dictionary<string, CreatedGame>();
             _loggedPlayers = new Dictionary<string, string>();
-            _gameControllerFactoryMock = new Mock<GameControllerFactory>();
+            _gameControllerFactoryMock = new Mock<IGameControllerFactory>();
 
             _instance = new Server(_gameControllerFactoryMock.Object, _activeGames, _availableGames, _loggedPlayers);
         }
@@ -173,7 +173,7 @@ namespace ServerTestModule
             string secondGame = "secondGame";
             string thirdGame = "thirdGame";
 
-            _availableGames.Add(firstGame, new Mock<CreatedGame>(null, null, null, null, null, null).Object);
+            _availableGames.Add(firstGame, new Mock<CreatedGame>(null, null, null, null, null, null, null).Object);
             _activeGames.Add(secondGame, new Mock<IGameController>().Object);
 
             Assert.False(_instance.DeleteGame(thirdGame));
@@ -184,7 +184,7 @@ namespace ServerTestModule
         [Test]
         public void ShouldDeleteGameWhenGameIsAvailable()
         {
-            _availableGames.Add(GameName, new Mock<CreatedGame>(null, null, null, null, null, null).Object);
+            _availableGames.Add(GameName, new Mock<CreatedGame>(null, null, null, null, null, null, null).Object);
 
             Assert.True(_instance.DeleteGame(GameName));
             Assert.False(_availableGames.Keys.Contains(GameName));
@@ -212,7 +212,7 @@ namespace ServerTestModule
             string firstGame = "firstGame";
             string secondGame = "secondGame";
             var gameStateMock = new Mock<GameState>();
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
             var gameControllerMock = new Mock<IGameController>();
 
             createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(new List<string>());
@@ -233,7 +233,7 @@ namespace ServerTestModule
         {
             string anotherPlayerName = "anotherPlayer";
             var PlayerNames = new List<string> { PlayerName, anotherPlayerName };
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
 
             createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(PlayerNames);
 
@@ -249,7 +249,7 @@ namespace ServerTestModule
         public void ShouldRemoveAvailableGameWhenLastPlayerRemoved()
         {
             var playerNames = new List<string> { PlayerName };
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
 
             createdGameMock.SetupGet(cr => cr.PlayerNames).Returns(playerNames);
 
@@ -301,7 +301,7 @@ namespace ServerTestModule
         {
 
             _loggedPlayers.Add(PlayerName, ContextId);
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             _availableGames.Add(GameName, createdGameMock.Object);
 
@@ -322,7 +322,7 @@ namespace ServerTestModule
         [Test]
         public void ShouldReturnFalseWhenUnnableToJoinPlayerToGame()
         {
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(false);
             _availableGames.Add(GameName, createdGameMock.Object);
 
@@ -336,7 +336,7 @@ namespace ServerTestModule
         {
 
             _loggedPlayers.Add(PlayerName, ContextId);
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
             var gameControllerMock = new Mock<IGameController>();
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
@@ -358,7 +358,7 @@ namespace ServerTestModule
 
             _loggedPlayers.Add(PlayerName, ContextId);
             var gameControllerMock = new Mock<IGameController>();
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
 
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
@@ -457,7 +457,7 @@ namespace ServerTestModule
         {
             _loggedPlayers.Add(PlayerName, ContextId);
             var gameControllerMock = new Mock<IGameController>();
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
 
             createdGameMock.Setup(cr => cr.AddPlayer(PlayerName)).Returns(true);
             createdGameMock.Setup(cr => cr.IsReadyToStart()).Returns(true);
@@ -478,7 +478,7 @@ namespace ServerTestModule
         public void ShouldReturnFalseWhenJoiningGameWIthUnpersistedPlayerName()
         {
 
-            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null);
+            var createdGameMock = new Mock<CreatedGame>(null, null, null, null, null, null, null);
             _availableGames.Add(GameName, createdGameMock.Object);
 
             Assert.False(_instance.JoinGame(PlayerName, GameName));

@@ -19,7 +19,7 @@ namespace ServerModule
     public class Server : IServer
     {
 
-        private readonly GameControllerFactory _gameControllerFactory;
+        private readonly IGameControllerFactory _gameControllerFactory;
 
         private readonly Dictionary<string, IGameController> _activeGames;
         private readonly Dictionary<string, CreatedGame> _availableGames;
@@ -35,7 +35,7 @@ namespace ServerModule
         /// <param name="availableGames">Dictionary containing pairs of {GameName : CreatedGame}</param>
         /// <param name="gameControllerFactory">Factory of GameControllers</param>
         /// <param name="loggedPlayers">Dictionary containing pairs of {PlayerName : ContextId}</param>
-        public Server(GameControllerFactory gameControllerFactory, Dictionary<string, IGameController> activeGames, Dictionary<string, CreatedGame> availableGames, Dictionary<string, string> loggedPlayers)
+        public Server(IGameControllerFactory gameControllerFactory, Dictionary<string, IGameController> activeGames, Dictionary<string, CreatedGame> availableGames, Dictionary<string, string> loggedPlayers)
         {
             _gameControllerFactory = gameControllerFactory;
             _activeGames = activeGames;

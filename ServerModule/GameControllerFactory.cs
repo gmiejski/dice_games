@@ -6,7 +6,7 @@ using GameControllerPokerModule;
 
 namespace ServerModule
 {
-    public class GameControllerFactory
+    public class GameControllerFactory : IGameControllerFactory
     {
         static public GameControllerFactory instance = null;
         public static GameControllerFactory getInstance()

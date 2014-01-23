@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="BotFactory.cs" />
     <Compile Include="GameControllerFactory.cs" />
+    <Compile Include="IGameControllerFactory.cs" />
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
