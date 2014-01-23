@@ -30,11 +30,15 @@ namespace GameControllerPokerModule
             {
                 var dice = new List<int> { 0, 0, 0, 0, 0 };
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
+                var move = new Move(dice);
+                MakeMove(player, move);
             }
             foreach (var bot in bots)
             {
                 var dice = new List<int> { 0, 0, 0, 0, 0 };
                 _playersDice.Add(bot.Name, new Configuration(Hands.HighCard, 0, dice));
+                var move = new Move(dice);
+                MakeMove(bot.Name, move);
             }
 
             _playersOrderedList = _playersDice.Keys.ToList();
