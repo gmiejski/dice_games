@@ -90,5 +90,10 @@ namespace CommonInterfacesModule
 
 
         public abstract bool MakeMove(string playerName, Move move);
+
+        public string OwnerName
+        {
+            get { return _ownerName; }
+        }
     }
 }
