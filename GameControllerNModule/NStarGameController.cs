@@ -18,6 +18,27 @@ namespace GameControllerNModule
         {
             _gameGoal = GenerateNewGoal();
             _roundsToWin = numberOfRounds;
+            foreach (var player in _playerNames)
+            {
+                _gameState.Update(player, InitialHand(_gameGoal));
+                PlayerState playerState;
+                GameState.PlayerStates.TryGetValue(player, out playerState);
+                var sum = playerState.Dices.Aggregate(1, (current, die) => current * die);
+                playerState.CurrentResult = sum.ToString() + " [" + _gameGoal.ToString() + (sum - _gameGoal).ToString("+#;-#;#") + "]";
+                playerState.CurrentResultValue = sum;
+            }
+        }
+
+        private Dictionary<int, int> InitialHand(int goal)
+        {
+            var hand = new Dictionary<int, int>();
+            do
+            {
+                hand.Clear();
+                for (var i = 0; i < 5; i++)
+                    hand[i] = _random.Next(1, 7);
+            } while (hand.Values.Aggregate(1, (current, die) => current * die) == goal);
+            return hand;
         }
 
         private int GenerateNewGoal()

@@ -10,13 +10,23 @@ namespace GameControllerNModule
     public class NPlusGameController : AbstractGameController
     {
         private int _gameGoal;
-        private int _roundsToWin;
+        private readonly int _roundsToWin;
         private readonly Random _random = new Random();
 
         public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots, int numberOfRounds) : base(ownerName, gameName, gameType, players, bots)
         {
             _gameGoal = GenerateNewGoal();
             _roundsToWin = numberOfRounds;
+            foreach (var player in _playerNames)
+            {
+                _gameState.Update(player,InitialHand(_gameGoal));
+                PlayerState playerState;
+                GameState.PlayerStates.TryGetValue(player, out playerState);
+                var sum = playerState.Dices.Sum();
+                playerState.CurrentResult = sum.ToString() + " [" + _gameGoal.ToString() + (sum - _gameGoal).ToString("+#;-#;#") + "]";
+                playerState.CurrentResultValue = sum;
+            }
+            
         }
 
         public override bool MakeMove(string playerName, Move move)
@@ -95,6 +105,18 @@ namespace GameControllerNModule
             var currentIndex = _playerNames.IndexOf(currentPlayer);
             var nextIndex = (currentIndex + 1)% _playerNames.Count;
             return _playerNames[nextIndex];
+        }
+
+        private Dictionary<int,int> InitialHand(int goal)
+        {
+            var hand = new Dictionary<int, int>();
+            do
+            {
+                hand.Clear();
+                for (var i = 0; i < 5; i++)
+                    hand[i] = _random.Next(1, 7);
+            } while (hand.Values.Sum() == goal);
+            return hand;
         }
     }
 }
