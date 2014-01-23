@@ -61,30 +61,48 @@ namespace GameControllerPokerModule
 
             var nextPlayerName = GetNextPlayerName();
 
+            var playerConfiguration = ApplyNewDicesToPlayerConfiguration(playerName, move);
+
+            playerConfiguration = CheckConfiguration(playerConfiguration);
+
+            UpdateGameState(playerName, gameState, playerConfiguration, nextPlayerName);
+
+            CheckWinnerChange(playerConfiguration, playerName);
+
+            OnBroadcastGameState(GameName, GameState);
+
+            CheckIfGameEnded(nextPlayerName, gameState);
+
+            return true;
+
+        }
+
+        private void UpdateGameState(string playerName, GameState gameState, Configuration playerConfiguration,
+            string nextPlayerName)
+        {
+            gameState.PlayerStates[playerName].Dices = playerConfiguration.Dices;
+            gameState.PlayerStates[playerName].CurrentResult = playerConfiguration.Hands.ToString();
+            gameState.WhoseTurn = nextPlayerName;
+        }
+
+        private void CheckIfGameEnded(string nextPlayerName, GameState gameState)
+        {
+            if (_roundIterator == _numberOfRoundsToWin && nextPlayerName.Equals(_firstPlayer))
+            {
+                gameState.IsOver = true;
+                OnDelete(GameName);
+            }
+        }
+
+        private Configuration ApplyNewDicesToPlayerConfiguration(string playerName, Move move)
+        {
             var playerConfiguration = _playersDice[playerName];
             var rnd = new Random();
             foreach (var element in move.DicesToRoll)
             {
                 playerConfiguration.Dices[element] = rnd.Next(1, 7); // creates a number between 1 and 6
             }
-
-            playerConfiguration = CheckConfiguration(playerConfiguration);
-
-            gameState.PlayerStates[playerName].Dices = playerConfiguration.Dices;
-
-            CheckWinnerChange(playerConfiguration, playerName);
-            gameState.WhoseTurn = nextPlayerName;
-//            updateGameState(gameState);
-            OnBroadcastGameState(GameName, GameState);
-
-            if (_roundIterator == _numberOfRoundsToWin && nextPlayerName.Equals(_firstPlayer))
-            {
-                gameState.IsOver = true;
-                OnDelete(GameName);
-            }
-
-            return true;
-
+            return playerConfiguration;
         }
 
         private string GetNextPlayerName()
@@ -167,44 +185,37 @@ namespace GameControllerPokerModule
 
         public Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
-            PlayerState winningPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
+            var winningPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
 
-            PlayerState playerState = GameState.PlayerStates[playerName];
-//            playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
+            var playerState = GameState.PlayerStates[playerName];
+            playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
             _playersByScoreList[playerName] = playerState.CurrentResultValue;
 
-            Dictionary<String, int> tmpList = new Dictionary<String, int>();
+            var tmpDIctionary = _playersByScoreList.OrderBy(key => key.Value).ToDictionary(player => player.Key, player => player.Value);
 
-            foreach (KeyValuePair<String, int> player in _playersByScoreList.OrderBy(key => key.Value))
-            {
-                tmpList.Add(player.Key, player.Value);
-            }
-
-            _playersByScoreList = tmpList;
+            _playersByScoreList = tmpDIctionary;
 
             if (playerName.Equals(GameState.WinnerName))
             {
                 if (!playerName.Equals(_playersByScoreList.Keys.First()))
                 {
-                    GameState.WinnerName = new List<string>();
-                    GameState.WinnerName.Add(_playersByScoreList.Keys.First());
+                    GameState.WinnerName = new List<string> {_playersByScoreList.Keys.First()};
                     return true;
                 }
-                else
-                    return false;
+                return false;
             }
-            else
-                if (winningPlayerState.CurrentResultValue < playerState.CurrentResultValue)
-                {
-                    GameState.WinnerName = new List<string>();
-                    GameState.WinnerName.Add(playerName);
-                    return true;
-                }
-                else if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue && !GameState.WinnerName.Contains(playerName))
-                {
-                    GameState.WinnerName.Add(playerName);
-                    return true;
-                }
+
+            if (winningPlayerState.CurrentResultValue < playerState.CurrentResultValue)
+            {
+                GameState.WinnerName = new List<string> {playerName};
+                return true;
+            }
+
+            if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue && !GameState.WinnerName.Contains(playerName))
+            {
+                GameState.WinnerName.Add(playerName);
+                return true;
+            }
 
             return false;
         }
