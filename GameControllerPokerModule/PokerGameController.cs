@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using CommonInterfacesModule;
 
@@ -18,6 +19,7 @@ namespace GameControllerPokerModule
         private int _roundIterator = 1;
         private int _turnsIterator = 1;
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
+        private List<IBot> _bots;
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
             List<String> players, List<IBot> bots, int numberOfRoundsToWin)
@@ -37,6 +39,9 @@ namespace GameControllerPokerModule
 
             _playersOrderedList = _playersDice.Keys.ToList();
             _firstPlayer = _playersOrderedList[0];
+
+            _bots = bots;
+
 
         }
 
@@ -72,6 +77,14 @@ namespace GameControllerPokerModule
             OnBroadcastGameState(GameName, GameState);
 
             CheckIfGameEnded(nextPlayerName, gameState);
+
+            if (_bots.Any(bot => bot.Name.Equals(nextPlayerName)))
+            {
+                var nextBot = _bots.First(bot => bot.Name.Equals(nextPlayerName));
+
+                nextBot.SendGameState(gameState);
+
+            }
 
             return true;
 
