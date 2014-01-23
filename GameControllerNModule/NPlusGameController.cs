@@ -62,7 +62,7 @@ namespace GameControllerNModule
         private int GenerateNewGoal()
         {
             var random = new Random();
-            return random.Next(6, 37);
+            return random.Next(6, 31);
         }
 
         private int DieRoll()
@@ -84,9 +84,11 @@ namespace GameControllerNModule
             {
                 return false;
             }
-            if (playerState.NumberOfWonRounds < _roundsToWin) return false;
-            GameState.WinnerName.Add(playerName);
-            GameState.IsOver = true;
+            if (playerState.NumberOfWonRounds < _roundsToWin)
+            {
+                GameState.WinnerName.Add(playerName);
+                GameState.IsOver = true;
+            }
             return true;
 
         }

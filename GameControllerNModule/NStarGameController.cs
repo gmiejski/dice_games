@@ -45,7 +45,7 @@ namespace GameControllerNModule
         {
             var newGoal = 1;
             var random = new Random();
-            for (var i = 0; i < 6; i++)
+            for (var i = 0; i < 5; i++)
             {
                 newGoal *= random.Next(1, 7);
             }
@@ -112,9 +112,11 @@ namespace GameControllerNModule
             {
                 return false;
             }
-            if (playerState.NumberOfWonRounds < _roundsToWin) return false;
-            GameState.WinnerName.Add(playerName);
-            GameState.IsOver = true;
+            if (playerState.NumberOfWonRounds < _roundsToWin)
+            {
+                GameState.WinnerName.Add(playerName);
+                GameState.IsOver = true;
+            }
             return true;
         }
 
