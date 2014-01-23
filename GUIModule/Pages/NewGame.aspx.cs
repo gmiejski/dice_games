@@ -42,7 +42,7 @@ namespace GUIModule.Pages
             if (canParseValues && areValuesValid) // validate input data
             { // data ok, create a new game
                 CreatedGame cg = Global.server.CreateGame(PlayerName, NewGameName.Text, gameType,
-                    numberOfPlayers, numberOfBots, botLevel);
+                    numberOfPlayers, numberOfBots, botLevel, numberOfRounds);
 
                 if (cg != null)
                 {

@@ -14,16 +14,17 @@ namespace GameControllerPokerModule
         private List<string> _playersOrderedList;
         private const int NumberOfTurnsInRound = 3;
         private const int NumberOfRounds = 3; 
+        private int _roundsToWin;
 
         private int _roundIterator = 1;
         private int _turnsIterator = 1;
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
-            List<String> players, List<IBot> bots)
+            List<String> players, List<IBot> bots, int numberOfRounds)
             : base(ownerName, gameName, gameType, players, bots)
         {
-            
+            _roundsToWin = numberOfRounds;
             foreach (var player in players)
             {
                 var dice = new List<int> { 0, 0, 0, 0, 0 };
@@ -49,9 +50,6 @@ namespace GameControllerPokerModule
 
             if (GameState.IsOver) return false;
 
-           
-
-            
 
             if ( _turnsIterator > NumberOfTurnsInRound)
             {

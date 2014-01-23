@@ -26,6 +26,7 @@ namespace ServerTestModule
         private const int NumberOfPlayers = 3;
         private const int NumberOfBots = 1;
         private BotLevel BotLevel = BotLevel.Easy;
+        private const int NumberOfRounds = 3;
 
         [SetUp]
         public void SetUp()
@@ -110,7 +111,7 @@ namespace ServerTestModule
         public void ShouldCreateNewGame()
         {
             CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
-                BotLevel);
+                BotLevel, NumberOfRounds);
 
             Assert.NotNull(createdGame);
             Assert.AreEqual(createdGame.GameName, GameName);
@@ -127,9 +128,9 @@ namespace ServerTestModule
         public void ShouldNotCreateNewGameWhenGameNameAlreadyInUse()
         {
             CreatedGame createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
-                BotLevel);
+                BotLevel, NumberOfRounds);
             CreatedGame secondGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
-                BotLevel);
+                BotLevel, NumberOfRounds);
 
             Assert.NotNull(createdGame);
             Assert.Null(secondGame);
@@ -140,12 +141,12 @@ namespace ServerTestModule
         [Test]
         public void ShouldNotCreateNewGameWhenArgumentsAreMalformed()
         {
-            Assert.Null(_instance.CreateGame(null, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame(string.Empty, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame(OwnerName, null, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame(OwnerName, string.Empty, GameType, NumberOfPlayers, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, -1, NumberOfBots, BotLevel));
-            Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, -1, BotLevel));
+            Assert.Null(_instance.CreateGame(null, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel, NumberOfRounds));
+            Assert.Null(_instance.CreateGame(string.Empty, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel, NumberOfRounds));
+            Assert.Null(_instance.CreateGame(OwnerName, null, GameType, NumberOfPlayers, NumberOfBots, BotLevel, NumberOfRounds));
+            Assert.Null(_instance.CreateGame(OwnerName, string.Empty, GameType, NumberOfPlayers, NumberOfBots, BotLevel, NumberOfRounds));
+            Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, -1, NumberOfBots, BotLevel, NumberOfRounds));
+            Assert.Null(_instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, -1, BotLevel, NumberOfRounds));
         }
 
         [Test]
@@ -154,7 +155,7 @@ namespace ServerTestModule
             var gameControllerMock = new Mock<IGameController>();
 
             _activeGames.Add(GameName, gameControllerMock.Object);
-            Assert.Null(_instance.CreateGame(PlayerName, GameName, GameType, 0, 0, BotLevel));
+            Assert.Null(_instance.CreateGame(PlayerName, GameName, GameType, 0, 0, BotLevel, NumberOfRounds));
 
         }
 
@@ -281,7 +282,7 @@ namespace ServerTestModule
         public void ShouldReturnAvailableGames()
         {
             var createdGame = _instance.CreateGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots,
-                BotLevel);
+                BotLevel, NumberOfRounds);
             var createdGames = _instance.GetAvailableGames();
             Assert.True(createdGames.Contains(createdGame));
         }

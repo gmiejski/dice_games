@@ -63,8 +63,9 @@ namespace ServerModule
         /// <param name="numberOfPlayers">Number of human players including game creator</param>
         /// <param name="numberOfBots">Number of bots</param>
         /// <param name="botLevel">Bot level, can be: Easy, Hard</param>
+        /// <param name="numberOfRounds">Rounds needed to win the game</param>
         /// <returns>Returns CreatedGame object or null when operation was unsuccesful .</returns>
-        public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel)
+        public CreatedGame CreateGame(string playerName, string gameName, GameType gameType, int numberOfPlayers, int numberOfBots, BotLevel botLevel, int numberOfRounds)
         {
             if (string.IsNullOrEmpty(playerName) || string.IsNullOrEmpty(gameName) || numberOfPlayers < 0 || numberOfBots < 0)
             {
@@ -83,7 +84,7 @@ namespace ServerModule
                 if (!_availableGames.ContainsKey(gameName))
                 {
                     createdGame = new CreatedGame(playerName, gameName, gameType, numberOfPlayers, numberOfBots,
-                        botLevel);
+                        botLevel, numberOfRounds);
 
                     _availableGames.Add(gameName, createdGame);
 

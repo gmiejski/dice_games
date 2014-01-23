@@ -20,6 +20,7 @@ namespace ServerTestModule
         private const int NumberOfPlayers = 3;
         private const int NumberOfBots = 1;
         private BotLevel BotLevel = BotLevel.Easy;
+        private const int NumberOfRounds = 3;
 
         [SetUp]
         public void SetUp()
@@ -84,7 +85,7 @@ namespace ServerTestModule
 
         private CreatedGame GetDefaultGame()
         {
-            return new CreatedGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel);
+            return new CreatedGame(OwnerName, GameName, GameType, NumberOfPlayers, NumberOfBots, BotLevel,NumberOfRounds);
         }
 
     }

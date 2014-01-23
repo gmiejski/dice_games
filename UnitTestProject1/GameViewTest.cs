@@ -15,7 +15,7 @@ namespace GUIUnitTest
         {
             var serv = new Mock<IServer>();
             serv.Setup(x => x.GetAvailableGames()).Returns(
-                new List<CreatedGame> { new CreatedGame("aa", "game", GameType.NPlus, 1, 3, BotLevel.Hard) }
+                new List<CreatedGame> { new CreatedGame("aa", "game", GameType.NPlus, 1, 3, BotLevel.Hard, 3) }
             );
             serv.Setup(x => x.GetGameState("game")).Returns((GameState)null);
 
@@ -25,7 +25,7 @@ namespace GUIUnitTest
 
             serv = new Mock<IServer>();
             serv.Setup(x => x.GetAvailableGames()).Returns(
-                new List<CreatedGame> { new CreatedGame("aa", "uhuhuhunotexist", GameType.NPlus, 1, 3, BotLevel.Hard) }
+                new List<CreatedGame> { new CreatedGame("aa", "uhuhuhunotexist", GameType.NPlus, 1, 3, BotLevel.Hard, 3) }
             );
             serv.Setup(x => x.GetGameState("game")).Returns(new GameState());
 
@@ -84,7 +84,7 @@ namespace GUIUnitTest
             var botLevel = BotLevel.Hard;
             var serv = new Mock<IServer>();
             
-            var game = new CreatedGame("owner", "game", gameType, 2, 3, botLevel);
+            var game = new CreatedGame("owner", "game", gameType, 2, 3, botLevel, 3);
             game.AddPlayer("usr1");
             serv.Setup(x => x.GetAvailableGames()).Returns(
                 new List<CreatedGame> { game }
