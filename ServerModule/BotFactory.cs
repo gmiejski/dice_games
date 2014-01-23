@@ -14,13 +14,13 @@ namespace ServerModule
 
             if (gameType == GameType.NPlus)
                 for (int i = 0; i < numberOfBots; i++)
-                    botList.Add(new NPlusBot(botLevel,(index+i).ToString()));
+                    botList.Add(new NPlusBot(botLevel, "BOT#" + (index+i).ToString()));
             else if (gameType == GameType.NStar)
                 for (int i = 0; i < numberOfBots; i++)
-                    botList.Add(new NStarBot(botLevel, (index+i).ToString()));
+                    botList.Add(new NStarBot(botLevel, "BOT#" + (index+i).ToString()));
             else if (gameType == GameType.Poker)
               for (int i = 0; i < numberOfBots;i++)
-                   botList.Add(new BotPoker(botLevel, (index+i).ToString()));
+                   botList.Add(new BotPoker(botLevel, "BOT#" + (index+i).ToString()));
             index += numberOfBots;
             return botList;
         }
