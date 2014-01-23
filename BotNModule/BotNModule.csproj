@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{48085B38-5644-4D7D-A57F-919ADA05E9F7}</ProjectGuid>
+    <ProjectGuid>{48FE5459-8CF8-4B53-88EB-82D1DD177CB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BotNModule</RootNamespace>

@@ -11,6 +11,9 @@ namespace GameControllerPokerModule
     {
         private Dictionary<String, Configuration> _playersDice = new Dictionary<String, Configuration>();
         private String _firstPlayer;
+        private List<string> _playersOrderedList;
+        private const int _numberOfTurnsInRound = 3;
+
         private int _roundIterator = 1;
         private int _turnsIterator = 1;
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
@@ -20,23 +23,26 @@ namespace GameControllerPokerModule
             : base(ownerName, gameName, gameType, players, bots)
         {
             _firstPlayer = players[0];
-            foreach (String player in players)
+            foreach (var player in players)
             {
-                List<int> dice = new List<int>() { 0, 0, 0, 0, 0 };
+                var dice = new List<int> { 0, 0, 0, 0, 0 };
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
             }
-            foreach (IBot bot in bots)
+            foreach (var bot in bots)
             {
-                List<int> dice = new List<int>() { 0, 0, 0, 0, 0 };
+                var dice = new List<int> { 0, 0, 0, 0, 0 };
                 _playersDice.Add(bot.Name, new Configuration(Hands.HighCard, 0, dice));
             }
+
+            _playersOrderedList = _playersDice.Keys.ToList();
+
         }
 
-        public override bool MakeMove(String PlayerName, Move move)
+        public override bool MakeMove(String playerName, Move move)
         {
-            GameState gameState = GameState;
+            var gameState = GameState;
 
-            if (!PlayerName.Equals(gameState.WhoseTurn) || move.DicesToRoll == null)
+            if (!playerName.Equals(gameState.WhoseTurn) || move.DicesToRoll == null)
                 return false;
 
             if (_roundIterator == 4)
@@ -45,47 +51,51 @@ namespace GameControllerPokerModule
                 OnDelete(GameName);
                 return false;
             }
-            else
-                if (PlayerName.Equals(_firstPlayer) && _turnsIterator == 4)
-                {
-                    _roundIterator += 1;
-                    _turnsIterator = 1;
-                    gameState.WinnerName = new List<string>();
-                    gameState.WinnerName.Add(_firstPlayer);
-                    _playersByScoreList = new Dictionary<String, int>();
-                    _playersByScoreList.Add(_firstPlayer, 0);
-                }
-                else
-                    if (PlayerName.Equals(_firstPlayer))
-                        _turnsIterator += 1;
 
-            Configuration playerConfiguration = _playersDice[PlayerName];
-            Random rnd = new Random();
-            foreach (int element in move.DicesToRoll)
+            var nextPlayerName = GetNextPlayerName();
+
+            if ( _turnsIterator > _numberOfTurnsInRound)
+            {
+                _roundIterator += 1;
+                _turnsIterator = 1;
+                gameState.WinnerName = new List<string> {_firstPlayer};
+                _playersByScoreList = new Dictionary<String, int> {{_firstPlayer, 0}};
+            }
+            else  _turnsIterator += 1;
+
+            var playerConfiguration = _playersDice[playerName];
+            var rnd = new Random();
+            foreach (var element in move.DicesToRoll)
             {
                 playerConfiguration.Dices[element] = rnd.Next(1, 7); // creates a number between 1 and 6
             }
 
             playerConfiguration = CheckConfiguration(playerConfiguration);
 
-            gameState.PlayerStates[PlayerName].Dices = playerConfiguration.Dices;
+            gameState.PlayerStates[playerName].Dices = playerConfiguration.Dices;
 
-            CheckWinnerChange(playerConfiguration, PlayerName);
-
-            updateGameState(gameState);
+            CheckWinnerChange(playerConfiguration, playerName);
+            gameState.WhoseTurn = nextPlayerName;
+//            updateGameState(gameState);
             OnBroadcastGameState(GameName, GameState);
+            
             return true;
 
         }
 
+        private string GetNextPlayerName()
+        {
+            return _playersOrderedList[(_turnsIterator)%_playersOrderedList.Count];
+        }
+
         public Configuration CheckConfiguration(Configuration configuration)
         {
-            List<int> counterList = new List<int> { 0, 0, 0, 0, 0, 0, 0 };
-            foreach (int element in configuration.Dices)
+            var counterList = new List<int> { 0, 0, 0, 0, 0, 0, 0 };
+            foreach (var element in configuration.Dices)
             {
                 counterList[element] += 1;
             }
-            HashSet<int> dices = new HashSet<int>(configuration.Dices);
+            var dices = new HashSet<int>(configuration.Dices);
 
             switch (dices.Count())
             {
@@ -156,7 +166,7 @@ namespace GameControllerPokerModule
             PlayerState winningPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
 
             PlayerState playerState = GameState.PlayerStates[playerName];
-            playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
+//            playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
             _playersByScoreList[playerName] = playerState.CurrentResultValue;
 
             Dictionary<String, int> tmpList = new Dictionary<String, int>();
