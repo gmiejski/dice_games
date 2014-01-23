@@ -21,6 +21,8 @@ namespace GameControllerPokerModule
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
         private List<IBot> _bots;
 
+        private Random rnd = new Random();
+
         public PokerGameController(String ownerName, String gameName, GameType gameType,
             List<String> players, List<IBot> bots, int numberOfRoundsToWin)
             : base(ownerName, gameName, gameType, players, bots)
@@ -31,14 +33,29 @@ namespace GameControllerPokerModule
                 var dice = new List<int> { 0, 0, 0, 0, 0 };
                 _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
                 var move = new Move(dice);
-                MakeMove(player, move);
+//                MakeMove(player, move);
             }
             foreach (var bot in bots)
             {
                 var dice = new List<int> { 0, 0, 0, 0, 0 };
                 _playersDice.Add(bot.Name, new Configuration(Hands.HighCard, 0, dice));
                 var move = new Move(dice);
-                MakeMove(bot.Name, move);
+//                MakeMove(bot.Name, move);
+            }
+
+            foreach (var keyValuePair in _playersDice)
+            {
+
+                var diceValues = new List<int>()
+                {
+                    rnd.Next(1, 7),
+                    rnd.Next(1, 7),
+                    rnd.Next(1, 7),
+                    rnd.Next(1, 7),
+                    rnd.Next(1, 7)
+                };
+                Move move =  new Move(diceValues);
+                GameState.PlayerStates[keyValuePair.Key].Dices = diceValues;
             }
 
             _playersOrderedList = _playersDice.Keys.ToList();
@@ -114,7 +131,7 @@ namespace GameControllerPokerModule
         private Configuration ApplyNewDicesToPlayerConfiguration(string playerName, Move move)
         {
             var playerConfiguration = _playersDice[playerName];
-            var rnd = new Random();
+            
             foreach (var element in move.DicesToRoll)
             {
                 playerConfiguration.Dices[element] = rnd.Next(1, 7); // creates a number between 1 and 6

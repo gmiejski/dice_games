@@ -28,7 +28,14 @@ namespace BotPokerModule
         {
             if (BotMoved != null)
             {
-                BotMoved(Name, GetNextMove(gameState));
+                try
+                {
+                    BotMoved(Name, GetNextMove(gameState));
+                }
+                catch (IndexOutOfRangeException e)
+                {
+                    BotMoved(Name, new Move(new List<int>(){0,1,2,3,4}));
+                }
             }
         }
 
