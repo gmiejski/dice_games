@@ -59,12 +59,11 @@ namespace GameControllerPokerModule
 
             if (GameState.IsOver) return false;
 
-
             if ( _turnsIterator > _numberOfTurnsInRound)
             {
                 _roundIterator += 1;
                 _turnsIterator = 2; // already getting turn number which will match second's player move
-                gameState.WinnerName = new List<string> {_firstPlayer};
+                gameState.LastRoundWinnerNames = new List<string> {_firstPlayer};
                 _playersByScoreList = new Dictionary<String, int> {{_firstPlayer, 0}};
             }
             else  _turnsIterator += 1;
@@ -203,7 +202,7 @@ namespace GameControllerPokerModule
 
         public Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
-            var winningPlayerState = GameState.PlayerStates[GameState.WinnerName[0]];
+            var winningPlayerState = GameState.PlayerStates[GameState.LastRoundWinnerNames[0]];
 
             var playerState = GameState.PlayerStates[playerName];
             playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
@@ -213,30 +212,34 @@ namespace GameControllerPokerModule
 
             _playersByScoreList = tmpDIctionary;
 
-            if (playerName.Equals(GameState.WinnerName))
-            {
-                if (!playerName.Equals(_playersByScoreList.Keys.First()))
-                {
-                    GameState.WinnerName = new List<string> {_playersByScoreList.Keys.First()};
-                    return true;
-                }
-                return false;
-            }
+            GameState.CurrentlyWinningPlayerNames
+            _playersByScoreList.Where(entry => entry.Value == _playersByScoreList.Max(entry2 => entry2.Value)).Select(t => t.Key);
 
-            if (winningPlayerState.CurrentResultValue < playerState.CurrentResultValue)
-            {
-                GameState.WinnerName = new List<string> {playerName};
-                return true;
-            }
-
-            if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue && !GameState.WinnerName.Contains(playerName))
-            {
-                GameState.WinnerName.Add(playerName);
-                return true;
-            }
+//            if (playerName.Equals(GameState.LastRoundWinnerNames))
+//            {
+//                if (!playerName.Equals(_playersByScoreList.Keys.First()))
+//                {
+//                    GameState.LastRoundWinnerNames = new List<string> {_playersByScoreList.Keys.First()};
+//                    return true;
+//                }
+//                return false;
+//            }
+//
+//            if (winningPlayerState.CurrentResultValue < playerState.CurrentResultValue)
+//            {
+//                GameState.LastRoundWinnerNames = new List<string> {playerName};
+//                return true;
+//            }
+//
+//            if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue && !GameState.LastRoundWinnerNames.Contains(playerName))
+//            {
+//                GameState.LastRoundWinnerNames.Add(playerName);
+//                return true;
+//            }
 
             return false;
         }
+
 
         private Configuration GetStartingConfiguration(Hands highestHandsAvailable)
         {

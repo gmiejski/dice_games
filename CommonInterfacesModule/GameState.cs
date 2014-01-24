@@ -11,7 +11,7 @@ namespace CommonInterfacesModule
 
         public string WhoseTurn { get; set; }
 
-        public List<string> WinnerName { get; set; }
+        public List<string> LastRoundWinnerNames { get; set; }
 
         public void Update(string playerName, Dictionary<int, int> newDice)
         {

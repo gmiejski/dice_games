@@ -25,7 +25,7 @@ namespace GUIModule.App_Code
 
             gameData.State = _ongoingGame.IsOver ? "zakończona" : "trwa";
             gameData.WhoseTurn = _ongoingGame.WhoseTurn;
-            gameData.Winner = _ongoingGame.WinnerName;
+            gameData.Winner = _ongoingGame.LastRoundWinnerNames;
 
             return gameData;
         }

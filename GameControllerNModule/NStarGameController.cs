@@ -114,7 +114,7 @@ namespace GameControllerNModule
             }
             if (playerState.NumberOfWonRounds < _roundsToWin)
             {
-                GameState.WinnerName.Add(playerName);
+                GameState.LastRoundWinnerNames.Add(playerName);
                 GameState.IsOver = true;
             }
             return true;
