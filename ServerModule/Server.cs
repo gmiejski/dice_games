@@ -88,6 +88,7 @@ namespace ServerModule
 
                     _availableGames.Add(gameName, createdGame);
 
+                    StartGameIfReady(gameName, createdGame);
                 }
 
             }
@@ -154,17 +155,7 @@ namespace ServerModule
                     {
                         var createdGame = _availableGames[gameName];
                         result = createdGame.AddPlayer(playerName);
-                        if (createdGame.IsReadyToStart())
-                        {
-                            _availableGames.Remove(gameName);
-                            var gameController = _gameControllerFactory.CreateGameController(createdGame);
-                            gameController.BroadcastGameState += OnGameStateChanged;
-                            gameController.DeleteGameController += DeleteGame;
-                            lock (_lockActiveGames)
-                            {
-                                _activeGames.Add(gameName, gameController);
-                            }
-                        }
+                        StartGameIfReady(gameName, createdGame);
                     }
                 }
                 if (result)
@@ -173,6 +164,21 @@ namespace ServerModule
                 }
             }
             return result;
+        }
+
+        private void StartGameIfReady(string gameName, CreatedGame createdGame)
+        {
+            if (createdGame.IsReadyToStart())
+            {
+                _availableGames.Remove(gameName);
+                var gameController = _gameControllerFactory.CreateGameController(createdGame);
+                gameController.BroadcastGameState += OnGameStateChanged;
+                gameController.DeleteGameController += DeleteGame;
+                lock (_lockActiveGames)
+                {
+                    _activeGames.Add(gameName, gameController);
+                }
+            }
         }
 
         /// <summary>
