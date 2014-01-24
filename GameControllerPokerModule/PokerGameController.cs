@@ -212,7 +212,7 @@ namespace GameControllerPokerModule
 
             _playersByScoreList = tmpDIctionary;
 
-            GameState.CurrentlyWinningPlayerNames
+//            GameState.CurrentlyWinningPlayerNames
             _playersByScoreList.Where(entry => entry.Value == _playersByScoreList.Max(entry2 => entry2.Value)).Select(t => t.Key);
 
 //            if (playerName.Equals(GameState.LastRoundWinnerNames))
