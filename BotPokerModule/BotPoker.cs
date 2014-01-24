@@ -39,8 +39,10 @@ namespace BotPokerModule
             }
         }
 
-        public Move GetNextMove(GameState gameState)
+        public Move GetNextMove(GameState _gameState)
         {
+            GameState gameState = _gameState.GetDeepCopy();
+
             PlayerState playerState;
             gameState.PlayerStates.TryGetValue(Name, out playerState);
             List<int> botDices = new List<int>(playerState.Dices);

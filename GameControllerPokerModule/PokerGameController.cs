@@ -13,7 +13,7 @@ namespace GameControllerPokerModule
         private Dictionary<String, Configuration> _playersDice = new Dictionary<String, Configuration>();
         private String _firstPlayer;
         private List<string> _playersOrderedList;
-        private const int NumberOfTurnsInRound = 3;
+        private readonly int _numberOfTurnsInRound;
         private readonly int _numberOfRoundsToWin = 3; 
 
         private int _roundIterator = 1;
@@ -22,6 +22,8 @@ namespace GameControllerPokerModule
         private List<IBot> _bots;
 
         private Random rnd = new Random();
+        private readonly Hands _bestStartingHandAvailable = Hands.TwoPair;
+
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
             List<String> players, List<IBot> bots, int numberOfRoundsToWin)
@@ -30,32 +32,12 @@ namespace GameControllerPokerModule
             _numberOfRoundsToWin = numberOfRoundsToWin;
             foreach (var player in players)
             {
-                var dice = new List<int> { 0, 0, 0, 0, 0 };
-                _playersDice.Add(player, new Configuration(Hands.HighCard, 0, dice));
-                var move = new Move(dice);
-//                MakeMove(player, move);
+                ApplyStartingConfiguration(player);
             }
-            foreach (var bot in bots)
+            
+            foreach (var botName in bots.Select(bot => bot.Name))
             {
-                var dice = new List<int> { 0, 0, 0, 0, 0 };
-                _playersDice.Add(bot.Name, new Configuration(Hands.HighCard, 0, dice));
-                var move = new Move(dice);
-//                MakeMove(bot.Name, move);
-            }
-
-            foreach (var keyValuePair in _playersDice)
-            {
-
-                var diceValues = new List<int>()
-                {
-                    rnd.Next(1, 7),
-                    rnd.Next(1, 7),
-                    rnd.Next(1, 7),
-                    rnd.Next(1, 7),
-                    rnd.Next(1, 7)
-                };
-                Move move =  new Move(diceValues);
-                GameState.PlayerStates[keyValuePair.Key].Dices = diceValues;
+                ApplyStartingConfiguration(botName);
             }
 
             _playersOrderedList = _playersDice.Keys.ToList();
@@ -63,8 +45,10 @@ namespace GameControllerPokerModule
 
             _bots = bots;
 
-
+            _numberOfTurnsInRound = _playersOrderedList.Count() ;
         }
+
+        
 
         public override bool MakeMove(String playerName, Move move)
         {
@@ -76,7 +60,7 @@ namespace GameControllerPokerModule
             if (GameState.IsOver) return false;
 
 
-            if ( _turnsIterator > NumberOfTurnsInRound)
+            if ( _turnsIterator > _numberOfTurnsInRound)
             {
                 _roundIterator += 1;
                 _turnsIterator = 2; // already getting turn number which will match second's player move
@@ -134,7 +118,7 @@ namespace GameControllerPokerModule
             
             foreach (var element in move.DicesToRoll)
             {
-                playerConfiguration.Dices[element] = rnd.Next(1, 7); // creates a number between 1 and 6
+                playerConfiguration.Dices[element] = GetRandomDiceValue();
             }
             return playerConfiguration;
         }
@@ -254,9 +238,41 @@ namespace GameControllerPokerModule
             return false;
         }
 
-        public void updateGameState(GameState newGameState)
+        private Configuration GetStartingConfiguration(Hands highestHandsAvailable)
         {
-            GameState = newGameState;
+
+            var configuration = new Configuration(Hands.HighCard, 0, new List<int>(), 0);
+            do
+            {
+                configuration.Dices = GetRandomDicesList(5);
+
+            } while ((int) CheckConfiguration(configuration).Hands > (int)highestHandsAvailable );
+
+            return configuration;
+        }
+
+        private List<int> GetRandomDicesList(int dicesCount)
+        {
+            var result = new List<int>();
+            for (int i = 0; i < dicesCount; i++)
+            {
+                result.Add(GetRandomDiceValue());
+            }
+            return result;
+        }
+
+        private int GetRandomDiceValue()
+        {
+            return rnd.Next(1, 7);
+        }
+
+        private void ApplyStartingConfiguration(string player)
+        {
+            var configuration = GetStartingConfiguration(_bestStartingHandAvailable);
+            _playersDice.Add(player, configuration);
+            GameState.PlayerStates[player].Dices.Clear();
+            GameState.PlayerStates[player].Dices.AddRange(configuration.Dices);
+            GameState.PlayerStates[player].CurrentResult = configuration.Hands.ToString();
         }
 
     }

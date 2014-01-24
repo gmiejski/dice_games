@@ -25,5 +25,26 @@ namespace CommonInterfacesModule
                 player.Dices[newDie.Key] = newDie.Value;
             }
         }
+
+        public GameState GetDeepCopy()
+        {
+            
+            GameState state = new GameState();
+            Dictionary<string, PlayerState> playerStates = new Dictionary<string, PlayerState>();
+            foreach (string name in PlayerStates.Keys)
+            {
+                var dices = new List<int>(PlayerStates[name].Dices);
+
+                PlayerState playerState = new PlayerState(dices);
+
+                playerStates.Add(name, playerState);
+            }
+
+            state.PlayerStates = playerStates;
+
+            return state;
+
+        }
+    
     }
 }
