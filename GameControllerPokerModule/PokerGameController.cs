@@ -35,7 +35,6 @@ namespace GameControllerPokerModule
             _numberOfRounds = numberOfRounds;
             
             ResetPlayersStartingConfiguration(players);
-            ResetPlayersStartingConfiguration(bots.Select(bot => bot.Name));
 
             _playersOrderedList = _playersDice.Keys.ToList();
             _firstPlayer = _playersOrderedList[0];

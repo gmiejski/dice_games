@@ -88,7 +88,7 @@ namespace CommonInterfacesModule
                 GameState.PlayerStates.Add(bot.Name, new PlayerState(new List<int>() { 0, 0, 0, 0, 0 }));
             }
             GameState.IsOver = false;
-            GameState.LastRoundWinnerNames = new List<string>() { players[0] };
+            GameState.LastRoundWinnerNames = new List<string>();
             GameState.WhoseTurn = players[0];
         }
 
