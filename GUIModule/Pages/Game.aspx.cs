@@ -8,15 +8,26 @@ using System.Web.UI.WebControls;
 using CommonInterfacesModule;
 using GUIModule.Pages;
 using System.Text;
+using System.Data;
 
 namespace GUIModule
 {
     public partial class Game : System.Web.UI.Page
     {
         private IServer _server;
+        private int _orderBy;
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (IsPostBack)
+            {
+                _orderBy = (int)ViewState["orderBy"];
+            }
+            else
+            {
+                ViewState["orderBy"] = _orderBy = 0;
+            }
+
             _server = Global.server;
             if ((Session["playerName"] == null) || (Session["gameName"] == null))
             {
@@ -56,8 +67,10 @@ namespace GUIModule
                 if (GameData.Winner != null) {
                     WinnerLabel.Visible = true;
                 }
-
-                PlayersList.DataSource = controller.GetPlayers();
+                
+                Players = controller.GetPlayers().OrderBy(delegate(KeyValuePair<string, PlayerState> v) { return v.Key; });
+                sort();
+                PlayersList.DataSource = Players;
                 PlayersList.DataBind();
 
                 userDice.DataSource = controller.GetPlayers()[PlayerName].Dices;
@@ -102,6 +115,7 @@ namespace GUIModule
             }
         }
 
+
         protected void LeaveGame_Click(object sender, EventArgs e)
         {
             _server.RemovePlayer(PlayerName);
@@ -109,10 +123,42 @@ namespace GUIModule
             Response.Redirect("Main.aspx", false);
         }
 
+        protected void PlayersSorting(object sender, GridViewSortEventArgs e)
+        {
+            int oldOrderBy = _orderBy;
+            _orderBy = e.SortExpression == "Key" ? 2 : 0;
+            
+            _orderBy += (oldOrderBy % 2 == 0) ? 1 : 0;
+            ViewState["orderBy"] = _orderBy;
+            sort();
+            PlayersList.DataSource = Players;
+            PlayersList.DataBind();
+        }
+
+        private void sort()
+        {
+            if (_orderBy < 2)
+            {
+                if (_orderBy % 2 == 0)
+                    Players = Players.OrderBy(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Value.CurrentResult; });
+                else
+                    Players = Players.OrderByDescending(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Value.CurrentResult; });
+            }
+            else
+            {
+                if (_orderBy % 2 == 0)
+                    Players = Players.OrderBy(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Key; });
+                else
+                    Players = Players.OrderByDescending(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Key; });
+            }
+        }
+
         public string GameName { get; set; }
         public string EncodedGameName { get; set; }
         public string EncodedPlayerName { get; set; }
         public string PlayerName { get; set; }
         public GameData GameData { get; set; }
+
+        public IOrderedEnumerable<KeyValuePair<string, PlayerState>> Players { get; set; }
     }
 }

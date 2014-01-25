@@ -59,9 +59,9 @@
                     </Columns>
                 </asp:GridView>
                 <asp:GridView runat="server" ID="PlayersList" cssClass="standardWindow horCentered"
-                    AutoGenerateColumns="false" OnDataBound="PlayersDataBound">
+                    AutoGenerateColumns="false" OnDataBound="PlayersDataBound" AllowSorting="true" OnSorting="PlayersSorting">
                     <Columns>
-                        <asp:BoundField DataField="Key" HeaderText="Gracz" />
+                        <asp:BoundField DataField="Key" HeaderText="Gracz" SortExpression="Key" />
                         <asp:BoundField DataField="Value.NumberOfWonRounds" HeaderText="Ogólny wynik" />
                         <asp:TemplateField HeaderText="#1"><ItemTemplate>
                                 <asp:Image ID="dice1" runat="server" ImageUrl='<%# "~/Images/" + DataBinder.Eval(Container.DataItem, "Value.Dices[0]") + ".png" %>' />
@@ -78,7 +78,7 @@
                         <asp:TemplateField HeaderText="#5"><ItemTemplate>
                                 <asp:Image ID="dice5" runat="server" ImageUrl='<%# "~/Images/" + DataBinder.Eval(Container.DataItem, "Value.Dices[4]") + ".png" %>' />
                             </ItemTemplate></asp:TemplateField>
-                        <asp:BoundField DataField="Value.CurrentResult" HeaderText="Kombinacja" />
+                        <asp:BoundField DataField="Value.CurrentResult" HeaderText="Kombinacja" SortExpression="Value.CurrentResultValue" />
                     </Columns>
                 </asp:GridView>
                 <asp:Panel runat="server" CssClass="horCentered">
@@ -112,7 +112,8 @@
                 $("#GameState").text("zakończona").css("color", "#f00");
                 $("#ThrowDice").attr("disabled", "disabled");
             };
-
+            
+            //$.connection.hub.logging = true;
             $.connection.hub.start().done(function () {
                 gameState.server.loginToGroup(playerName, gameName);
                 $(document).on('click', '#ThrowDice', function (event) {
