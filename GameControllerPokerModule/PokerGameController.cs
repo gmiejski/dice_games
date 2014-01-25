@@ -221,15 +221,11 @@ namespace GameControllerPokerModule
         }
 
 
-        public Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
+        public void CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
             var playerState = GameState.PlayerStates[playerName];
             playerState.CurrentResultValue = GetCurrentResultValue(playerConfiguration, playerState);
             _playersByScoreList[playerName] = playerState.CurrentResultValue;
-
-            _playersByScoreList = _playersByScoreList.OrderBy(key => key.Value).ToDictionary(player => player.Key, player => player.Value);
-
-            return false;
         }
 
         private int GetCurrentResultValue(Configuration playerConfiguration, PlayerState playerState)
