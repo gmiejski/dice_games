@@ -8,6 +8,10 @@
     display: none;
 }
 
+a {
+    color: #1044aa;
+}
+
 .playerHasTurn {
     border: solid 4px #ccb700 !important;
 }

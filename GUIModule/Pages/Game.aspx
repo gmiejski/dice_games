@@ -23,7 +23,7 @@
                     <asp:Label runat="server" CssClass="gameStat">Jesteś <%= PlayerName %></asp:Label><br />
                     <asp:Label runat="server" CssClass="gameStat">Nazwa gry: <%= GameName %></asp:Label><br />
                     <asp:Label runat="server" CssClass="gameStat">Stan: <asp:label runat="server" ID="GameState"><%= GameData.State %></asp:label></asp:Label><br />
-                    <asp:Label runat="server" CssClass="gameStat" ID="WinnerLabel">Zwycięzca: <%= String.Join(", ", GameData.Winner) %></asp:Label>
+                    <asp:Label runat="server" CssClass="gameStat" ID="WinnerLabel">Zwycięzca poprzedniej rundy: <%= String.Join(", ", GameData.Winner) %></asp:Label>
                 </asp:Panel>
                 <asp:GridView runat="server" ID="AwaitingPlayersList" CssClass="standardWindow horCentered" AutoGenerateColumns="false">
                     <Columns>
