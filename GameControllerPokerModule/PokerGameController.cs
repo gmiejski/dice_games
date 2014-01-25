@@ -25,7 +25,7 @@ namespace GameControllerPokerModule
         private List<IBot> _bots;
 
         private Random rnd = new Random();
-        private readonly Hands _bestStartingHandAvailable = Hands.TwoPair;
+        private readonly Hands _bestStartingHandAvailable = Hands.Pair;
 
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
@@ -33,15 +33,9 @@ namespace GameControllerPokerModule
             : base(ownerName, gameName, gameType, players, bots)
         {
             _numberOfRounds = numberOfRounds;
-            foreach (var player in players)
-            {
-                ApplyStartingConfiguration(player);
-            }
             
-            foreach (var botName in bots.Select(bot => bot.Name))
-            {
-                ApplyStartingConfiguration(botName);
-            }
+            ResetPlayersStartingConfiguration(players);
+            ResetPlayersStartingConfiguration(bots.Select(bot => bot.Name));
 
             _playersOrderedList = _playersDice.Keys.ToList();
             _firstPlayer = _playersOrderedList[0];
@@ -66,14 +60,6 @@ namespace GameControllerPokerModule
             {
                 _turnIterator++;
                 _movesInTurnIterator = 1; // already getting move number which will match second's player move
-
-                if (_turnIterator > _numberOfTurnsInRound)
-                {
-                    _roundIterator++;
-                    _turnIterator = 1;
-                }
-//                gameState.LastRoundWinnerNames = new List<string> {_firstPlayer};
-//                _playersByScoreList = new Dictionary<String, int> {{_firstPlayer, 0}};
             }
             else  _movesInTurnIterator += 1;
 
@@ -85,7 +71,9 @@ namespace GameControllerPokerModule
 
             UpdateGameState(playerName, gameState, playerConfiguration, nextPlayerName);
 
-//            CheckWinnerChange(playerConfiguration, playerName);
+            CheckWinnerChange(playerConfiguration, playerName);
+
+            CheckIfRoundEnded(gameState);
 
             OnBroadcastGameState(GameName, GameState);
 
@@ -101,6 +89,30 @@ namespace GameControllerPokerModule
 
             return true;
 
+        }
+
+        private void CheckIfRoundEnded(GameState gameState)
+        {
+            if (_turnIterator > _numberOfTurnsInRound)
+            {
+                _roundIterator++;
+                _turnIterator = 1;
+                UpdateRoundWinnersStatistics(gameState);
+                _playersDice.Clear();
+                ResetPlayersStartingConfiguration(_playersOrderedList);
+            }
+        }
+
+        private void UpdateRoundWinnersStatistics(GameState gameState)
+        {
+            GameState.LastRoundWinnerNames.Clear();
+            IEnumerable<string> lastRoundWinnerNames =
+                _playersByScoreList.Where(entry => entry.Value == _playersByScoreList.Max(p => p.Value)).Select(t => t.Key);
+            foreach (var roundWinnerName in lastRoundWinnerNames)
+            {
+                gameState.PlayerStates[roundWinnerName].NumberOfWonRounds++;
+                GameState.LastRoundWinnerNames.Add(roundWinnerName);
+            }
         }
 
         private void UpdateGameState(string playerName, GameState gameState, Configuration playerConfiguration,
@@ -211,42 +223,18 @@ namespace GameControllerPokerModule
 
         public Boolean CheckWinnerChange(Configuration playerConfiguration, String playerName)
         {
-            var winningPlayerState = GameState.PlayerStates[GameState.LastRoundWinnerNames[0]];
-
             var playerState = GameState.PlayerStates[playerName];
-            playerState.CurrentResultValue = (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
+            playerState.CurrentResultValue = GetCurrentResultValue(playerConfiguration, playerState);
             _playersByScoreList[playerName] = playerState.CurrentResultValue;
 
-            var tmpDIctionary = _playersByScoreList.OrderBy(key => key.Value).ToDictionary(player => player.Key, player => player.Value);
-
-            _playersByScoreList = tmpDIctionary;
-
-//            GameState.CurrentlyWinningPlayerNames
-            _playersByScoreList.Where(entry => entry.Value == _playersByScoreList.Max(entry2 => entry2.Value)).Select(t => t.Key);
-
-//            if (playerName.Equals(GameState.LastRoundWinnerNames))
-//            {
-//                if (!playerName.Equals(_playersByScoreList.Keys.First()))
-//                {
-//                    GameState.LastRoundWinnerNames = new List<string> {_playersByScoreList.Keys.First()};
-//                    return true;
-//                }
-//                return false;
-//            }
-//
-//            if (winningPlayerState.CurrentResultValue < playerState.CurrentResultValue)
-//            {
-//                GameState.LastRoundWinnerNames = new List<string> {playerName};
-//                return true;
-//            }
-//
-//            if (winningPlayerState.CurrentResultValue == playerState.CurrentResultValue && !GameState.LastRoundWinnerNames.Contains(playerName))
-//            {
-//                GameState.LastRoundWinnerNames.Add(playerName);
-//                return true;
-//            }
+            _playersByScoreList = _playersByScoreList.OrderBy(key => key.Value).ToDictionary(player => player.Key, player => player.Value);
 
             return false;
+        }
+
+        private int GetCurrentResultValue(Configuration playerConfiguration, PlayerState playerState)
+        {
+            return (int)Enum.Parse(typeof(Hands), playerState.CurrentResult) * 1000000 + playerConfiguration.HigherValue * 1000 + playerConfiguration.LowerValue;
         }
 
 
@@ -280,12 +268,27 @@ namespace GameControllerPokerModule
 
         private void ApplyStartingConfiguration(string player)
         {
+            
             var configuration = GetStartingConfiguration(_bestStartingHandAvailable);
             _playersDice.Add(player, configuration);
             GameState.PlayerStates[player].Dices.Clear();
             GameState.PlayerStates[player].Dices.AddRange(configuration.Dices);
             GameState.PlayerStates[player].CurrentResult = configuration.Hands.ToString();
+            GameState.PlayerStates[player].CurrentResultValue = GetCurrentResultValue(configuration,
+                GameState.PlayerStates[player]);
         }
+
+        private void ResetPlayersStartingConfiguration(IEnumerable<string> playerNames )
+        {
+            
+            foreach (var player in playerNames)
+            {
+                ApplyStartingConfiguration(player);
+            }
+
+        }
+
+
 
     }
 }
