@@ -16,7 +16,7 @@ namespace GUIModule.Pages
         {
 
             if (Session["playerName"] == null) {
-                Response.Redirect("Login.aspx", false);
+                Response.Redirect("~/Pages/Login.aspx", false);
             }
             PlayerName = (string)Session["playerName"];
 
@@ -34,9 +34,9 @@ namespace GUIModule.Pages
             {
                 Session["gameName"] = joinedGameName;
                 if (Session["playerName"] == null) {
-                    Response.Redirect("Login.aspx");
+                    Response.Redirect("~/Pages/Login.aspx");
                 }
-                Response.Redirect("Game.aspx", false);
+                Response.Redirect("~/Pages/Game.aspx", false);
             }
             else
             {
@@ -48,14 +48,14 @@ namespace GUIModule.Pages
 
         protected void NewGame_Click(object sender, EventArgs e)
         {
-            Response.Redirect("NewGame.aspx");
+            Response.Redirect("~/Pages/NewGame.aspx");
         }
 
         protected void Logout_Click(object sender, EventArgs e)
         {
             Session["playerName"] = null;
             server.UnregisterPlayer(PlayerName);
-            Response.Redirect("Login.aspx", false);
+            Response.Redirect("~/Pages/Login.aspx", false);
         }
     }
 }

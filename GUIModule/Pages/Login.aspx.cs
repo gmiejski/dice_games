@@ -13,7 +13,7 @@ namespace GUIModule.App_Code
         {
             if (Session["playerName"] != null)
             {
-                Response.Redirect("Main.aspx", false);
+                Response.Redirect("~/Pages/Main.aspx", false);
             }
         }
 
@@ -22,7 +22,7 @@ namespace GUIModule.App_Code
             if (Global.server.RegisterPlayer(LoginName.Text, "context_" + Session["playerName"]))
             {
                 Session["playerName"] = LoginName.Text;
-                Response.Redirect("Main.aspx", false);
+                Response.Redirect("~/Pages/Main.aspx", false);
             }
             else
             {

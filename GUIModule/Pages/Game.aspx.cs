@@ -31,7 +31,7 @@ namespace GUIModule
             _server = Global.server;
             if ((Session["playerName"] == null) || (Session["gameName"] == null))
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("~/Pages/Login.aspx");
             }
 
             PlayerName = Session["playerName"].ToString();
@@ -50,7 +50,7 @@ namespace GUIModule
             catch (InvalidOperationException)
             {
                 Session["gameName"] = null;
-                Response.Redirect("Main.aspx");
+                Response.Redirect("~/Pages/Main.aspx");
             }
 
             // set things like name, winner etc.
@@ -120,7 +120,7 @@ namespace GUIModule
         {
             _server.RemovePlayer(PlayerName);
             Session["gameName"] = null;
-            Response.Redirect("Main.aspx", false);
+            Response.Redirect("~/Pages/Main.aspx", false);
         }
 
         protected void PlayersSorting(object sender, GridViewSortEventArgs e)

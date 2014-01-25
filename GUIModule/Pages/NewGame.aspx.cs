@@ -17,7 +17,7 @@ namespace GUIModule.Pages
         {
             if (Session["playerName"] == null)
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("~/Pages/Login.aspx");
             }
 
             PlayerName = Session["playerName"].ToString();
@@ -47,7 +47,7 @@ namespace GUIModule.Pages
                 if (cg != null)
                 {
                     Session["gameName"] = NewGameName.Text;
-                    Response.Redirect("Game.aspx", false); // redirect to a new games
+                    Response.Redirect("~/Pages/Game.aspx", false); // redirect to a new games
                 }
                 else // for example name is already taken
                 {
@@ -79,7 +79,7 @@ namespace GUIModule.Pages
 
         protected void LeaveNewGame_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Main.aspx");
+            Response.Redirect("~/Pages/Main.aspx");
         }
     }
 }
