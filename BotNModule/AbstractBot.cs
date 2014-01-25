@@ -9,6 +9,7 @@ namespace BotNModule
 {
     public abstract class AbstractBot : IBot
     {
+        
         private BotLevel botLevel;
         public virtual event BotMovedHandler BotMoved;
         protected String name;
@@ -22,11 +23,11 @@ namespace BotNModule
             this.name = name;
         }
         public abstract Move GetNextMove(GameState gameState);
-        public void SendGameState(GameState gameState)
-        {
-	        if (BotMoved != null)
-                BotMoved(Name, GetNextMove(gameState));
-        }
+        public abstract void SendGameState(GameState gameState);
+       // {
+	        //if (BotMoved != null)
+            //    BotMoved(Name, GetNextMove(gameState));
+       // }
         public BotLevel GetBotLevel()
         {
             return botLevel;

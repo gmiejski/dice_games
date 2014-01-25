@@ -9,9 +9,9 @@ namespace GameControllerNModule
 {
     public class NPlusGameController : AbstractGameController
     {
-        private int _gameGoal;
         private readonly int _roundsToWin;
         private readonly Random _random = new Random();
+        private bool isWinner = false;
 
         public NPlusGameController(string ownerName, string gameName, CommonInterfacesModule.GameType gameType, List<string> players, List<IBot> bots, int numberOfRounds) : base(ownerName, gameName, gameType, players, bots)
         {
@@ -52,10 +52,21 @@ namespace GameControllerNModule
 
             if (CheckWinConditions(playerName))
             {
-                ResetDice();
-                _gameGoal = GenerateNewGoal();
+               // ResetDice();
+               // _gameGoal = GenerateNewGoal();
+               // isWinner=true;
+                GameState.IsOver = true;
+                OnDelete(GameName);
             }
             OnBroadcastGameState(GameName, GameState);
+            if (!isWinner && _bots.Any(bot => bot.Name.Equals(GameState.WhoseTurn)))
+            {
+                var nextBot = _bots.First(bot => bot.Name.Equals(GameState.WhoseTurn));
+
+                nextBot.SendGameState(GameState);
+
+            }
+
             return true;
         }
 

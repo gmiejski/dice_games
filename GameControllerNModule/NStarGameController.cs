@@ -9,7 +9,6 @@ namespace GameControllerNModule
 {
     public class NStarGameController : AbstractGameController
     {
-        private int _gameGoal;
         private int _roundsToWin;
         private readonly Random _random = new Random();
 
@@ -75,10 +74,21 @@ namespace GameControllerNModule
 
             if (CheckWinConditions(playerName))
             {
-                ResetDice();
-                _gameGoal = GenerateNewGoal();
+               // ResetDice();
+               // _gameGoal = GenerateNewGoal();
+
+
+                GameState.IsOver = true;
+                OnDelete(GameName);
             }
             OnBroadcastGameState(GameName, GameState);
+            if (_bots.Any(bot => bot.Name.Equals(GameState.WhoseTurn)))
+            {
+                var nextBot = _bots.First(bot => bot.Name.Equals(GameState.WhoseTurn));
+
+                nextBot.SendGameState(GameState);
+
+            }
             return true;
         }
 

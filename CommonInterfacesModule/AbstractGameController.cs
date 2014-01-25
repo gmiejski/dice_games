@@ -8,6 +8,7 @@ namespace CommonInterfacesModule
     public abstract class AbstractGameController : IGameController
     {
 
+        protected static int _gameGoal;
         protected GameState _gameState;
         protected List<IBot> _bots;
         protected String _gameName;
@@ -34,6 +35,13 @@ namespace CommonInterfacesModule
             }
         }
 
+        public static int getGameGoal
+        {
+            get
+            {
+                return _gameGoal;
+            }
+        }
         public GameState GameState
         {
             get
@@ -65,15 +73,17 @@ namespace CommonInterfacesModule
             _gameName = gameName;
             _gameType = gameType;
             _playerNames = players;
+
             _bots = bots;
             GameState = new GameState();
             GameState.PlayerStates = new Dictionary<string, PlayerState>();
             foreach (String player in _playerNames)
             {
                 GameState.PlayerStates.Add(player, new PlayerState(new List<int>() { 0, 0, 0, 0, 0 }));
-            }
+            } 
             foreach (IBot bot in bots)
             {
+                _playerNames.Add(bot.Name);
                 bot.BotMoved += new BotMovedHandler(BotMoved);
                 GameState.PlayerStates.Add(bot.Name, new PlayerState(new List<int>() { 0, 0, 0, 0, 0 }));
             }

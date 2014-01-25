@@ -61,10 +61,6 @@
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
-    <Reference Include="ServerModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ServerModule\bin\Debug\ServerModule.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -177,6 +173,10 @@
     <ProjectReference Include="..\CommonInterfacesModule\CommonInterfacesModule.csproj">
       <Project>{1181133f-5015-490e-9d3a-11c9b24906be}</Project>
       <Name>CommonInterfacesModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ServerModule\ServerModule.csproj">
+      <Project>{de6544c9-2820-453d-b69e-fadbbd07c28a}</Project>
+      <Name>ServerModule</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
