@@ -36,6 +36,7 @@ namespace BotNModule
 
                     best = new List<double>();
                     removing = new List<List<int>>();
+                    System.Threading.Thread.Sleep(1500);
                 }
                 else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
             }
@@ -64,7 +65,7 @@ namespace BotNModule
         /// <param name="numOfDices"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public double CollectSetSize(int numOfDices, int val)
+        private double CollectSetSize(int numOfDices, int val)
         {
             double s = 0;
             for (int i = 1; i <= 6; i++)
@@ -80,8 +81,8 @@ namespace BotNModule
 
         private List<double> best = new List<double>();
         private List<List<int>> removing = new List<List<int>>();
-        private BotLevel botLevel;
-        private string p;
+
+
         /// <summary>
         /// return values of dices to roll
         /// It's based on highest Probability
@@ -90,7 +91,7 @@ namespace BotNModule
         /// <param name="product"></param>
         /// <param name="removed">empty list</param>
         /// <returns></returns>
-        public List<int> UltimateProbability(List<int> dices, int product, List<int> removed)
+        private List<int> UltimateProbability(List<int> dices, int product, List<int> removed)
         {
             foreach (int x in dices)
             {
@@ -113,7 +114,7 @@ namespace BotNModule
                 return removing.ElementAt(best.IndexOf(best.Max()));
             return null;
         }
-        public static int getProduct(List<int> dices)
+        private static int getProduct(List<int> dices)
         {
             if (dices.Count > 0)
             {

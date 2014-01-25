@@ -42,6 +42,7 @@ namespace GameControllerNModule
             if (!GameState.WhoseTurn.Equals(playerName))
                 return false;
 
+
             var newDice = move.DicesToRoll.ToDictionary(die => die, die => DieRoll());
             GameState.Update(playerName,newDice);
             PlayerState player;
@@ -52,11 +53,16 @@ namespace GameControllerNModule
 
             if (CheckWinConditions(playerName))
             {
-               // ResetDice();
-               // _gameGoal = GenerateNewGoal();
-               // isWinner=true;
-                GameState.IsOver = true;
-                OnDelete(GameName);
+                _gameGoal = GenerateNewGoal();
+                foreach (var myPlayer in _playerNames)
+                {
+                    _gameState.Update(myPlayer, InitialHand(_gameGoal));
+                    PlayerState playerState;
+                    GameState.PlayerStates.TryGetValue(myPlayer, out playerState);
+                    var mySum = playerState.Dices.Sum();
+                    playerState.CurrentResult = mySum.ToString() + " [" + _gameGoal.ToString() + (mySum - _gameGoal).ToString("+#;-#;#") + "]";
+                    playerState.CurrentResultValue = mySum;
+                }
             }
             OnBroadcastGameState(GameName, GameState);
             if (!isWinner && _bots.Any(bot => bot.Name.Equals(GameState.WhoseTurn)))
@@ -85,11 +91,16 @@ namespace GameControllerNModule
         {
             PlayerState playerState;
             GameState.PlayerStates.TryGetValue(playerName, out playerState);
+            var tmpPlayer = GameState.WhoseTurn;
             GameState.WhoseTurn = NextPlayer();
 
             if (playerState.CurrentResultValue.Equals(_gameGoal))
             {
                 playerState.NumberOfWonRounds += 1;
+                GameState.WhoseTurn = tmpPlayer;
+                OnBroadcastGameState(GameName, GameState);
+                System.Threading.Thread.Sleep(2500);
+                GameState.WhoseTurn = NextPlayer();
             }
             else
             {
@@ -98,7 +109,12 @@ namespace GameControllerNModule
             if (playerState.NumberOfWonRounds < _roundsToWin)
             {
                 GameState.LastRoundWinnerNames.Add(playerName);
+                GameState.WhoseTurn = _ownerName;
+            }
+            else
+            {
                 GameState.IsOver = true;
+                OnDelete(GameName);
             }
             return true;
 

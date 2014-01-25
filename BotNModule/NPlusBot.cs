@@ -36,6 +36,7 @@ namespace BotNModule
 
                     best = new List<double>();
                     removing = new List<List<int>>();
+                    System.Threading.Thread.Sleep(1500);
                 }
                 else throw new NotImplementedException();//tu musi poleciec jakis wyjatek...
             }
@@ -64,7 +65,7 @@ namespace BotNModule
         /// <param name="numOfDices"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public double CollectSetSize(int numOfDices, int val)
+        private double CollectSetSize(int numOfDices, int val)
         {
             double s = 0;
             for (int i = 1; i <= 6; i++)
@@ -88,7 +89,7 @@ namespace BotNModule
         /// <param name="product"></param>
         /// <param name="removed">empty list</param>
         /// <returns></returns>
-        public List<int> UltimateProbability(List<int> dices, int product, List<int> removed)
+        private List<int> UltimateProbability(List<int> dices, int product, List<int> removed)
         {
             foreach (int x in dices)
             {
