@@ -22,7 +22,7 @@ namespace BotNModule
             {
                 if (gameState.PlayerStates.TryGetValue(this.name, out player))
                 {
-                    List<int> l = UltimateProbability(player.Dices, 20, new List<int>());
+                    List<int> l = UltimateProbability(player.Dices, AbstractGameController.getGameGoal, new List<int>());
                     List<int> ll = new List<int>(l);
                     List<int> tmpl = new List<int>(l);
                     List<int> tmpDice = new List<int>(player.Dices);
@@ -51,6 +51,11 @@ namespace BotNModule
         }
 
         public override event BotMovedHandler BotMoved;
+        public override void SendGameState(GameState gameState)
+        {
+            if (BotMoved != null)
+                BotMoved(Name, GetNextMove(gameState));
+        }
 
         /// <summary>
         /// Zwraca liczebnosc zbioru takiego, ze iloczyn oczek numOfDices kosci zwroci wartosc val.

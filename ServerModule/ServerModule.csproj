@@ -60,10 +60,6 @@
       <Project>{97e046dc-fb1c-4e49-94da-346d32cb071d}</Project>
       <Name>GameControllerPokerModule</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GUIModule\GUIModule.csproj">
-      <Project>{c1bbbc49-0a1d-4fb4-8b82-fe05a4adcbe7}</Project>
-      <Name>GUIModule</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BotFactory.cs" />
@@ -72,6 +68,9 @@
     <Compile Include="Server.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="GUIModule">
+      <HintPath>..\GUIModule\bin\GUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>packages\Microsoft.AspNet.SignalR.Core.2.0.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
