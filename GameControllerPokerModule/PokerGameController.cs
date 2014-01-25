@@ -128,6 +128,7 @@ namespace GameControllerPokerModule
             if (_roundIterator > _numberOfRounds && nextPlayerName.Equals(_firstPlayer))
             {
                 gameState.IsOver = true;
+                System.Threading.Thread.Sleep(1500);
                 OnDelete(GameName);
             }
         }
