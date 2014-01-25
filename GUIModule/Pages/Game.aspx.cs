@@ -126,8 +126,13 @@ namespace GUIModule
         protected void PlayersSorting(object sender, GridViewSortEventArgs e)
         {
             int oldOrderBy = _orderBy;
-            _orderBy = e.SortExpression == "Key" ? 2 : 0;
-            
+
+            if (e.SortExpression == "Value.CurrentResultValue")
+                _orderBy = 2;
+            else if (e.SortExpression == "Key")
+                _orderBy = 0;
+            else _orderBy = 4;
+
             _orderBy += (oldOrderBy % 2 == 0) ? 1 : 0;
             ViewState["orderBy"] = _orderBy;
             sort();
@@ -138,18 +143,25 @@ namespace GUIModule
         private void sort()
         {
             if (_orderBy < 2)
-            {
-                if (_orderBy % 2 == 0)
-                    Players = Players.OrderBy(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Value.CurrentResult; });
-                else
-                    Players = Players.OrderByDescending(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Value.CurrentResult; });
-            }
-            else
-            {
+            { // sort by key
                 if (_orderBy % 2 == 0)
                     Players = Players.OrderBy(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Key; });
                 else
                     Players = Players.OrderByDescending(delegate(KeyValuePair<string, PlayerState> v1) { return v1.Key; });
+            }
+            else
+            { // sort by general or current result
+                Func<KeyValuePair<string, PlayerState>, int> fun = null;
+
+                if (_orderBy < 4)
+                    fun = delegate(KeyValuePair<string, PlayerState> v1) { return v1.Value.CurrentResultValue; };
+                else
+                    fun = delegate(KeyValuePair<string, PlayerState> v1) { return v1.Value.NumberOfWonRounds; };
+
+                if (_orderBy % 2 == 0)
+                    Players = Players.OrderBy(fun);
+                else
+                    Players = Players.OrderByDescending(fun);
             }
         }
 

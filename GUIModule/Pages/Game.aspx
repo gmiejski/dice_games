@@ -62,7 +62,7 @@
                     AutoGenerateColumns="false" OnDataBound="PlayersDataBound" AllowSorting="true" OnSorting="PlayersSorting">
                     <Columns>
                         <asp:BoundField DataField="Key" HeaderText="Gracz" SortExpression="Key" />
-                        <asp:BoundField DataField="Value.NumberOfWonRounds" HeaderText="Ogólny wynik" />
+                        <asp:BoundField DataField="Value.NumberOfWonRounds" HeaderText="Ogólny wynik" SortExpression="Value.NumberOfWonRounds" />
                         <asp:TemplateField HeaderText="#1"><ItemTemplate>
                                 <asp:Image ID="dice1" runat="server" ImageUrl='<%# "~/Images/" + DataBinder.Eval(Container.DataItem, "Value.Dices[0]") + ".png" %>' />
                             </ItemTemplate></asp:TemplateField>
