@@ -22,9 +22,9 @@ namespace GameControllerNModule
                 _gameState.Update(player, InitialHand(_gameGoal));
                 PlayerState playerState;
                 GameState.PlayerStates.TryGetValue(player, out playerState);
-                var sum = playerState.Dices.Aggregate(1, (current, die) => current * die);
-                playerState.CurrentResult = sum.ToString() + " [" + _gameGoal.ToString() + (sum - _gameGoal).ToString("+#;-#;#") + "]";
-                playerState.CurrentResultValue = sum;
+                var product = playerState.Dices.Aggregate(1, (current, die) => current * die);
+                playerState.CurrentResult = product.ToString() + " [" + _gameGoal.ToString() + (product - _gameGoal).ToString("+#;-#;#") + "]";
+                playerState.CurrentResultValue = product;
             }
         }
 
@@ -80,9 +80,9 @@ namespace GameControllerNModule
                     _gameState.Update(myPlayer, InitialHand(_gameGoal));
                     PlayerState playerState;
                     GameState.PlayerStates.TryGetValue(myPlayer, out playerState);
-                    var mySum = playerState.Dices.Sum();
-                    playerState.CurrentResult = mySum.ToString() + " [" + _gameGoal.ToString() + (mySum - _gameGoal).ToString("+#;-#;#") + "]";
-                    playerState.CurrentResultValue = mySum;
+                    var myProduct = playerState.Dices.Aggregate(1, (current, die) => current * die);
+                    playerState.CurrentResult = myProduct.ToString() + " [" + _gameGoal.ToString() + (myProduct - _gameGoal).ToString("+#;-#;#") + "]";
+                    playerState.CurrentResultValue = myProduct;
                 }
             }
             OnBroadcastGameState(GameName, GameState);

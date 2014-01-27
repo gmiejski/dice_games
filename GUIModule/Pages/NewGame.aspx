@@ -52,7 +52,7 @@
                         Poziom botów:
                     </asp:TableCell>
                     <asp:TableCell>
-                        <asp:RadioButton ID="BotLevelEasy" runat="server" GroupName="botLevel" Text="Łatwy" />
+                        <asp:RadioButton ID="BotLevelEasy" runat="server" GroupName="botLevel" Text="Łatwy" Checked="true" />
                         <asp:RadioButton ID="BotLevelHard" runat="server" GroupName="botLevel" Text="Trudny" />
                     </asp:TableCell>
                 </asp:TableRow>
@@ -61,7 +61,7 @@
                         Liczba rund:
                     </asp:TableCell>
                     <asp:TableCell>
-                        <asp:TextBox ID="NewGameRounds" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="NewGameRounds" runat="server">3</asp:TextBox>
                     </asp:TableCell>
                 </asp:TableRow>
             </asp:Table>
