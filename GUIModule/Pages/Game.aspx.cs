@@ -64,7 +64,7 @@ namespace GUIModule
 
                 
 
-                if (GameData.Winner != null) {
+                if (GameData.Winner.Count > 0) {
                     WinnerLabel.Visible = true;
                 }
                 
