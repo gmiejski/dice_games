@@ -111,6 +111,9 @@
                 $.connection.hub.stop();
                 $("#GameState").text("zakończona").css("color", "#f00");
                 $("#ThrowDice").attr("disabled", "disabled");
+                $("a").click(function (event) {
+                    event.preventDefault();
+                });
             };
             
             //$.connection.hub.logging = true;
