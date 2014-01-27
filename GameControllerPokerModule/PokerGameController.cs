@@ -14,13 +14,12 @@ namespace GameControllerPokerModule
         private String _firstPlayer;
         private List<string> _playersOrderedList;
         private readonly int _numberOfTurnsInRound = 3;
-        private readonly int _numberOfRounds = 3;
+        private readonly int _numberOfRoundsToWin = 3;
         private readonly int _numberOfMovesInTurn;
 
         private int _movesInTurnIterator = 1;
-        private int _roundIterator = 1;
         private int _turnIterator = 1;
-        
+
         private Dictionary<String, int> _playersByScoreList = new Dictionary<String, int>();
         private List<IBot> _bots;
 
@@ -29,11 +28,11 @@ namespace GameControllerPokerModule
 
 
         public PokerGameController(String ownerName, String gameName, GameType gameType,
-            List<String> players, List<IBot> bots, int numberOfRounds)
+            List<String> players, List<IBot> bots, int numberOfRoundsToWin)
             : base(ownerName, gameName, gameType, players, bots)
         {
-            _numberOfRounds = numberOfRounds;
-            
+            _numberOfRoundsToWin = numberOfRoundsToWin;
+
             ResetPlayersStartingConfiguration(players);
 
             _playersOrderedList = _playersDice.Keys.ToList();
@@ -41,10 +40,10 @@ namespace GameControllerPokerModule
 
             _bots = bots;
 
-            _numberOfMovesInTurn = _playersOrderedList.Count() ;
+            _numberOfMovesInTurn = _playersOrderedList.Count();
         }
 
-        
+
 
         public override bool MakeMove(String playerName, Move move)
         {
@@ -58,9 +57,9 @@ namespace GameControllerPokerModule
             if (_movesInTurnIterator >= _numberOfMovesInTurn)
             {
                 _turnIterator++;
-                _movesInTurnIterator = 1; // already getting move number which will match second's player move
+                _movesInTurnIterator = 1; 
             }
-            else  _movesInTurnIterator += 1;
+            else _movesInTurnIterator += 1;
 
             var nextPlayerName = GetNextPlayerName();
 
@@ -76,7 +75,7 @@ namespace GameControllerPokerModule
 
             OnBroadcastGameState(GameName, GameState);
 
-            CheckIfGameEnded(nextPlayerName, gameState);
+            CheckIfGameEnded(gameState);
 
             if (_bots.Any(bot => bot.Name.Equals(nextPlayerName)))
             {
@@ -94,7 +93,6 @@ namespace GameControllerPokerModule
         {
             if (_turnIterator > _numberOfTurnsInRound)
             {
-                _roundIterator++;
                 _turnIterator = 1;
                 UpdateRoundWinnersStatistics(gameState);
                 _playersDice.Clear();
@@ -105,7 +103,7 @@ namespace GameControllerPokerModule
         private void UpdateRoundWinnersStatistics(GameState gameState)
         {
             GameState.LastRoundWinnerNames.Clear();
-            IEnumerable<string> lastRoundWinnerNames =
+            var lastRoundWinnerNames =
                 _playersByScoreList.Where(entry => entry.Value == _playersByScoreList.Max(p => p.Value)).Select(t => t.Key);
             foreach (var roundWinnerName in lastRoundWinnerNames)
             {
@@ -122,20 +120,18 @@ namespace GameControllerPokerModule
             gameState.WhoseTurn = nextPlayerName;
         }
 
-        private void CheckIfGameEnded(string nextPlayerName, GameState gameState)
+        private void CheckIfGameEnded( GameState gameState)
         {
-            if (_roundIterator > _numberOfRounds && nextPlayerName.Equals(_firstPlayer))
-            {
-                gameState.IsOver = true;
-                System.Threading.Thread.Sleep(1500);
-                OnDelete(GameName);
-            }
+            if (gameState.PlayerStates.All(person => person.Value.NumberOfWonRounds != _numberOfRoundsToWin)) return;
+            gameState.IsOver = true;
+            System.Threading.Thread.Sleep(1500);
+            OnDelete(GameName);
         }
 
         private Configuration ApplyNewDicesToPlayerConfiguration(string playerName, Move move)
         {
             var playerConfiguration = _playersDice[playerName];
-            
+
             foreach (var element in move.DicesToRoll)
             {
                 playerConfiguration.Dices[element] = GetRandomDiceValue();
@@ -145,7 +141,7 @@ namespace GameControllerPokerModule
 
         private string GetNextPlayerName()
         {
-            return _playersOrderedList[(_movesInTurnIterator - 1)%_playersOrderedList.Count];
+            return _playersOrderedList[(_movesInTurnIterator - 1) % _playersOrderedList.Count];
         }
 
         public Configuration CheckConfiguration(Configuration configuration)
@@ -242,7 +238,7 @@ namespace GameControllerPokerModule
             {
                 configuration.Dices = GetRandomDicesList(5);
 
-            } while ((int) CheckConfiguration(configuration).Hands > (int)highestHandsAvailable );
+            } while ((int)CheckConfiguration(configuration).Hands > (int)highestHandsAvailable);
 
             return configuration;
         }
@@ -264,7 +260,7 @@ namespace GameControllerPokerModule
 
         private void ApplyStartingConfiguration(string player)
         {
-            
+
             var configuration = GetStartingConfiguration(_bestStartingHandAvailable);
             _playersDice.Add(player, configuration);
             GameState.PlayerStates[player].Dices.Clear();
@@ -274,9 +270,9 @@ namespace GameControllerPokerModule
                 GameState.PlayerStates[player]);
         }
 
-        private void ResetPlayersStartingConfiguration(IEnumerable<string> playerNames )
+        private void ResetPlayersStartingConfiguration(IEnumerable<string> playerNames)
         {
-            
+
             foreach (var player in playerNames)
             {
                 ApplyStartingConfiguration(player);

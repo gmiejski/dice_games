@@ -24,7 +24,7 @@ namespace GameControllerNModule
                 GameState.PlayerStates.TryGetValue(player, out playerState);
                 var sum = playerState.Dices.Sum();
                 playerState.CurrentResult = sum.ToString() + " [" + _gameGoal.ToString() + (sum - _gameGoal).ToString("+#;-#;#") + "]";
-                playerState.CurrentResultValue = sum;
+                playerState.CurrentResultValue = Math.Abs(sum - _gameGoal);
             }
             
         }
@@ -35,7 +35,11 @@ namespace GameControllerNModule
             {
                 throw new ArgumentNullException();
             }
-            if (move.DicesToRoll.Count > 5 || move.DicesToRoll.Max() > 4)
+
+            if (move.DicesToRoll.Count == 0)
+                return false;
+
+            if ((move.DicesToRoll.Count > 5) || (move.DicesToRoll.Max() > 4))
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -49,7 +53,7 @@ namespace GameControllerNModule
             GameState.PlayerStates.TryGetValue(playerName,out player);
             var sum = player.Dices.Sum();
             player.CurrentResult = sum.ToString() + " [" + _gameGoal.ToString() + (sum - _gameGoal).ToString("+#;-#;#") + "]";
-            player.CurrentResultValue = sum;
+            player.CurrentResultValue = Math.Abs(sum - _gameGoal);
 
             if (CheckWinConditions(playerName))
             {
@@ -61,7 +65,7 @@ namespace GameControllerNModule
                     GameState.PlayerStates.TryGetValue(myPlayer, out playerState);
                     var mySum = playerState.Dices.Sum();
                     playerState.CurrentResult = mySum.ToString() + " [" + _gameGoal.ToString() + (mySum - _gameGoal).ToString("+#;-#;#") + "]";
-                    playerState.CurrentResultValue = mySum;
+                    playerState.CurrentResultValue = Math.Abs(mySum - _gameGoal);
                 }
             }
             OnBroadcastGameState(GameName, GameState);
@@ -94,10 +98,12 @@ namespace GameControllerNModule
             var tmpPlayer = GameState.WhoseTurn;
             GameState.WhoseTurn = NextPlayer();
 
-            if (playerState.CurrentResultValue.Equals(_gameGoal))
+            if (playerState.CurrentResultValue == 0)
             {
                 playerState.NumberOfWonRounds += 1;
                 GameState.WhoseTurn = tmpPlayer;
+                GameState.LastRoundWinnerNames.Clear();
+                GameState.LastRoundWinnerNames.Add(playerName);
                 OnBroadcastGameState(GameName, GameState);
                 System.Threading.Thread.Sleep(2500);
                 GameState.WhoseTurn = NextPlayer();
@@ -108,7 +114,6 @@ namespace GameControllerNModule
             }
             if (playerState.NumberOfWonRounds < _roundsToWin)
             {
-                GameState.LastRoundWinnerNames.Add(playerName);
                 GameState.WhoseTurn = _ownerName;
             }
             else

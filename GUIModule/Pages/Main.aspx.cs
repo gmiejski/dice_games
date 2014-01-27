@@ -51,6 +51,11 @@ namespace GUIModule.Pages
             Response.Redirect("~/Pages/NewGame.aspx");
         }
 
+        protected void Main_Refresh(object sender, EventArgs e)
+        {
+            Response.Redirect(Request.RawUrl);
+        }
+
         protected void Logout_Click(object sender, EventArgs e)
         {
             Session["playerName"] = null;
