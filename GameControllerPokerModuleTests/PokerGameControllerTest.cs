@@ -14,6 +14,7 @@ namespace GameControllerPokerModuleTests
     public class PokerGameControllerTest
     {
         private IGameController gameController;
+        private int numberOfRounds = 3;
 
         [TestMethod]
         public void TestCreateGameController()
@@ -26,12 +27,12 @@ namespace GameControllerPokerModuleTests
             var iBotMock2 = new Mock<IBot>();
             iBotMock2.SetupGet(x => x.Name).Returns("bot2");
             List<IBot> botList = new List<IBot>() { iBotMock1.Object, iBotMock2.Object };
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
-            
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, numberOfRounds);
+
             //CreatedGame createdGame = new CreatedGame(players[0], gameName, gameType, players.Count, botList.Count, BotLevel.Easy);
             //createdGame.PlayerNames = players;
             //gameController = GameControllerFactory.getInstance().CreateGameController(createdGame);
-            
+
             Assert.IsNotNull(gameController);
             Assert.IsNotNull(gameController.GameState);
             Assert.IsNotNull(gameController.GameState.PlayerStates);
@@ -52,7 +53,7 @@ namespace GameControllerPokerModuleTests
             GameType gameType = GameType.Poker;
             List<String> players = new List<String>() { "player1", "player2" };
             List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, numberOfRounds);
             String nextPlayer = players[0];
             gameController.GameState.WhoseTurn = nextPlayer;
             Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
@@ -70,34 +71,13 @@ namespace GameControllerPokerModuleTests
         }
 
         [TestMethod]
-        public void TestMakeMoveWithLeaderChange()
-        {
-            String gameName = "gra1";
-            GameType gameType = GameType.Poker;
-            List<String> players = new List<String>() { "player1", "player2" };
-            List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
-            String nextPlayer = players[0];
-            gameController.GameState.WhoseTurn = nextPlayer;
-            Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
-            List<int> playerDice = gameController.GameState.PlayerStates[nextPlayer].Dices;
-            List<int> bestDice = new List<int>() { 6, 6, 6, 6, 6 };
-            Configuration bestConfiguration = new Configuration(Hands.Five, 6, bestDice);
-            bestConfiguration.Dices = bestDice;
-            Assert.AreEqual(bestConfiguration.Hands, Hands.Five);
-            Assert.AreEqual(bestConfiguration.Dices, bestDice);
-            Assert.IsTrue(((PokerGameController)gameController).CheckWinnerChange(bestConfiguration, players[1]));
-            Assert.IsTrue(gameController.GameState.WinnerName.Contains("player2"));
-        }
-
-        [TestMethod]
         public void TestMakeMoveNullDiceToRoll()
         {
             String gameName = "gra1";
             GameType gameType = GameType.Poker;
             List<String> players = new List<String>() { "player1", "player2" };
             List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, numberOfRounds);
             String nextPlayer = players[0];
             gameController.GameState.WhoseTurn = nextPlayer;
             Move firstMove = new Move(null);
@@ -111,7 +91,7 @@ namespace GameControllerPokerModuleTests
             GameType gameType = GameType.Poker;
             List<String> players = new List<String>() { "player1", "player2" };
             List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, numberOfRounds);
             String nextPlayer = players[0];
             gameController.GameState.WhoseTurn = nextPlayer;
             Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
@@ -128,7 +108,7 @@ namespace GameControllerPokerModuleTests
             var iBotMock1 = new Mock<IBot>();
             iBotMock1.SetupGet(x => x.Name).Returns("bot1");
             List<IBot> botList = new List<IBot>() { iBotMock1.Object };
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, numberOfRounds);
             String nextPlayer = "bot1";
             gameController.GameState.WhoseTurn = nextPlayer;
             Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
@@ -145,7 +125,7 @@ namespace GameControllerPokerModuleTests
             GameType gameType = GameType.Poker;
             List<String> players = new List<String>();
             List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController("player", gameName, gameType, players, botList);
+            gameController = new PokerGameController("player", gameName, gameType, players, botList, numberOfRounds);
         }
 
         [TestMethod]
@@ -153,37 +133,18 @@ namespace GameControllerPokerModuleTests
         {
             String gameName = "gra1";
             GameType gameType = GameType.Poker;
-            List<String> players = new List<String>() { "player1", "player2" };
+            List<String> players = new List<String>() { "player1" };
             List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, 1);
             String nextPlayer = players[0];
             gameController.GameState.WhoseTurn = nextPlayer;
             Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 3; i++)
             {
                 gameController.MakeMove(players[0], firstMove);
                 gameController.GameState.WhoseTurn = players[0];
             }
-            Assert.IsFalse(gameController.MakeMove(players[0], firstMove));
             Assert.IsTrue(gameController.GameState.IsOver);
-        }
-
-        [TestMethod]
-        public void TestRoundOver()
-        {
-            String gameName = "gra1";
-            GameType gameType = GameType.Poker;
-            List<String> players = new List<String>() { "player1", "player2" };
-            List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
-            String nextPlayer = players[0];
-            Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
-            for (int i = 0; i < 4; i++)
-            {
-                gameController.GameState.WhoseTurn = players[0];
-                gameController.MakeMove(players[0], firstMove);
-            }
-            Assert.IsTrue(gameController.GameState.WinnerName.Contains(players[0]) && gameController.GameState.WinnerName.Count == 1);
         }
 
         [TestMethod]
@@ -193,7 +154,7 @@ namespace GameControllerPokerModuleTests
             GameType gameType = GameType.Poker;
             List<String> players = new List<String>() { "player1", "player2" };
             List<IBot> botList = new List<IBot>();
-            gameController = new PokerGameController(players[0], gameName, gameType, players, botList);
+            gameController = new PokerGameController(players[0], gameName, gameType, players, botList, numberOfRounds);
             String nextPlayer = players[0];
             Move firstMove = new Move(new List<int>() { 0, 1, 2, 3, 4 });
             Configuration fiveConfiguration = new Configuration(Hands.HighCard, 0, new List<int>() { 6, 6, 6, 6, 6 });
