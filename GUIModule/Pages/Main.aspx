@@ -40,6 +40,8 @@
             </Columns>
         </asp:GridView>
         <asp:Panel runat="server" CssClass="horCentered">
+            <br />
+            <asp:Button ID="RefreshButton" runat="server" Text="Odśwież" OnClick="Main_Refresh" />
             <asp:Button runat="server" Text="Załóż grę" OnClick="NewGame_Click" CssClass="bottom"/>
         </asp:Panel>
         <asp:Panel runat="server" CssClass="bottomRightCorner" >
